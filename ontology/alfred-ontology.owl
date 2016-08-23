@@ -1,0 +1,725 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.alfred-ai.com/recipe-ontology.owl#"
+     xml:base="http://www.alfred-ai.com/recipe-ontology.owl"
+     xmlns:recipe-ontology="http://www.alfred-ai.com/recipe-ontology.owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.alfred-ai.com/recipe-ontology.owl"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#isA -->
+
+    <owl:ObjectProperty rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#isA"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#isUsedIn -->
+
+    <owl:ObjectProperty rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#isUsedIn">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <owl:inverseOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#uses"/>
+        <rdfs:domain rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#ingredient"/>
+        <rdfs:range rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#recipe"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#uses -->
+
+    <owl:ObjectProperty rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#uses">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#recipe"/>
+        <rdfs:range rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#ingredient"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#hasCalorieAmount -->
+
+    <owl:DatatypeProperty rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#hasCalorieAmount">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#hasColor -->
+
+    <owl:DatatypeProperty rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#hasColor">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#hasImageSourceURL -->
+
+    <owl:DatatypeProperty rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#hasImageSourceURL">
+        <rdfs:domain rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#image"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#hasName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#hasName">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#name"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#servesPeopleAmount -->
+
+    <owl:DatatypeProperty rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#servesPeopleAmount">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#recipe"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#apple -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#apple">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#fruit"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#bean -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#bean">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#food"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#cayenne-pepper -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#cayenne-pepper">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seasoning"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#chicken_meat -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#chicken_meat">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#non_red_meat"/>
+        <owl:disjointWith rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#duck_meat"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#clams -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#clams">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seafood"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#cod_fish -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#cod_fish">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#fish"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#cow_meat -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#cow_meat">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#red_meat"/>
+        <owl:disjointWith rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#pork_meat"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#crab -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#crab">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seafood"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#dairy -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#dairy">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#food"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#dessert -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#dessert">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#meal_type"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#duck_meat -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#duck_meat">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#non_red_meat"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#egg -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#egg">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#dairy"/>
+        <rdfs:label xml:lang="en">egg</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#entree -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#entree">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#meal_type"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#fish -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#fish">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#food"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#food -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#food">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#ingredient"/>
+        <owl:disjointWith rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seasoning"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#fruit -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#fruit">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#food"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#image -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#image">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#recipe"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#ingredient -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#ingredient"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#kiwi -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#kiwi">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#fruit"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#lobster -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#lobster">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seafood"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#main_course -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#main_course">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#meal_type"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#meal_type -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#meal_type">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#meat -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#meat">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#food"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#milk -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#milk">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#dairy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#mussles -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#mussles">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seafood"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#name -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#name">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#recipe"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#non_red_meat -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#non_red_meat">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#meat"/>
+        <owl:disjointWith rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#red_meat"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#nut -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#nut">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#food"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#octopus -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#octopus">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#fish"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#oregano -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#oregano">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seasoning"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#oyster -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#oyster">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seafood"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#paprika -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#paprika">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seasoning"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#pear -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#pear">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#fruit"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#pepper -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#pepper">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seasoning"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#pork_meat -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#pork_meat">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#red_meat"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#recipe -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#recipe"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#redBean -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#redBean">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#bean"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#red_fish -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#red_fish">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#fish"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#red_meat -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#red_meat">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#meat"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#salmon -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#salmon">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#fish"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#salt -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#salt">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seasoning"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#sandwich -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#sandwich">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#meal_type"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#sardine -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#sardine">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#fish"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#seafood -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#seafood">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#food"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#seasoning -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#seasoning">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#ingredient"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#shrimp -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#shrimp">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#seafood"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#soup -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#soup">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#meal_type"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#vegetable -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#vegetable">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#food"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#whiteBean -->
+
+    <owl:Class rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#whiteBean">
+        <rdfs:subClassOf rdf:resource="http://www.alfred-ai.com/recipe-ontology.owl#bean"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#apple -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#apple"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#cayenne-pepper -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#cayenne-pepper"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#dessert -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#dessert">
+        <hasName></hasName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#entree -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#entree"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#hazelnut -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#hazelnut"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#kiwi -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#kiwi"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#lemon -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#lemon"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#lime -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#lime"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#macadamia -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#macadamia"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#mainCourse -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#mainCourse"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#octopus -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#octopus"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#orange -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#orange"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#oregano -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#oregano"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#paprika -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#paprika"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#peanut -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#peanut"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#pear -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#pear"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#pepper -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#pepper"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#redfish -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#redfish"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#salmon -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#salmon"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#salt -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#salt"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#sandwich -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#sandwich"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#sardine -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#sardine"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#soup -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#soup"/>
+    
+
+
+    <!-- http://www.alfred-ai.com/recipe-ontology.owl#walnut -->
+
+    <owl:NamedIndividual rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#walnut"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotations
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#apple">
+        <rdfs:label xml:lang="en">apple</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#kiwi">
+        <rdfs:label xml:lang="en">kiwi</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#pear">
+        <rdfs:label xml:lang="en">pear</rdfs:label>
+    </rdf:Description>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#bean"/>
+            <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#dairy"/>
+            <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#fish"/>
+            <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#fruit"/>
+            <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#meat"/>
+            <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#nut"/>
+            <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#vegetable"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointProperties"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#hasCalorieAmount"/>
+            <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#hasColor"/>
+            <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#hasName"/>
+            <rdf:Description rdf:about="http://www.alfred-ai.com/recipe-ontology.owl#servesPeopleAmount"/>
+        </owl:members>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi -->
+
