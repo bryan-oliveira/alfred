@@ -1,6 +1,9 @@
-from db.sqlalchemy_query import is_username_free, check_credentials
-from db.alfred_db import Users, Allergy
+from db.sqlalchemy_query import is_username_free
+from app.models import Users, Allergy
 from db.sqlalchemy_insert import insert_user
+
+
+debug_mode = False
 
 
 def register_account(form):
@@ -29,14 +32,21 @@ def register_account(form):
     u1 = Users(fullname=fullname, username=username, age=age, gender=gender, password=pwd)
     a1 = Allergy(soy=soy, milk=milk, eggs=eggs, nuts=nuts, gluten=gluten, fish=fish, sesame=sesame)
 
-    # If False, return it and corresponding error message
+    # If False, return with corresponding error message
     data_is_valid = validate_data(u1)
+    if debug_mode:
+        print "register_account<data_is_valid: ", data_is_valid
+
     if not data_is_valid[0]:
+        if debug_mode:
+            print "register_account<data_is_valid<inside IF>: ", data_is_valid
         return data_is_valid
 
     # Return True if user added to database, or return False and error message
     result = insert_user(u1, a1)
-    return result[0]
+    if debug_mode:
+        print "register_account>result:", result
+    return result
 
 
 def validate_data(user):
@@ -44,20 +54,7 @@ def validate_data(user):
     if not is_username_free(user.username):
         return False, 'Username is already taken. Please choose another.'
 
-    # Check if all mandatory fields are filled
-    field_completion = are_mandatory_fields_filled(user)
-    return field_completion
-
-
-def is_field_checked(form, field):
-    # HTML Checkbox fields come in on/off form. This function converts on/off to True/False equivalent
-    if field in form:
-        if form[field] == 'on':  # Redundant ?
-            return True
-    return False
-
-
-def are_mandatory_fields_filled(user):
+    # Validate data length
     if len(user.fullname) < 1:
         return False, 'Name is mandatory.'
 
@@ -70,18 +67,29 @@ def are_mandatory_fields_filled(user):
     return True, ''
 
 
+def is_field_checked(form, field):
+    # HTML Checkbox fields come in on/off form. This function converts on/off to True/False equivalent
+    if field in form:
+        if form[field] == 'on':  # Redundant ?
+            return True
+    return False
+
+
 def check_valid_age(form, field):
-    # Checks if age field is an integer between 0 and 130
+    # Checks if age field is an integer between 0 and 120
     if field in form:
         try:
             if int(form[field]) < 0 or int(form[field]) > 120:
-                return False, 'Invalid Age. Please insert valid age.'
+                print "check_valid_age: False. Invalid age. Please insert valid age."
+                return False, 'Invalid age. Please insert valid age.'
             else:
+                # Returns age
+                print "check_valid_age:", form[field]
                 return form[field], ''
         except ValueError:
-            return -1, ''
-    return True, ''
+            print "check_valid_age: False."
+            return False, 'Invalid age. Please try again'
 
+    print "Should never reach here. But then again..."
+    return False, ''
 
-def login_account(form):
-    return check_credentials(form['username'], form['pwd'])

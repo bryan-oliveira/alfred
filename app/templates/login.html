@@ -1,97 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Alfred</title>
+{% block content %}
 
-    <!-- Bulma.io CSS Framework -->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.0.26/css/bulma.min.css">
-    <!-- Font awesome CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
-    <!-- Custom CSS -->
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    {% if form %}
 
-</head>
-<body>
-    <div class="container is-fluid">
-        <!-- TODO: Import header template instead of defining in each -->
-        <div class="columns">
-            <div class="column is-half is-offset-one-quarter has-text-centered">
-                <a class="" href="/index"><h1 class="title is-1 is-centered">Alfred</h1></a>
-                <div id="container-ios9" style="background: #69707a;"></div>
+    <div class="modal">
+        <div class="modal-background" onclick="$('div.modal').toggleClass('is-active');"></div>
+            <div class="modal-container">
+                <div class="modal-card">
+                    <!-- Any other Bulma elements you want -->
+                    <section class="modal-card-body">
+                        <h3 class="title is-3">Sign In</h3>
+                        <form action="/login" method="post" name="login">
+
+                            {{ form.hidden_tag() }}
+
+                            <label class="label">User Name</label>
+                            <p class="control">
+                                {{ form.username(size=20, class="input") }}<br>
+                            </p>
+
+                            <label class="label">Password</label>
+                            <p class="control">
+                            {{ form.password(size=20, class="input") }}<br>
+                            </p>
+
+                            <p>{{ form.remember_me }} Remember Me</p>
+
+                            <p class="control">
+                                <input type="submit" value="Sign In" class="button is-dark" />
+                                <button class="button is-link">Cancel</button>
+                            </p>
+
+                        </form>
+                    </section>
+                </div>
             </div>
-
-            <div class="column is-one-quarter">
-                <a href="/register">Register</a>
-                <a href="login.html">Login</a>
-            </div>
-        </div>
-
-
-
-        <div class="columns">
-
-            <!-- First 1/4 of Screen -->
-            <div class="column is-one-quarter">
-            </div>
-
-
-            <!-- Second 1/4 of Screen -->
-            <div class="column is-half">
-
-                {% if error_msg %}
-                <article class="message is-danger">
-                    <div class="message-body"> {{ error_msg }}</div>
-                </article>
-                {% endif %}
-
-                <form action="/login" method="post">
-
-                <!-- Name, Password, Gender, Age -->
-
-                <label class="label">User Name</label>
-                <p class="control">
-                    <input class="input" type="text" placeholder="User Name" name="username">
-                </p>
-
-                <label class="label">Password</label>
-                <p class="control">
-                    <input class="input" type="password" placeholder="Password" name="pwd">
-                </p>
-
-                <!-- Buttons -->
-                <p class="control">
-                    <input type="submit" class="button is-dark" />
-                    <button class="button is-link">Cancel</button>
-                </p>
-
-                </form>
-            </div>
-
-        </div>
-
-        <img onclick="startRecording()" class="microphone image is-128x128" src="{{ url_for('static', filename='images/microphone.png') }}">
-
-
+        <button class="modal-close" onclick="$('div.modal').toggleClass('is-active');"></button>
     </div>
 
-    <!-- Siri wave thingy -->
-    <script src="{{ url_for('static', filename='js/siriwave.js') }}"></script>
+    {% endif %}
 
-    <script>
-    var $siri_ios9 = document.getElementById('container-ios9');
-    var SW9 = new SiriWave({
-        width: 259,
-        height: 40,
-        speed: 0.1,
-        amplitude: 0.7,
-        container: $siri_ios9,
-        autostart: true,
-    });
-    </script>
+{% endblock %}
 
-    <!-- Microphone recorder functions -->
-    <script src="{{ url_for('static', filename='js/recorder.js')}}"></script>
 
-</body>
-</html>

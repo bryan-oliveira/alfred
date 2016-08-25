@@ -1,82 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Alfred</title>
+{% extends "index.html" %}
 
-    <!-- Bulma.io CSS Framework -->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.0.26/css/bulma.min.css">
-    <!-- Font awesome CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
-    <!-- Custom CSS -->
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+{% block content %}
 
-    <div class="container is-fluid">
+    <!--  Recipe display area. Is the right 3/4 of the screen -->
+    <div class="column">
 
-        <!-- Header: Alfred -->
-        <section class="hero is-dark has-text-centered">
-            <div class="hero-body">
-                <div class="container">
-                    <a href="/index"><h1 class="title is-1">Alfred</h1></a>
-                </div>
-            </div>
-        </section>
-
+        <h3 class="title is-3 recipe_title">{{ recipe.name }}</h3>
 
         <div class="columns">
-            <!-- Recipe column  1/4 Screen Left -->
-            <div class="column is-one-quarter">
-                <h3 class="title is-3">Recipes</h3>
-                {% for recipe in recipes %}
-                <!-- TODO Make a clickable link by POSTing recipe name -->
-                <p><a href="/search?recipe_name={{recipe.name|urlencode}}"> {{ recipe.name}}</a></p>
+            <div class="column is-one-third">
+
+                <!--  Recipe ingredients -->
+                <h5 class="title is-5">Ingredients</h5>
+                <ul>
+                    {% for ingredient in recipe.ingredients %}
+                    <div class="columns">
+                        <div class="column ingredient_column">
+                            <span class="icon" style="float: left">
+                                <i class="fa fa-check"></i>
+                            </span>
+                            <li>{{ ingredient }}</li>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="column">
+                <!-- Recipe image -->
+                {% if recipe.img_src is defined %}
+                    <img src={{ recipe.img_src }}>
+                {% endif %}
+
+                <!-- Recipe directions -->
+                <h3 class="title is-3">Directions</h3>
+                {% for direction in recipe.directions %}
+                    <p class="directions_steps">{{ direction|safe }}</p>
                 {% endfor %}
 
             </div>
-
-            <!--  Recipe display area. Is the right 3/4 of the screen -->
-            <div class="column">
-
-                <h3 class="title is-3 recipe_title">{{ recipe.name }}</h3>
-
-                <div class="columns">
-                    <div class="column is-one-third">
-
-                        <!--  Recipe ingredients -->
-                        <h5 class="title is-5">Ingredients</h5>
-                        <ul>
-                            {% for ingredient in recipe.ingredients %}
-                            <div class="columns">
-                                <div class="column ingredient_column">
-                                    <span class="icon" style="float: left">
-                                        <i class="fa fa-check"></i>
-                                    </span>
-                                    <li>{{ ingredient }}</li>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </ul>
-                    </div>
-
-                    <div class="column">
-                        <!-- Recipe image -->
-                        {% if recipe.img_src is defined %}
-                        <img src={{ recipe.img_src }}>
-                        {% endif %}
-
-                        <!-- Recipe directions -->
-                        <h3 class="title is-3">Directions</h3>
-                        {% for direction in recipe.directions %}
-                        <p class="directions_steps">{{ direction|safe }}</p>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-
-
-        </div> <!-- End of main column div. Contains 2 sub columns, recipe listing col. 1/4 screen left and  recipe show 3/4 screen right -->
+        </div>
     </div>
-</body>
-</html>
+
+{% endblock %}

@@ -19,4 +19,17 @@ h2                  { font-size: 1.2em; }
 .directions_steps   { margin-bottom: 10px; }
 .no_underline       { text-decoration: none; }
 
-.microphone         { float: right; }
+.microphone         { float: right; max-width: 200px; }
+.top_margin_20px    { margin-top: 20px; }
+.spacer             { margin: 10px; }
+.image-cropper      {
+                        border-radius: 50%;
+                        overflow: hidden;
+                        -webkit-border-radius: 50%;
+                        -moz-border-radius: 50%;
+                        -ms-border-radius: 50%;
+                        -o-border-radius: 50%;
+                        border-radius: 50%;
+                        /* Center image */
+                        margin: 0 auto;
+                    }

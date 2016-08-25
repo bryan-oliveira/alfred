@@ -7,11 +7,9 @@ navigator.getUserMedia = ( navigator.getUserMedia ||
                        navigator.msGetUserMedia);
 
 // set up basic variables for app
-
 var record = document.querySelector('.microphone');
 
 //main block for doing the audio recording
-
 if (navigator.getUserMedia) {
 
     console.log('getUserMedia is supported.');
@@ -109,3 +107,4 @@ if (navigator.getUserMedia) {
 } else {
    console.log('getUserMedia not supported on your browser!');
 }
+
