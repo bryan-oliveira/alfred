@@ -1,7 +1,7 @@
-from db.sqlalchemy_query import is_username_free
-from app.models import Users, Allergy
-from db.sqlalchemy_insert import insert_user
+from app.database.db_insert import insert_user
 
+from app.database.db_query import is_username_free
+from app.models import Users, Allergy
 
 debug_mode = False
 

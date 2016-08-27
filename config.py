@@ -1,5 +1,4 @@
 import os
-from sqlalchemy import create_engine
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -15,9 +14,6 @@ SECRET_KEY = 'you-will-never-guess'
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'database.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-# changed from other files importing engine, to defining a DB URI
-# engine = create_engine('sqlite:///' + os.path.join(basedir, 'database.db'))
 
 ROOT_FOLDER = ROOT_FOLDER
 UPLOAD_FOLDER = UPLOAD_FOLDER

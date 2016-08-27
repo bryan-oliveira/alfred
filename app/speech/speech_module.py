@@ -2,7 +2,6 @@ import speech_recognition as sr
 import app
 import os
 
-
 BING_KEY = "2f3bcd576a404153a32724a54e7d6e6b"
 
 
@@ -44,5 +43,4 @@ def speech_recognition_from_file():
             return "Alfred: I could not understand."
         except sr.RequestError as e:
             return "Could not request results from Microsoft Bing Voice Recognition service; {0}".format(e)
-
 

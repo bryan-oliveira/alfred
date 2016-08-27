@@ -6,12 +6,16 @@
 
     <!-- Bulma.io CSS Framework -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.0.26/css/bulma.min.css">
+
     <!-- Font awesome CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
-    <!-- Custom CSS -->
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+
+    <!-- Custom CSS -->
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 <body>
     <div class="container is-fluid">
@@ -52,28 +56,16 @@
             {% include "login.html" %}
 
         </div>
+
+        <img src="{{ url_for('static', filename='images/alfred2.png') }}" class="microphone" onclick="startRecording()">
+
     </div>
-
-    <!-- Siri wave thingy -->
-    <!--
-    <script src="{{ url_for('static', filename='js/siriwave.js') }}"></script>
-
-    <script>
-    var $siri_ios9 = document.getElementById('container-ios9');
-    var SW9 = new SiriWave({
-        width: 259,
-        height: 40,
-        speed: 0.1,
-        amplitude: 0.7,
-        container: $siri_ios9,
-        autostart: true,
-    });
-    </script>
-    -->
 
 
     <!-- Microphone recorder functions -->
     <script src="{{ url_for('static', filename='js/recorder.js')}}"></script>
+
+    <audio controls src="data:audio/wav;base64,{{ wavfile }}" ></audio>
 
 </body>
 </html>

@@ -11,8 +11,8 @@ class Users(db.Model):
     gender = db.Column(db.String(1), nullable=True)
     password = db.Column(db.String(15), nullable=False)
 
-    # allergies_id = db.Column(db.Integer, db.ForeignKey('allergies.id'))
-    # allergies = db.relationship('Allergy', backref='users')
+    # allergies_id = database.Column(database.Integer, database.ForeignKey('allergies.id'))
+    # allergies = database.relationship('Allergy', backref='users')
 
     @property
     def is_authenticated(self):
@@ -47,7 +47,7 @@ class Allergy(db.Model):
     gluten = db.Column(db.Boolean, nullable=False)
     fish = db.Column(db.Boolean, nullable=False)
     sesame = db.Column(db.Boolean, nullable=False)
-    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    # user_id = database.Column(database.Integer, database.ForeignKey('users.id'))
 
     def __repr__(self):
         return '<nuts:%r soy:%r gluten:%r fish:%r sesame:%r milk:%r>' % (self.nuts, self.soy, self.gluten, self.fish, self.sesame, self.milk)

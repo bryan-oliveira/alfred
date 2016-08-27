@@ -1,4 +1,6 @@
 from flask import render_template, redirect, request, url_for, g, flash, abort
+from flask.globals import session
+from datetime import datetime, timedelta
 from app import app, lm
 from get_recipes_from_file import getRecipesFromFile, getRecipeByName
 from alfred.alfred_brain import alfred_brain
@@ -7,7 +9,7 @@ import random
 from app.models import Users
 from .forms import LoginForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
-
+from app.speech.alfred_tts import get_raw_wav
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
 
@@ -17,26 +19,52 @@ RECOMMENDED_RECIPE_LIST_SIZE = 8
 @app.route('/index')
 def index():
 
+    print "Debug:", session
+
+    # If user is authenticated
     if current_user.is_authenticated:
+
         # Loads recipes from fie JSON format, returns random X at random
         recipes = getRecipesFromFile()
+
+        # Sends login form TODO: Put a condition in template. No need to send form to logged user
         form = LoginForm()
-        print len(recipes), "recipes"
+
+        # Send first name to template
+        # TODO: Consider stashing everything in session var
         user = current_user.fullname.split()[0]
+
+        # If time var available, check inactivity duration. >10m = Alfred greets
+        if 'time' in session:
+            now = datetime.utcnow()
+            duration = now - session['time']
+            print "Now:", now, "Stamp:", session['time'], "Duration:", duration
+
+            if duration > timedelta(minutes=10):
+                alfred_greeting = True
+        else:
+            alfred_greeting = True
+
+        # session['time'] = datetime.utcnow()
+
+        phrase = 'Hello, ' + user + ' how may I help you?'
+        print phrase
+        alfred_voice = get_raw_wav(phrase)
 
         return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
         return render_template('index.html',
                                title='Home',
                                recipes=return_recipes,
                                form=form,
-                               user=user)
+                               user=user,
+                               wavfile=alfred_voice)
 
     else:
         # Loads recipes from fie JSON format, returns random X at random
         recipes = getRecipesFromFile()
         form = LoginForm()
-        print len(recipes), " recipes"
-        print current_user
+
+        print "Current User not auth:", current_user
 
         return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
         return render_template('index.html',

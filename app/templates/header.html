@@ -5,19 +5,22 @@
             <nav class="nav">
                 <!-- Nav Left -->
                 <div class="nav-left">
-                    <img onclick="startRecording()" class="microphone" src="{{ url_for('static', filename='images/food-tray2.png') }}">
+                    <a class="nav-item">
+                    </a>
                 </div>
 
                 <!-- Nav Center ? -->
                 <div class="nav-center">
-                    <a class="nav-item is-brand" href="/index"><h1 class="title is-1 is-centered">Alfred</h1></a>
+                    <a class="nav-item" href="/index">
+                        <span class="alfred">Alfred</span>
+                    </a>
                 </div>
 
                 <!-- Nav Toggle -->
                 <!--
                 <span class="nav-toggle">
-                    <span>Login</span>
-                    <span>Register</span>
+                    <span></span>
+                    <span></span>
                 </span>
                 -->
 
@@ -45,8 +48,8 @@
                         </a>
 
                         <span class="nav-item">
-                            <a class="button is-info is-outlined" href="/register">Register</a>
-                            <a class="button is-info is-outlined" href="#" onclick="$('div.modal').toggleClass('is-active');">Login</a>
+                            <a class="button is-warning is-outlined" href="#" onclick="$('div.modal').toggleClass('is-active');">Login</a>
+                            <a class="button is-warning is-outlined" href="/register">Register</a>
                         </span>
                     {% endif %}
 
