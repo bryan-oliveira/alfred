@@ -10,6 +10,7 @@ itsdangerous==0.24
 Jinja2==2.8
 Mako==1.0.4
 MarkupSafe==0.23
+nltk==3.2.1
 pbr==1.9.1
 post==0.0.5
 publicsuffix==1.1.0
