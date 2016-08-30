@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+
+"""
+
 import alsaaudio
 import time
 import audioop
@@ -26,3 +29,4 @@ while True:
         print l, audioop.max(data, 2)
     time.sleep(.1)
 
+"""

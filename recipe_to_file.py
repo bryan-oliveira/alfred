@@ -6,6 +6,7 @@ from config import RECIPE_FILE, NEW_RECIPE_FILE
 recipe_file = RECIPE_FILE
 NEW_RECIPE_FILE = RECIPE_FILE
 
+
 class Recipe(object):
     def __init__(self, ingredients, directions, name):
         self.ingredients = ingredients

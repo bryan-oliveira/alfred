@@ -1,11 +1,9 @@
 from file_operations import is_empty_file
-from config import RECIPE_FILE, NEW_RECIPE_FILE
+from config import RECIPE_FILE
 import json
-import codecs
 
 # Recipe file defined in application config.py
 RECIPE_FILE = RECIPE_FILE
-
 
 
 def getRecipesFromFile():
