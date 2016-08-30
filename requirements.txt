@@ -9,7 +9,6 @@ Mako==1.0.4
 MarkupSafe==0.23
 pbr==1.9.1
 post==0.0.5
-public==0.0.0
 publicsuffix==1.1.0
 PyAudio==0.2.9
 pyglet==1.2.4
