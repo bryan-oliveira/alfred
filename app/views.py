@@ -9,7 +9,8 @@ import random
 from app.models import Users
 from .forms import LoginForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from app.speech.alfred_tts import get_raw_wav
+# from app.speech.alfred_tts import get_raw_wav
+from .speech.tts_test import get_raw_wav
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
 
@@ -24,6 +25,9 @@ def index():
     # If user is authenticated
     if current_user.is_authenticated:
 
+        alfred_voice = None
+        alfred_greeting = False
+
         # Loads recipes from fie JSON format, returns random X at random
         recipes = getRecipesFromFile()
 
@@ -34,7 +38,7 @@ def index():
         # TODO: Consider stashing everything in session var
         user = current_user.fullname.split()[0]
 
-        # If time var available, check inactivity duration. >10m = Alfred greets
+        # If time var available, check inactivity duration. >10m = Alfred greets you
         if 'time' in session:
             now = datetime.utcnow()
             duration = now - session['time']
@@ -45,11 +49,12 @@ def index():
         else:
             alfred_greeting = True
 
-        # session['time'] = datetime.utcnow()
+        session['time'] = datetime.utcnow()
 
-        phrase = 'Hello, ' + user + ' how may I help you?'
-        print phrase
-        alfred_voice = get_raw_wav(phrase)
+        if alfred_greeting:
+            phrase = 'Hello ' + user + ', how may I help you?'
+            print phrase
+            alfred_voice = get_raw_wav(phrase)
 
         return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
         return render_template('index.html',

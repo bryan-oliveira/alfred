@@ -61,11 +61,12 @@
 
     </div>
 
-
     <!-- Microphone recorder functions -->
     <script src="{{ url_for('static', filename='js/recorder.js')}}"></script>
 
-    <audio controls src="data:audio/wav;base64,{{ wavfile }}" ></audio>
+    {% if wavfile %}
+        <audio autoplay src="data:audio/wav;base64,{{ wavfile }}">Your browser does not support this audio format.</audio>
+    {% endif %}
 
 </body>
 </html>

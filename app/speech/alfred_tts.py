@@ -1,15 +1,17 @@
+"""
+
 import httplib as http
 from urllib import urlencode
 import json
 import base64
 # from tokens import *
 
-# Note: Sign up at http://www.projectoxford.ai to get a subscription key.
-# Search for Speech APIs from Azure Marketplace.
-# Use the subscription key as Client secret below.
+# Debug audio: Just to play wav from this module
+import pyaudio
+import wave
+import pyglet
 
-# uncomment this line and add your client_id:
-# clientSecret = '<32 digits of security>'
+# Note: Use the subscription key as Client secret below.
 clientSecret = '2f3bcd576a404153a32724a54e7d6e6b'
 
 ttsHost = "https://speech.platform.bing.com"
@@ -17,7 +19,7 @@ ttsHost = "https://speech.platform.bing.com"
 params = urlencode(
     {'grant_type': 'client_credentials', 'client_id': 'nothing', 'client_secret': clientSecret, 'scope': ttsHost})
 
-print ("The body data: %s" % (params))
+# print ("The body data: %s" % (params))
 
 headers = {"Content-type": "application/x-www-form-urlencoded"}
 
@@ -28,7 +30,8 @@ path = "/token/issueToken"
 conn = http.HTTPSConnection(AccessTokenHost)
 conn.request("POST", path, params, headers)
 response = conn.getresponse()
-print(response.status, response.reason)
+
+# print response.status, response.reason
 
 data = response.read()
 conn.close()
@@ -41,7 +44,7 @@ ddata = json.loads(accesstoken)
 access_token = ddata['access_token']
 
 headers = {"Content-type"            : "application/ssml+xml",
-           "X-Microsoft-OutputFormat": "riff-8khz-8bit-mono-mulaw",
+           "X-Microsoft-OutputFormat": "riff-16khz-16bit-mono-pcm",
            "Authorization"           : "Bearer " + access_token,
            "X-Search-AppId"          : "07D3234E49CE426DAA29772419F436CA",
            "X-Search-ClientID"       : "1ECFAE91408841A480F00935DC390960",
@@ -50,19 +53,36 @@ headers = {"Content-type"            : "application/ssml+xml",
 
 def get_raw_wav(text):
     print "DEBUG TEXT:", text
-    body = "<speak version='1.0' xml:lang='en-us'><voice xml:lang='en-us' xml:gender='Female' name='Microsoft Server Speech Text to Speech Voice (en-US, ZiraRUS)'>" + text + "</voice></speak>"
+    body = "<speak version='1.0' xml:lang='en-us'><voice xml:lang='en-us'" \
+           "xml:gender='Female' name='Microsoft Server Speech Text to Speech Voice (en-US, ZiraRUS)'>" + text + "</voice></speak>"
+
     conn = http.HTTPSConnection("speech.platform.bing.com")
     conn.request("POST", "/synthesize", body, headers)
+
     response = conn.getresponse()
     print(response.status, response.reason)
-    data = response.read()
-    encoded = base64.b64encode(data)
+
+    data_ = response.read()
+    conn.close()
+
+    encoded = base64.b64encode(data_)
     s = str(encoded)
     sliced = s[2:-1]
-    conn.close()
-    print(sliced)
-    return sliced
+
+    f = open('file.wav', 'w')
+    f.write(data_)
+
+    # print(sliced)
+    return data_
 
 
 if __name__ == "__main__":
     get_raw_wav('Hello my name is bryan.')
+
+    # song = pyglet.media.load('file.wav')
+    # song.play()
+    # pyglet.app.run()
+
+"""
+
+
