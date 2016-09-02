@@ -9,8 +9,7 @@ import random
 from app.models import Users
 from .forms import LoginForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
-# from app.speech.alfred_tts import get_raw_wav
-from .speech.tts_test import get_raw_wav
+from app.speech.alfred_tts import get_raw_wav
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
 
@@ -57,7 +56,7 @@ def index():
             alfred_voice = get_raw_wav(phrase)
 
         return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
-        return render_template('index.html',
+        return render_template('categories.html',
                                title='Home',
                                recipes=return_recipes,
                                form=form,
@@ -72,7 +71,7 @@ def index():
         print "Current User not auth:", current_user
 
         return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
-        return render_template('index.html',
+        return render_template('categories.html',
                                title='Home',
                                recipes=return_recipes,
                                form=form)
@@ -169,7 +168,7 @@ def login():
 
         return redirect(url_for('index'))
 
-    return render_template('index.html',
+    return render_template('categories.html',
                            title='Sign In',
                            form=form)
 

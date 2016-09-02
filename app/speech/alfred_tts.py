@@ -1,88 +1,60 @@
-"""
-
-import httplib as http
-from urllib import urlencode
+# from tokens import OXFORD_SPEECH_API # add your own tokens file or remove this line and uncomment line 6
+import requests
 import json
 import base64
-# from tokens import *
 
-# Debug audio: Just to play wav from this module
-import pyaudio
-import wave
 import pyglet
 
-# Note: Use the subscription key as Client secret below.
-clientSecret = '2f3bcd576a404153a32724a54e7d6e6b'
 
-ttsHost = "https://speech.platform.bing.com"
+OXFORD_SPEECH_API = "2f3bcd576a404153a32724a54e7d6e6b"
 
-params = urlencode(
-    {'grant_type': 'client_credentials', 'client_id': 'nothing', 'client_secret': clientSecret, 'scope': ttsHost})
-
-# print ("The body data: %s" % (params))
-
-headers = {"Content-type": "application/x-www-form-urlencoded"}
-
-AccessTokenHost = "oxford-speech.cloudapp.net"
-path = "/token/issueToken"
-
-# Connect to server to get the Oxford Access Token
-conn = http.HTTPSConnection(AccessTokenHost)
-conn.request("POST", path, params, headers)
-response = conn.getresponse()
-
-# print response.status, response.reason
-
-data = response.read()
-conn.close()
-
-accesstoken = data.decode("UTF-8")
-print ("Oxford Access Token: " + accesstoken)
-
-# decode the object from json
-ddata = json.loads(accesstoken)
-access_token = ddata['access_token']
-
-headers = {"Content-type"            : "application/ssml+xml",
-           "X-Microsoft-OutputFormat": "riff-16khz-16bit-mono-pcm",
-           "Authorization"           : "Bearer " + access_token,
-           "X-Search-AppId"          : "07D3234E49CE426DAA29772419F436CA",
-           "X-Search-ClientID"       : "1ECFAE91408841A480F00935DC390960",
-           "User-Agent"              : "TTSForPython"}
+SPEECH_END_POINT = "https://speech.platform.bing.com/recognize"
+TTSHOST = "https://speech.platform.bing.com"
 
 
-def get_raw_wav(text):
-    print "DEBUG TEXT:", text
-    body = "<speak version='1.0' xml:lang='en-us'><voice xml:lang='en-us'" \
-           "xml:gender='Female' name='Microsoft Server Speech Text to Speech Voice (en-US, ZiraRUS)'>" + text + "</voice></speak>"
-
-    conn = http.HTTPSConnection("speech.platform.bing.com")
-    conn.request("POST", "/synthesize", body, headers)
-
-    response = conn.getresponse()
-    print(response.status, response.reason)
-
-    data_ = response.read()
-    conn.close()
-
-    encoded = base64.b64encode(data_)
-    s = str(encoded)
-    sliced = s[2:-1]
-
-    f = open('file.wav', 'w')
-    f.write(data_)
-
-    # print(sliced)
-    return data_
+ACCESS_TOKEN_PAYLOAD = {'grant_type': 'client_credentials', 'client_id': 'nothing', 'client_secret': OXFORD_SPEECH_API, 'scope': TTSHOST}
+ACCESS_TOKEN_HEADERS = {"Content-type": "application/x-www-form-urlencoded"}
+ACCESS_TOKEN_HOST = "http://oxford-speech.cloudapp.net"
+ACCESS_TOKEN_PATH = "/token/issueToken"
+ACCESS_TOKEN_URL = ACCESS_TOKEN_HOST+ACCESS_TOKEN_PATH
 
 
-if __name__ == "__main__":
-    get_raw_wav('Hello my name is bryan.')
+def get_access_token():
+    r = requests.post(ACCESS_TOKEN_URL, headers=ACCESS_TOKEN_HEADERS, data=ACCESS_TOKEN_PAYLOAD)
+    print "Access token status code: " + str(r.status_code)
+    data = r.content
+    return str(json.loads(data)['access_token'])
 
-    # song = pyglet.media.load('file.wav')
-    # song.play()
-    # pyglet.app.run()
 
-"""
+TTS_HEADERS = {"Content-type": "application/ssml+xml",
+               "X-Microsoft-OutputFormat": "riff-8khz-8bit-mono-mulaw",
+               "Authorization": "Bearer " + get_access_token(),
+               "X-Search-AppId": "07D3234E49CE426DAA29772419F436CA",
+               "X-Search-ClientID": "1ECFAE91408841A480F00935DC390960",
+               "User-Agent": "TTSForPython"}
 
+TTS_URL = TTSHOST + "/synthesize"
+
+
+def get_raw_wav(text="hello world"):
+    print 'getting wav', text
+
+    body = "<speak version='1.0' xml:lang='en-us'><voice xml:lang='en-gb' xml:gender='Male' " \
+           "name='Microsoft Server Speech Text to Speech Voice (en-GB, George, Apollo)'>" + text + \
+           "</voice></speak>"
+
+    r = requests.post(TTS_URL, headers=TTS_HEADERS, data=body)
+    print "TTS Status Code: " + str(r.status_code)
+    data = r.content
+
+    # Debug from file
+    # f = open('file.wav', 'r')
+    # data = f.read()
+    # return data
+
+    return str(base64.b64encode(data))
+
+
+if __name__ == '__main__':
+    get_raw_wav(text="Hello, my name is Bryan!")
 

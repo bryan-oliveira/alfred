@@ -16,6 +16,7 @@ def alfred_brain(audio_phrase):
     # Extract intent from text
     # command_type, ingredients, meal_course = idr.intent_brain(text)
 
+    # Searches for ingredients within text
     ingredients = idr.ingredient_search(text)
 
     # Test with custom ingredients DEBUG

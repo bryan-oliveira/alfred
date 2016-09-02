@@ -3,11 +3,13 @@ from nltk import pos_tag
 
 
 def intent_brain(usr_input):
-
+    # Detect commands {}
     command_type = detect_command_type(usr_input)
 
+    # Ingredient search
     ingredients = ingredient_search(usr_input)
 
+    # Search for meal type {soup, main dish, entree}
     meal_course = recipe_type_search(usr_input)
 
     return command_type, ingredients, meal_course
@@ -104,7 +106,7 @@ def question_intent(action_type, usr_input):
     print pos
 
     if action_type == 'how':
-        # Example Q: how can I make scambled eggs?
+        # Example Q: how can I make scrambled eggs?
         # Example R: why don't you check out some recipes?
         pass
 
@@ -123,9 +125,11 @@ if __name__ == '__main__':
     # recipe_type_search("show me some tomato soups")
     # recipe_type_search("alfred, I would like some cheesecake")
     # recipe_type_search("I feel like having some dessert")
+
     detect_question("how can I make scrambled eggs?")
     detect_question("how do you make scrambled eggs?")
     detect_question("how can you make scrambled eggs?")
+
     detect_question("what is the weather like tomorrow?")
     detect_question("what is the weather like tomorrow in Algarve?")
     detect_question("what can I make with eggs and mushrooms?")

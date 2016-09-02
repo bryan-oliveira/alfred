@@ -31,7 +31,9 @@ def getRecipesByIngredients(ingredients):
     """ Input: Ingredients to search in recipes.
         Output: Return N_RECIPES amount of recipes.
         TODO: Change from i to N_RECIPES. """
+
     recipes_with_ingredients = []
+
     if not is_empty_file(RECIPE_FILE):
         with open(RECIPE_FILE, 'r') as data_file:
             data = json.load(data_file)
@@ -48,10 +50,10 @@ def getRecipesByIngredients(ingredients):
                         # Keep the recipe names that contain the ingredients
                         if ing1 in recipe_ingredient:
                             # Don't save duplicates
-                            if recipe['name'] not in  recipes_with_ingredients:
+                            if recipe['name'] not in recipes_with_ingredients:
                                 recipes_with_ingredients += [recipe['name']]
                                 i += 1
-                                print "Ingr: Saving -->", recipe['name']
+                                # print "Ingr: Saving -->", recipe['name']
                                 next_recipe = True
                                 break
 
