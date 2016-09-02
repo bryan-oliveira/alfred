@@ -2,6 +2,14 @@ from nltk import word_tokenize
 from nltk import pos_tag
 
 
+def ingredient_notin():
+    """
+    Find recipe without a certain ingredient
+    :return:
+    """
+    pass
+
+
 def intent_brain(usr_input):
     # Detect commands {}
     command_type = detect_command_type(usr_input)

@@ -3,7 +3,6 @@ import requests
 import json
 import base64
 
-import pyglet
 
 
 OXFORD_SPEECH_API = "2f3bcd576a404153a32724a54e7d6e6b"
