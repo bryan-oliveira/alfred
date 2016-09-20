@@ -10,6 +10,7 @@ from app.models import Users
 from .forms import LoginForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from app.speech.alfred_tts import get_raw_wav
+import nltk
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
 
@@ -173,6 +174,20 @@ def login():
                            form=form)
 
 
+@app.route("/admin", methods=['GET'])
+def admin_page():
+    return render_template("admin.html")
+
+
+@app.route("/run_nltk_script", methods=['POST'])
+def run_nltk_script():
+    """
+    This function installs a NLTK dependency on the local machine
+    :return: True
+    """
+    nltk.download('punkt')
+    return True
+
 @app.route("/logout")
 @login_required
 def logout():
@@ -181,8 +196,8 @@ def logout():
 
 
 def next_is_valid(url):
-    """This function receives an url, and must heck whether it is valid/safe"""
-    print url
+    """This function receives an url, and must check whether it is valid/safe"""
+    print "######", url
     return True
 
 

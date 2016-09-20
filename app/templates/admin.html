@@ -1,0 +1,30 @@
+{% extends "base-template.html" %}
+
+{% block content %}
+    <h3 class="is title is-3">Admin Page</h3>
+
+    <div class="columns">
+        <div class="column is-half">
+
+            <nav class="level">
+                <!-- Left side -->
+                <div class="level-left">
+                    <div class="level-item">
+                        <h4 class="is-4">Run script to install punkt for NLTK Tokenize</h4>
+                    </div>
+                </div>
+
+                <!-- Right Side -->
+                <div class="level-right">
+                    <div class="level-item">
+                        <form action="/run_script" method="post">
+                            <input type="submit" value="Run Script">
+                        </form>
+                    </div>
+                </div>
+            </nav>
+
+        </div>
+    </div>
+
+{% endblock %}

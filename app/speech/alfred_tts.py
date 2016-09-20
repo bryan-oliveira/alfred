@@ -1,9 +1,6 @@
-# from tokens import OXFORD_SPEECH_API # add your own tokens file or remove this line and uncomment line 6
-import requests
-import json
 import base64
-
-
+import json
+import requests
 
 OXFORD_SPEECH_API = "2f3bcd576a404153a32724a54e7d6e6b"
 
@@ -15,14 +12,20 @@ ACCESS_TOKEN_PAYLOAD = {'grant_type': 'client_credentials', 'client_id': 'nothin
 ACCESS_TOKEN_HEADERS = {"Content-type": "application/x-www-form-urlencoded"}
 ACCESS_TOKEN_HOST = "http://oxford-speech.cloudapp.net"
 ACCESS_TOKEN_PATH = "/token/issueToken"
-ACCESS_TOKEN_URL = ACCESS_TOKEN_HOST+ACCESS_TOKEN_PATH
+ACCESS_TOKEN_URL = ACCESS_TOKEN_HOST + ACCESS_TOKEN_PATH
 
 
 def get_access_token():
-    r = requests.post(ACCESS_TOKEN_URL, headers=ACCESS_TOKEN_HEADERS, data=ACCESS_TOKEN_PAYLOAD)
-    print "Access token status code: " + str(r.status_code)
-    data = r.content
-    return str(json.loads(data)['access_token'])
+    try:
+        r = requests.post(ACCESS_TOKEN_URL, headers=ACCESS_TOKEN_HEADERS, data=ACCESS_TOKEN_PAYLOAD)
+        print "Access token status code: " + str(r.status_code)
+        data = r.content
+        return str(json.loads(data)['access_token'])
+
+    # except NewConnectionError:
+    except:
+        print "Error: No response received"
+        return None
 
 
 TTS_HEADERS = {"Content-type": "application/ssml+xml",
