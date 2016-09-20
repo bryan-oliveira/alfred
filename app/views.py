@@ -179,13 +179,18 @@ def admin_page():
     return render_template("admin.html")
 
 
-@app.route("/run_nltk_script", methods=['POST'])
+@app.route("/run_nltk_script", methods=['GET', 'POST'])
 def run_nltk_script():
     """
     This function installs a NLTK dependency on the server machine
     :return: True
     """
-    nltk.download('punkt')
+    print request.args
+    module = ""
+    for x in request.args:
+        module = x
+
+    nltk.download(module)
     return True
 
 @app.route("/logout")
