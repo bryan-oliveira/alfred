@@ -182,7 +182,7 @@ def admin_page():
 @app.route("/run_nltk_script", methods=['POST'])
 def run_nltk_script():
     """
-    This function installs a NLTK dependency on the local machine
+    This function installs a NLTK dependency on the server machine
     :return: True
     """
     nltk.download('punkt')
