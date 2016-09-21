@@ -189,9 +189,10 @@ def run_nltk_script():
     module = ""
     for x in request.args:
         module = x
-
     nltk.download(module)
-    return True
+
+    return redirect('index')
+
 
 @app.route("/logout")
 @login_required

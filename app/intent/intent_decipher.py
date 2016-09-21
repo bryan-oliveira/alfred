@@ -1,8 +1,15 @@
+import nltk
 from nltk import word_tokenize
 from nltk import pos_tag
 
+from config import basedir
+import os
 
-def ingredient_notin():
+path = os.path.join(basedir, 'nltk_data')
+nltk.data.path.append(path)
+
+
+def ingredient_not_in():
     """
     Find recipe without a certain ingredient
     :return:

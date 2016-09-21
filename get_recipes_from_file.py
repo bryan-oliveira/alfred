@@ -4,6 +4,7 @@ import json
 
 # Recipe file defined in application config.py
 RECIPE_FILE = RECIPE_FILE
+N_RECIPES = 10
 
 
 def getRecipesFromFile():
@@ -70,7 +71,7 @@ def getRecipesByIngredients(ingredients):
 
 
 def getRecipesByKeywordInName(keywords):
-    """ Input: Ingredients to search in recipes.
+    """ Input: Keyword to search in recipe name.
         Output: Return N_RECIPES amount of recipes.
         TODO: Change from i to N_RECIPES. """
     print "Function: getRecipesByKeywordInName"
@@ -87,7 +88,7 @@ def getRecipesByKeywordInName(keywords):
             for recipe in data:
                 # For each keyword in said recipe
                 for kw in keywords:
-                    print kw + " - in - " + recipe['name']
+                    # print kw + " - in - " + recipe['name']
                     # For each ingredient we are looking for
                     if kw.lower() in recipe['name'].lower():
                         # Don't save duplicates
@@ -97,7 +98,7 @@ def getRecipesByKeywordInName(keywords):
                             print "Title Saving -->", recipe['name']
                             break
 
-                if i > 11:
+                if i > N_RECIPES:
                     print "Title: i>10 getRecipesByIngredient"
                     break
 
