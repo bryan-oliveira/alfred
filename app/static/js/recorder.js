@@ -72,7 +72,7 @@ if (navigator.getUserMedia) {
             console.log("recorder stopped");
 
             deleteButton.onclick = function(e) {
-            evtTgt = e.target;
+            var evtTgt = e.target;
             evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
             }
 
@@ -83,7 +83,8 @@ if (navigator.getUserMedia) {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function (response) {
                 if (xhr.readyState == 4){
-                    document.getElementById("recipe_list").innerHTML = xhr.responseText;
+                    /* document.getElementById("recipe_list").innerHTML = xhr.responseText;*/
+                    document.body.innerHTML = xhr.responseText;
                 }
             }
             xhr.open('POST', '/upload', true);

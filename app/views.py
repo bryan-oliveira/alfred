@@ -10,9 +10,14 @@ from app.models import Users
 from .forms import LoginForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from app.speech.alfred_tts import get_raw_wav
-import nltk
+
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
+
+
+def getUserName():
+    # TODO: Consider stashing everything in session var
+    return current_user.fullname.split()[0]
 
 
 # Alfred main page
@@ -35,8 +40,7 @@ def index():
         form = LoginForm()
 
         # Send first name to template
-        # TODO: Consider stashing everything in session var
-        user = current_user.fullname.split()[0]
+        user = getUserName()
 
         # If time var available, check inactivity duration. >10m = Alfred greets you
         if 'time' in session:
@@ -59,7 +63,7 @@ def index():
         return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
         return render_template('categories.html',
                                title='Home',
-                               recipes=return_recipes,
+                               recipe_suggestions=return_recipes,
                                form=form,
                                user=user,
                                wavfile=alfred_voice)
@@ -74,7 +78,7 @@ def index():
         return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
         return render_template('categories.html',
                                title='Home',
-                               recipes=return_recipes,
+                               recipe_suggestions=return_recipes,
                                form=form)
 
 
@@ -95,16 +99,14 @@ def search_recipe():
 
     return render_template('show_recipe.html',
                            title=recipe['name'],
-                           recipes=return_recipes,
-                           recipe=recipe)
+                           recipe_suggestions=return_recipes,
+                           recipe=recipe,
+                           user=getUserName())
 
 
 # Upload audio clip to flask | Clicking on Microphone icon triggers this
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    # Debug audio BLOB
-    # app.logger.debug(request.files['audio'])
-
     # Get spoken audio clip
     audio = request.files['audio']
 
@@ -114,12 +116,15 @@ def upload():
     # print recipes
     print len(recipes)
 
-    # TODO: Change to recommended recipes whenever possible
-    # Loads recipes from file (JSON), returns 20 random
-    recommend_recipes = getRecipesFromFile()
-    return_recipes = random.sample(recommend_recipes, RECOMMENDED_RECIPE_LIST_SIZE)
+    # TODO: Scalability: call getRecipesFromFile once and share it to session var; Update every 5m vs every call;
+    # Loads recipes from fie JSON format, returns random 20 at random
+    recipe_list = getRecipesFromFile()
+    return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
 
-    return render_template('show_recipe_results.html', recipes=recipes)
+    return render_template('show_recipe_results.html',
+                           recipes=recipes,
+                           recipe_suggestions=return_recipes,
+                           user=getUserName())
 
 
 # Register view
@@ -177,21 +182,6 @@ def login():
 @app.route("/admin", methods=['GET'])
 def admin_page():
     return render_template("admin.html")
-
-
-@app.route("/run_nltk_script", methods=['GET', 'POST'])
-def run_nltk_script():
-    """
-    This function installs a NLTK dependency on the server machine
-    :return: True
-    """
-    print request.args
-    module = ""
-    for x in request.args:
-        module = x
-    nltk.download(module)
-
-    return redirect('index')
 
 
 @app.route("/logout")

@@ -32,7 +32,7 @@
                 <div class="column is-one-quarter">
 
                     <h3 class="title is-3">Recipes</h3>
-                    {% for recipe in recipes %}
+                    {% for recipe in recipe_suggestions %}
                         <!-- TODO Make a clickable link by POSTing recipe name -->
                         <p><a href="/search?recipe_name={{recipe.name|urlencode}}">{{ recipe.name}}</a></p>
                     {% endfor %}
@@ -42,11 +42,8 @@
                 <!-- Right 3/4 of screen -->
                 <div class="column is-three-quarters">
 
-                    {% block content %}{% endblock %}
-
-                    <!-- Alfred results -->
-                    <div id="recipe_list" class="columns is-multiline">
-                    </div>
+                    {% block content %}
+                    {% endblock %}
 
                 </div>
 

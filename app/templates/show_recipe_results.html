@@ -1,12 +1,19 @@
-{% for recipe in recipes %}
-    {% if recipe.img_src != "" %}
-        <div class="column is-3">
-            <h4 class="title is-4">
-                <a href="/search?recipe_name={{recipe.name|urlencode}}"> {{ recipe.name[:20]}}</a>
-            </h4>
-            <a href="/search?recipe_name={{recipe.name|urlencode}}">
-                <img src="{{recipe.img_src}}">
-            </a>
-        </div>
-    {% endif %}
-{% endfor %}
+{% extends "base-template.html" %}
+
+{% block content %}
+    <div class="columns is-multiline">
+        {% for recipe in recipes %}
+            {% if recipe.img_src != "" %}
+                <div class="column is-3">
+                    <h4 class="title is-4">
+                        <a href="/search?recipe_name={{recipe.name|urlencode}}"> {{ recipe.name[:20]}}</a>
+                    </h4>
+
+                    <a href="/search?recipe_name={{recipe.name|urlencode}}">
+                        <img src="{{recipe.img_src}}">
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
