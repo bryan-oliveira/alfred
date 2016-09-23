@@ -28,6 +28,72 @@ def getRecipeByName(recipe_name):
             return None
 
 
+def getRecipesWithAllIngredients(ingredients):
+    """ Input: Ingredients to search in recipes.
+        Output: Return N_RECIPES amount of recipes.
+        TODO: Change from i to N_RECIPES. """
+
+    recipes_with_all_ingredients = []
+    ingredients = ['pepper', 'chicken', 'avocado']
+
+    if not is_empty_file(RECIPE_FILE):
+        with open(RECIPE_FILE, 'r') as data_file:
+            data = json.load(data_file)
+
+            i = 0
+            ing_counter = 0
+            next_recipe = False
+            n_ings = len(ingredients)
+
+            debug = 3
+            debug_output = []
+
+            # For each recipe
+            for recipe in data:
+
+                debug -= 1
+                ing_counter = 0
+
+                recipe_output = recipe['name'] + '\n'
+
+                # For each ingredient string in recipe Ex: '1/2 onion'
+                for recipe_ingredient in recipe['ingredients']:
+
+                    # print recipe['name']
+
+                    # For each ingredient we are looking for
+                    for ing in ingredients:
+
+                        if ing in recipe_ingredient:
+                            # print 'ING - ', ing, 'in', recipe_ingredient
+                            string = '\tFound ing: ' + ing + ' in ' + recipe_ingredient + '\n'
+                            recipe_output += string
+                            ing_counter += 1
+
+                        # TODO: Check whether duplicate recipes are being inserted
+                        # Old: if ing_counter == n_ings and recipe['name'] not in recipes_with_all_ingredients:
+                        if ing_counter == n_ings:
+                            recipes_with_all_ingredients += [recipe]
+                            next_recipe = True
+                            ing_counter = 0
+                            i += 1
+                            print "FOUND RECIPE - ", recipe_output, '\n'
+                            break
+
+                    if next_recipe is True:
+                        next_recipe = False
+                        break
+
+                # print '\n\n'
+
+                if i > 11:
+                    print "Ingr: i>10 getRecipesByAllIngredient"
+                    break
+
+    # print recipes_with_ingredients
+    return recipes_with_all_ingredients
+
+
 def getRecipesByIngredients(ingredients):
     """ Input: Ingredients to search in recipes.
         Output: Return N_RECIPES amount of recipes.
@@ -52,7 +118,8 @@ def getRecipesByIngredients(ingredients):
                         if ing1 in recipe_ingredient:
                             # Don't save duplicates
                             if recipe['name'] not in recipes_with_ingredients:
-                                recipes_with_ingredients += [recipe['name']]
+                                # Old: recipes_with_ingredients += [recipe['name']]
+                                recipes_with_ingredients += [recipe]
                                 i += 1
                                 # print "Ingr: Saving -->", recipe['name']
                                 next_recipe = True
@@ -77,7 +144,7 @@ def getRecipesByKeywordInName(keywords):
     print "Function: getRecipesByKeywordInName"
     print "Keywords:", keywords
 
-    recipes_with_ingredients = []
+    recipes_with_keywords = []
     if not is_empty_file(RECIPE_FILE):
         with open(RECIPE_FILE, 'r') as data_file:
             data = json.load(data_file)
@@ -92,10 +159,10 @@ def getRecipesByKeywordInName(keywords):
                     # For each ingredient we are looking for
                     if kw.lower() in recipe['name'].lower():
                         # Don't save duplicates
-                        if recipe['name'] not in recipes_with_ingredients:
-                            recipes_with_ingredients += [recipe['name']]
+                        if recipe['name'] not in recipes_with_keywords:
+                            # Old: recipes_with_ingredients += [recipe['name']]
+                            recipes_with_keywords += [recipe]
                             i += 1
-                            print "Title Saving -->", recipe['name']
                             break
 
                 if i > N_RECIPES:
@@ -103,7 +170,7 @@ def getRecipesByKeywordInName(keywords):
                     break
 
     # print recipes_with_ingredients
-    return recipes_with_ingredients
+    return recipes_with_keywords
 
 
 if __name__ == '__main__':
