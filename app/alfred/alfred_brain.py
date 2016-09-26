@@ -15,17 +15,19 @@ def alfred_brain(audio_phrase):
 
     print "Step 2"
     # Perform voice recognition
-    text = ss.speech_recognition_from_file()
+
+    # text = ss.speech_recognition_from_file() <-
 
     # Extract intent from text
     # command_type, ingredients, meal_course = idr.intent_brain(text)
 
     print "Step 3"
     # Searches for ingredients within text
-    ingredients = idr.ingredient_search(text)
+
+    # ingredients = idr.ingredient_search(text) <-
 
     # Test with custom ingredients DEBUG
-    # ings = ['tomato', 'soup']
+    ingredients = ['tomato', 'soup']
 
     print "3.5"
     recipe_names += getRecipesWithAllIngredients(ingredients)

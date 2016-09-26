@@ -1,11 +1,13 @@
 from file_operations import is_empty_file
 from config import RECIPE_FILE
 import json
+import copy
 
 # Recipe file defined in application config.py
 RECIPE_FILE = RECIPE_FILE
 N_RECIPES = 10
 
+DEBUG = False
 
 def getRecipesFromFile():
 
@@ -41,53 +43,55 @@ def getRecipesWithAllIngredients(ingredients):
             data = json.load(data_file)
 
             i = 0
-            ing_counter = 0
             next_recipe = False
-            n_ings = len(ingredients)
+            ing_copy = ingredients
 
             debug = 3
-            debug_output = []
 
             # For each recipe
             for recipe in data:
 
                 debug -= 1
-                ing_counter = 0
 
+                ing_copy = copy.deepcopy(ingredients)
                 recipe_output = recipe['name'] + '\n'
+
+                if DEBUG:
+                    print recipe['name']
 
                 # For each ingredient string in recipe Ex: '1/2 onion'
                 for recipe_ingredient in recipe['ingredients']:
 
-                    # print recipe['name']
-
                     # For each ingredient we are looking for
-                    for ing in ingredients:
+                    for ing in ing_copy:
 
                         if ing in recipe_ingredient:
-                            # print 'ING - ', ing, 'in', recipe_ingredient
-                            string = '\tFound ing: ' + ing + ' in ' + recipe_ingredient + '\n'
-                            recipe_output += string
-                            ing_counter += 1
+                            if DEBUG:
+                                string = '\tFound ing: ' + ing + ' in ' + recipe_ingredient + '\n'
+                                recipe_output += string
+                                print 'found ->', ing, 'left:', ing_copy, len(ing_copy)
 
-                        # TODO: Check whether duplicate recipes are being inserted
-                        # Old: if ing_counter == n_ings and recipe['name'] not in recipes_with_all_ingredients:
-                        if ing_counter == n_ings:
-                            recipes_with_all_ingredients += [recipe]
-                            next_recipe = True
-                            ing_counter = 0
-                            i += 1
-                            print "FOUND RECIPE - ", recipe_output, '\n'
+                            ing_copy.remove(ing)
                             break
+
+                    # TODO: Check whether duplicate recipes are being inserted
+                    # Old: if ing_counter == n_ings and recipe['name'] not in recipes_with_all_ingredients:
+                    if len(ing_copy) == 0:
+                        recipes_with_all_ingredients += [recipe]
+                        next_recipe = True
+                        i += 1
+
+                        if DEBUG:
+                            print "FOUND RECIPE - ", recipe_output, '\n'
+
+                        break
 
                     if next_recipe is True:
                         next_recipe = False
                         break
 
-                # print '\n\n'
-
                 if i > 11:
-                    print "Ingr: i>10 getRecipesByAllIngredient"
+                    print "Ingr: i > 11 - getRecipesByAllIngredient"
                     break
 
     # print recipes_with_ingredients
@@ -133,7 +137,6 @@ def getRecipesByIngredients(ingredients):
                     print "Ingr: i>10 getRecipesByIngredient"
                     break
 
-    # print recipes_with_ingredients
     return recipes_with_ingredients
 
 

@@ -19,7 +19,12 @@
 </head>
 <body>
     <div class="container is-fluid">
-        <!-- TODO: Import header template instead of defining in each -->
+
+        <!-- Invisible audio player -->
+        {% if wavfile %}
+            <audio autoplay src="data:audio/wav;base64,{{ wavfile }}">Your browser does not support this audio format.</audio>
+        {% endif %}
+
 
         <!-- Header -->
         {% include 'header.html' %}
@@ -42,8 +47,10 @@
                 <!-- Right 3/4 of screen -->
                 <div class="column is-three-quarters">
 
-                    {% block content %}
-                    {% endblock %}
+                    <div class="recipe_list">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
 
                 </div>
 
@@ -54,16 +61,11 @@
 
         </div>
 
-        <img src="{{ url_for('static', filename='images/alfred2.png') }}" class="microphone" onclick="startRecording()">
-
     </div>
 
     <!-- Microphone recorder functions -->
+    <img src="{{ url_for('static', filename='images/alfred2.png') }}" class="microphone" onclick="startRecording()">
     <script src="{{ url_for('static', filename='js/recorder.js')}}"></script>
-
-    {% if wavfile %}
-        <audio autoplay src="data:audio/wav;base64,{{ wavfile }}">Your browser does not support this audio format.</audio>
-    {% endif %}
 
 </body>
 </html>
