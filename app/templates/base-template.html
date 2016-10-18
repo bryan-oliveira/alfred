@@ -31,33 +31,39 @@
 
         <div class="container">
 
-            <!-- Column Section-->
-            <div class="columns">
-                <!-- Left 1/4 of screen -->
-                <div class="column is-one-quarter">
+            <!-- Fullscreen Content -->
+            {% block fullscreen %}
 
-                    <h3 class="title is-3">Recipes</h3>
-                    {% for recipe in recipe_suggestions %}
-                        <!-- TODO Make a clickable link by POSTing recipe name -->
-                        <p><a href="/search?recipe_name={{recipe.name|urlencode}}">{{ recipe.name}}</a></p>
-                    {% endfor %}
+                <!-- Column Section-->
+                <div class="columns">
 
-                </div>
+                    <!-- Left 1/4 of screen -->
+                    <div class="column is-one-quarter">
 
-                <!-- Right 3/4 of screen -->
-                <div class="column is-three-quarters">
+                        <h3 class="title is-3">Recipes</h3>
+                        {% for recipe in recipe_suggestions %}
+                            <!-- TODO Make a clickable link by POSTing recipe name -->
+                            <p><a href="/search?recipe_name={{recipe.title|urlencode }}">{{ recipe.title }}</a></p>
+                        {% endfor %}
 
-                    <div class="recipe_list">
-                        {% block content %}
-                        {% endblock %}
+                    </div>
+
+                    <!-- Right 3/4 of screen -->
+                    <div class="column is-three-quarters">
+
+                        <div class="recipe_list">
+                            {% block content %}
+                            {% endblock %}
+                        </div>
+
                     </div>
 
                 </div>
 
-            </div>
+                <!-- Login modal -->
+                {% include "login.html" %}
 
-            <!-- Login modal -->
-            {% include "login.html" %}
+            {% endblock %}
 
         </div>
 

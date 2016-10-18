@@ -2,8 +2,8 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-RECIPE_FILE = os.path.join(basedir, 'recipe_data/recipe.data')
-NEW_RECIPE_FILE = os.path.join(basedir, 'recipe_data/new_recipe.data')
+# RECIPE_FILE = os.path.join(basedir, 'recipe_data/recipe.data')
+RECIPE_FILE = os.path.join(basedir, 'recipe_data/recipes_epicurious.data')
 
 UPLOAD_FOLDER = os.path.join(basedir, "audio/")
 ROOT_FOLDER = '.'
@@ -18,5 +18,5 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 ROOT_FOLDER = ROOT_FOLDER
 UPLOAD_FOLDER = UPLOAD_FOLDER
 RECIPE_FILE = RECIPE_FILE
-NEW_RECIPE_FILE = NEW_RECIPE_FILE
+
 

@@ -1,9 +1,8 @@
 import json
 import codecs
 from file_operations import is_empty_file
-from config import RECIPE_FILE, NEW_RECIPE_FILE
+from config import RECIPE_FILE
 
-recipe_file = RECIPE_FILE
 NEW_RECIPE_FILE = RECIPE_FILE
 
 
@@ -27,6 +26,7 @@ def save_recipe(new_recipe):
         with codecs.open(NEW_RECIPE_FILE, encoding='utf-8', mode='w') as f:
             json.dump(new_recipe, f, encoding='utf-8')
 
+        print "Saved %d recipes to file." % len(new_recipe)
     # Case 2: Non empty file. We must append recipe to current structure
     else:
 
@@ -43,6 +43,10 @@ def save_recipe(new_recipe):
 
         with codecs.open(NEW_RECIPE_FILE, encoding='utf-8', mode='w') as f:
             json.dump(json_structure, f, encoding='utf-8')
+
+        print "Saved %d recipes to file." % len(json_structure)
+
+    return True
 
 
 def eliminateIrregularRecipes():

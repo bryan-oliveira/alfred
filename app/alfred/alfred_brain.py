@@ -27,7 +27,7 @@ def alfred_brain(audio_phrase):
     # ingredients = idr.ingredient_search(text) <-
 
     # Test with custom ingredients DEBUG
-    ingredients = ['tomato', 'soup']
+    ingredients = ['tomato', 'avocado', 'chicken']
 
     print "3.5"
     recipe_names += getRecipesWithAllIngredients(ingredients)

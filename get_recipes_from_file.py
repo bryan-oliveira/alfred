@@ -9,6 +9,7 @@ N_RECIPES = 10
 
 DEBUG = False
 
+
 def getRecipesFromFile():
 
     if not is_empty_file(RECIPE_FILE):
@@ -16,7 +17,7 @@ def getRecipesFromFile():
             data = json.load(data_file)
 
             return data
-
+    
 
 def getRecipeByName(recipe_name):
 
@@ -25,7 +26,7 @@ def getRecipeByName(recipe_name):
             data = json.load(data_file)
             for recipe in data:
                 # print 'Recipe list:',recipe['name'],' ; Recipe search:', recipe_name
-                if recipe['name'] == recipe_name:
+                if recipe['title'] == recipe_name:
                     return recipe
             return None
 
@@ -36,7 +37,6 @@ def getRecipesWithAllIngredients(ingredients):
         TODO: Change from i to N_RECIPES. """
 
     recipes_with_all_ingredients = []
-    ingredients = ['pepper', 'chicken', 'avocado']
 
     if not is_empty_file(RECIPE_FILE):
         with open(RECIPE_FILE, 'r') as data_file:
@@ -54,13 +54,13 @@ def getRecipesWithAllIngredients(ingredients):
                 debug -= 1
 
                 ing_copy = copy.deepcopy(ingredients)
-                recipe_output = recipe['name'] + '\n'
+                recipe_output = recipe['title'] + '\n'
 
                 if DEBUG:
-                    print recipe['name']
+                    print recipe['title']
 
                 # For each ingredient string in recipe Ex: '1/2 onion'
-                for recipe_ingredient in recipe['ingredients']:
+                for recipe_ingredient in recipe['ingredientList']:
 
                     # For each ingredient we are looking for
                     for ing in ing_copy:
@@ -115,13 +115,13 @@ def getRecipesByIngredients(ingredients):
             # For each recipe
             for recipe in data:
                 # For each ingredient in said recipe
-                for recipe_ingredient in recipe['ingredients']:
+                for recipe_ingredient in recipe['ingredientList']:
                     # For each ingredient we are looking for
                     for ing1 in ingredients:
                         # Keep the recipe names that contain the ingredients
                         if ing1 in recipe_ingredient:
                             # Don't save duplicates
-                            if recipe['name'] not in recipes_with_ingredients:
+                            if recipe['title'] not in recipes_with_ingredients:
                                 # Old: recipes_with_ingredients += [recipe['name']]
                                 recipes_with_ingredients += [recipe]
                                 i += 1
@@ -160,9 +160,9 @@ def getRecipesByKeywordInName(keywords):
                 for kw in keywords:
                     # print kw + " - in - " + recipe['name']
                     # For each ingredient we are looking for
-                    if kw.lower() in recipe['name'].lower():
+                    if kw.lower() in recipe['title'].lower():
                         # Don't save duplicates
-                        if recipe['name'] not in recipes_with_keywords:
+                        if recipe['title'] not in recipes_with_keywords:
                             # Old: recipes_with_ingredients += [recipe['name']]
                             recipes_with_keywords += [recipe]
                             i += 1

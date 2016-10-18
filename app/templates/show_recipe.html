@@ -1,45 +1,86 @@
 {% extends "base-template.html" %}
 
-{% block content %}
+{% block fullscreen %}
 
-    <!--  Recipe display area. Is the right 3/4 of the screen -->
-    <div class="column">
+    <h2 class="title is-2 recipe_title has-text-centered">{{ recipe.title|upper }}</h2>
 
-        <h3 class="title is-3 recipe_title">{{ recipe.name }}</h3>
+    <div class="columns">
+        <div class="column is-one-third">
 
-        <div class="columns">
-            <div class="column is-one-third">
-
-                <!--  Recipe ingredients -->
-                <h5 class="title is-5">Ingredients</h5>
-                <ul>
-                    {% for ingredient in recipe.ingredients %}
-                    <div class="columns">
-                        <div class="column ingredient_column">
-                            <span class="icon" style="float: left">
-                                <i class="fa fa-check"></i>
-                            </span>
-                            <li>{{ ingredient }}</li>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </ul>
-            </div>
-
-            <div class="column">
-                <!-- Recipe image -->
-                {% if recipe.img_src is defined %}
-                    <img src={{ recipe.img_src }}>
+            <!--  Recipe ingredients -->
+            <h4 class="title is-4">INGREDIENTS</h4>
+            <hr>
+            {% for ingTitle, ingList in recipe.ingredientList.iteritems() %}
+                {% if ingTitle == "None" %}
+                    <table class="table is-narrow">
+                        <tbody>
+                            {% for ing in ingList %}
+                                <tr>
+                                    <td class="is-icon">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td>{{ ing }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 {% endif %}
+            {% endfor %}
 
-                <!-- Recipe directions -->
-                <h3 class="title is-3">Directions</h3>
-                {% for direction in recipe.directions %}
-                    <p class="directions_steps">{{ direction|safe }}</p>
-                {% endfor %}
+            {% for ingTitle, ingList in recipe.ingredientList.iteritems() %}
+                {% if ingTitle != "None" %}
+                    <p class="title is-5 ">{{ ingTitle }}</p>
+                    <table class="table is-narrow no-border">
+                        <tbody>
+                            {% for ing in ingList %}
+                                <tr>
+                                    <td class="is-icon">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td>{{ ing }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            {% endfor %}
 
-            </div>
+
+        </div>
+
+        <div class="column">
+            <!-- Recipe image -->
+            {% if recipe.imgURL is defined %}
+                <img src="{{ "http://" ~ recipe.imgURL }}">
+            {% endif %}
+
+            <!-- Recipe directions -->
+            <h3 class="title is-3">Preparation</h3>
+            <hr>
+            <!-- Special Case:
+            First print Steps without title. This is to keep the order of the preparations steps.
+            In preparations steps without title, there may be comments at the end that are labeled.
+            This forces them to come last. It preparation steps are labeled, this is irrelevant
+            -->
+            {% for title, stepList in recipe.preparation.iteritems() %}
+                {% if title == "None" %}
+                    {% for step in stepList %}
+                        <h5 class="title is-5">{{ step }}</h5>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+
+            {% for title, stepList in recipe.preparation.iteritems() %}
+                {% if title != "None" %}
+                    <h4 class="title is-4" style="margin-top: 10px;">{{ title }}</h4>
+                    {% for step in stepList %}
+                        <h5 class="subtitle is-5">{{ step }}</h5>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+
         </div>
     </div>
+
 
 {% endblock %}

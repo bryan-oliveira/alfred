@@ -1,9 +1,11 @@
-body                { font-family: sans-serif; background: #fafafa; /*background: #eee;*/ }
+/*
+body                { font-family: sans-serif; background: #fafafa; }
+/*
 a, h1, h2           { color: #377ba8; }
-h1, h2, h3          { font-family: 'Georgia', serif; margin: 0; }
+h1, h2, h3          {font-family: 'Georgia', serif; margin: 0; }
 h1                  { border-bottom: 2px solid #eee; }
 h2                  { font-size: 1.2em; }
-
+*/
 @font-face {
     font-family: allura;
     src: url('allura.ttf');
@@ -23,7 +25,7 @@ h2                  { font-size: 1.2em; }
 .recipe_list        { padding: 10px 0px 0px 10px; }
 .directions_steps   { margin-bottom: 10px; }
 .no_underline       { text-decoration: none; }
-
+.no-border td       { border-width: 0 0 0px; border: 0px; }
 .microphone         { width: 200px; height: 175px; margin: 10px; float: left; bottom: 10px; position: fixed;}
 .alfred             { font-family: allura; font-size: 90px; color: white; }
 .top_margin_20px    { margin-top: 20px; }

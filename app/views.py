@@ -61,6 +61,9 @@ def index():
             alfred_voice = get_raw_wav(phrase)
 
         return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
+
+        print "DEBUG:", return_recipes[0]['title']
+
         return render_template('categories.html',
                                title='Home',
                                recipe_suggestions=return_recipes,
@@ -98,7 +101,7 @@ def search_recipe():
         return render_template('error_page.html')
 
     return render_template('show_recipe.html',
-                           title=recipe['name'],
+                           title=recipe['title'],
                            recipe_suggestions=return_recipes,
                            recipe=recipe,
                            user=getUserName())

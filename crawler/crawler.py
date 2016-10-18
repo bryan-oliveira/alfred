@@ -25,7 +25,6 @@ def parse_recipe(recipe_link):
         # print "no img"
         return None
 
-
     # Get recipe name
     name = soup_2.find("h1", {"itemprop": "name"})
     if name is not None:
