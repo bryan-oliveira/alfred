@@ -1,0 +1,37 @@
+<table class="table is-narrow">
+    <tbody>
+
+        <tr>
+            <td>Yield</td>
+            <td>{% if recipe.yield == "None" %}
+                    -
+                {% else %}
+                    {{ recipe.yield }}
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Active Time</td>
+            <td>
+                {% if recipe.activeTime == "None"  %}
+                    -
+                {% else %}
+                    {{ recipe.activeTime }}
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Total Time</td>
+            <td>
+                {% if recipe.totalTime == "None"  %}
+                    -
+                {% else %}
+                    {{ recipe.totalTime }}
+                {% endif %}
+            </td>
+        </tr>
+
+    </tbody>
+</table>

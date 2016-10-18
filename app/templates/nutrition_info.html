@@ -1,0 +1,11 @@
+<table class="table is-narrow">
+    <thead><tr><td>Nutrition Information</td><td></td></tr></thead>
+    <tbody>
+        {% for key, value in recipe.nutritionInfo[0].iteritems() %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

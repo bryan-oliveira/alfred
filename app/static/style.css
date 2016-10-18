@@ -29,6 +29,7 @@ h2                  { font-size: 1.2em; }
 .microphone         { width: 200px; height: 175px; margin: 10px; float: left; bottom: 10px; position: fixed;}
 .alfred             { font-family: allura; font-size: 90px; color: white; }
 .top_margin_20px    { margin-top: 20px; }
+.bottom_margin_10px { margin-bottom: 10px; }
 .spacer             { margin: 10px; }
 .image-cropper      {
                         border-radius: 50%;
