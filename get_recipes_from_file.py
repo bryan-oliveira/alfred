@@ -110,32 +110,40 @@ def getRecipesByIngredients(ingredients):
             data = json.load(data_file)
 
             i = 0
+            x = 0
             next_recipe = False  # When ingredient found, skip to next recipe
 
             # For each recipe
             for recipe in data:
-                # For each ingredient in said recipe
-                for recipe_ingredient in recipe['ingredientList']:
-                    # For each ingredient we are looking for
-                    for ing1 in ingredients:
-                        # Keep the recipe names that contain the ingredients
-                        if ing1 in recipe_ingredient:
-                            # Don't save duplicates
-                            if recipe['title'] not in recipes_with_ingredients:
-                                # Old: recipes_with_ingredients += [recipe['name']]
-                                recipes_with_ingredients += [recipe]
-                                i += 1
-                                # print "Ingr: Saving -->", recipe['name']
-                                next_recipe = True
-                                break
+                # For each subtype (if available) in ingList
+                x += 1
+                print "Title:", recipe['title'], x
 
-                    if next_recipe is True:
-                        next_recipe = False
+                for title in recipe['ingredientList']:
+                    # For each ingredient in said recipe
+                    print "Title", title
+                    for recipe_ingredient in recipe['ingredientList'][title]:
+                        print "Ingredient:", recipe_ingredient
+                        # For each ingredient we are looking for
+                        for ing1 in ingredients:
+                            # Keep the recipe names that contain the ingredients
+                            if ing1 in recipe_ingredient:
+                                # Don't save duplicates
+                                if recipe['title'] not in recipes_with_ingredients:
+                                    # Old: recipes_with_ingredients += [recipe['name']]
+                                    recipes_with_ingredients += [recipe]
+                                    i += 1
+                                    # print "Ingr: Saving -->", recipe['name']
+                                    next_recipe = True
+                                    break
+
+                        if next_recipe is True:
+                            next_recipe = False
+                            break
+
+                    if i > 11:
+                        print "Ingr: i>10 getRecipesByIngredient"
                         break
-
-                if i > 11:
-                    print "Ingr: i>10 getRecipesByIngredient"
-                    break
 
     return recipes_with_ingredients
 

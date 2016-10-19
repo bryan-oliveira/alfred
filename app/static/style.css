@@ -26,10 +26,12 @@ h2                  { font-size: 1.2em; }
 .directions_steps   { margin-bottom: 10px; }
 .no_underline       { text-decoration: none; }
 .no-border td       { border-width: 0 0 0px; border: 0px; }
+.no-top-margin      { margin-top: 0px;}
 .microphone         { width: 200px; height: 175px; margin: 10px; float: left; bottom: 10px; position: fixed;}
 .alfred             { font-family: allura; font-size: 90px; color: white; }
 .top_margin_20px    { margin-top: 20px; }
 .bottom_margin_10px { margin-bottom: 10px; }
+.tag-buttons        { margin: 5px; }
 .spacer             { margin: 10px; }
 .image-cropper      {
                         border-radius: 50%;

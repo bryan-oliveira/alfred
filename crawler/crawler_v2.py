@@ -106,8 +106,8 @@ def parse_recipe(url):
 
         # Get ingredient items
         for items in subList:
-            # print items.string
-            ings.append(items.string)
+            # print items.text
+            ings.append(items.text)
 
             ingredientlist[ingTitle] = ings
     # print "finalIngList:", finalIngList
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     # Recipe list
     recipe_list = []
 
-    for page in range(1):
+    for page in range(2):
 
         print "################# PAGE %d ##################" % (page + 1)
 

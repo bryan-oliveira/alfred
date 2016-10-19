@@ -8,8 +8,8 @@
         <div class="column is-one-quarter">
 
             <!--  Recipe ingredients -->
-            <hr style="margin-top: 0px;">
-            <h4 class="title is-4">INGREDIENTS</h4>
+            <hr class="no-top-margin">
+            <h4 class="title is-4">Ingredients</h4>
             <hr>
             {% for ingTitle, ingList in recipe.ingredientList.iteritems() %}
                 {% if ingTitle == "None" %}
@@ -53,12 +53,16 @@
         <div class="column">
             <div class="columns">
                 <div class="column is-two-thirds">
+                    <hr class="no-top-margin" >
                     <!-- Recipe image -->
                     {% if recipe.imgURL is defined %}
                         <img src="{{ "http://" ~ recipe.imgURL }}">
                     {% endif %}
+
+                    {% include "tags.html" %}
                 </div>
                 <div class="column">
+                    <hr class="no-top-margin">
                     {% include "additional_info.html" %}
                     {% include "nutrition_info.html" %}
                 </div>
