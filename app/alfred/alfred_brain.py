@@ -28,17 +28,21 @@ def alfred_brain(audio_phrase):
 
     # Test with custom ingredients DEBUG
     ingredients = ['olive oil']
+    recipe_names = []
 
-    print "3.5"
-    recipe_names += getRecipesWithAllIngredients(ingredients)
+    print "Step 3.5"
+    getRecipesWithAllIngredients(recipe_names, ingredients)
+    print "Len recipes:", len(recipe_names)
 
     print "Step 4"
     # Search recipes based on ingredients received from intent
-    recipe_names += getRecipesByIngredients(ingredients)
+    getRecipesByIngredients(recipe_names, ingredients)
+    print "Len recipes:", len(recipe_names)
 
     print "Step 5"
     # Search recipes based on ingredients in recipe title
-    recipe_names += getRecipesByKeywordInName(ingredients)
+    # recipe_names += getRecipesByKeywordInName(recipe_names, ingredients)
+    print "Len recipes:", len(recipe_names)
 
     print "Step 6"
     # Get recipes TODO: Main bottleneck is currently here

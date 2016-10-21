@@ -5,12 +5,12 @@
         {% for recipe in recipes %}
             {% if recipe.imgURL != "" %}
                 <div class="column is-3">
-                    <h5 class="title is-5">
-                        <a href="/search?recipe_name={{recipe.title|urlencode}}"> {{ recipe.title[:24]}}</a>
+                    <h5 class="title is-5" style="height: 36px;">
+                        <a href="/search?recipe_name={{recipe.title|urlencode}}"> {{ recipe.title[:54]}}</a>
                     </h5>
 
                     <a href="/search?recipe_name={{recipe.title|urlencode}}">
-                        <img src="{{recipe.imgURL}}">
+                        <img src="{{ "http://" ~ recipe.imgURL }}">
                     </a>
                 </div>
             {% endif %}
