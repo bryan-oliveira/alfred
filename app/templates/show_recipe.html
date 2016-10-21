@@ -1,102 +1,102 @@
 {% extends "base-template.html" %}
 
 {% block fullscreen %}
+    <div class="recipe_list">
+        <h2 class="title is-2 recipe_title has-text-centered green">{{ recipe.title|upper }}</h2>
 
-    <h2 class="title is-2 recipe_title has-text-centered">{{ recipe.title|upper }}</h2>
+        <div class="columns">
+            <div class="column is-one-quarter">
 
-    <div class="columns">
-        <div class="column is-one-quarter">
-
-            <!--  Recipe ingredients -->
-            <hr class="no-top-margin">
-            <h4 class="title is-4">Ingredients</h4>
-            <hr>
-            {% for ingTitle, ingList in recipe.ingredientList.iteritems() %}
-                {% if ingTitle == "None" %}
-                    <table class="table is-narrow no-border bottom_margin_10px">
-                        <tbody>
-                            {% for ing in ingList %}
-                                <tr>
-                                    <td class="is-icon">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td>{{ ing }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% endif %}
-            {% endfor %}
-
-            {% for ingTitle, ingList in recipe.ingredientList.iteritems() %}
-                {% if ingTitle != "None" %}
-                    <p class="title is-5" style="margin-bottom: 5px;">{{ ingTitle }}</p>
-                    <hr class="is-marginless">
-                    <table class="table is-narrow no-border bottom_margin_10px">
-                        <tbody>
-                            {% for ing in ingList %}
-                                <tr>
-                                    <td class="is-icon">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td>{{ ing }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% endif %}
-            {% endfor %}
-
-
-        </div>
-
-        <div class="column">
-            <div class="columns">
-                <div class="column is-two-thirds">
-                    <hr class="no-top-margin" >
-                    <!-- Recipe image -->
-                    {% if recipe.imgURL is defined %}
-                        <img src="{{ "http://" ~ recipe.imgURL }}">
+                <!--  Recipe ingredients -->
+                <hr class="no-top-margin">
+                <h4 class="title is-4">Ingredients</h4>
+                <hr>
+                {% for ingTitle, ingList in recipe.ingredientList.iteritems() %}
+                    {% if ingTitle == "None" %}
+                        <table class="table is-narrow no-border bottom_margin_10px">
+                            <tbody>
+                                {% for ing in ingList %}
+                                    <tr>
+                                        <td class="is-icon">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td>{{ ing }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     {% endif %}
+                {% endfor %}
 
-                    {% include "tags.html" %}
-                </div>
-                <div class="column">
-                    <hr class="no-top-margin">
-                    {% include "additional_info.html" %}
-                    {% include "nutrition_info.html" %}
-                </div>
+                {% for ingTitle, ingList in recipe.ingredientList.iteritems() %}
+                    {% if ingTitle != "None" %}
+                        <p class="title is-5" style="margin-bottom: 5px;">{{ ingTitle }}</p>
+                        <hr class="is-marginless">
+                        <table class="table is-narrow no-border bottom_margin_10px">
+                            <tbody>
+                                {% for ing in ingList %}
+                                    <tr>
+                                        <td class="is-icon">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td>{{ ing }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                {% endfor %}
+
+
             </div>
 
+            <div class="column">
+                <div class="columns">
+                    <div class="column is-two-thirds">
+                        <hr class="no-top-margin" >
+                        <!-- Recipe image -->
+                        {% if recipe.imgURL is defined %}
+                            <img src="{{ "http://" ~ recipe.imgURL }}">
+                        {% endif %}
 
-            <!-- Recipe directions -->
-            <hr>
-            <h3 class="title is-3">Preparation</h3>
-            <hr>
-            <!-- Special Case:
-            First print Steps without title. This is to keep the order of the preparations steps.
-            In preparations steps without title, there may be comments at the end that are labeled.
-            This forces them to come last. It preparation steps are labeled, this is irrelevant
-            -->
-            {% for title, stepList in recipe.preparation.iteritems() %}
-                {% if title == "None" %}
-                    {% for step in stepList %}
-                        <h5 class="subtitle is-5">{{ step }}</h5>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
+                        {% include "tags.html" %}
+                    </div>
+                    <div class="column">
+                        <hr class="no-top-margin">
+                        {% include "additional_info.html" %}
+                        {% include "nutrition_info.html" %}
+                    </div>
+                </div>
 
-            {% for title, stepList in recipe.preparation.iteritems() %}
-                {% if title != "None" %}
-                    <h4 class="title is-4" style="margin-top: 10px;">{{ title }}</h4>
-                    {% for step in stepList %}
-                        <h5 class="subtitle is-5">{{ step }}</h5>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
 
+                <!-- Recipe directions -->
+                <hr>
+                <h3 class="title is-3">Preparation</h3>
+                <hr>
+                <!-- Special Case:
+                First print Steps without title. This is to keep the order of the preparations steps.
+                In preparations steps without title, there may be comments at the end that are labeled.
+                This forces them to come last. It preparation steps are labeled, this is irrelevant
+                -->
+                {% for title, stepList in recipe.preparation.iteritems() %}
+                    {% if title == "None" %}
+                        {% for step in stepList %}
+                            <h5 class="subtitle is-5">{{ step }}</h5>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for title, stepList in recipe.preparation.iteritems() %}
+                    {% if title != "None" %}
+                        <h4 class="title is-4" style="margin-top: 10px;">{{ title }}</h4>
+                        {% for step in stepList %}
+                            <h5 class="subtitle is-5">{{ step }}</h5>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
+            </div>
         </div>
     </div>
-
 
 {% endblock %}

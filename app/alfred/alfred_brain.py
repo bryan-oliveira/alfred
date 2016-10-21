@@ -7,7 +7,8 @@ import os
 
 def alfred_brain(audio_phrase):
     # Save all recipes to this list
-    recipe_names = []
+    recipe_all_ings = []
+    recipe_partial_ings = []
 
     print "Step 1"
     # Save audio file to disk
@@ -16,39 +17,38 @@ def alfred_brain(audio_phrase):
     print "Step 2"
     # Perform voice recognition
 
-    # text = ss.speech_recognition_from_file() <-
+    text = ss.speech_recognition_from_file()
 
     # Extract intent from text
-    # command_type, ingredients, meal_course = idr.intent_brain(text)
+    command_type, ingredients, meal_course = idr.intent_brain(text)
 
     print "Step 3"
     # Searches for ingredients within text
 
-    # ingredients = idr.ingredient_search(text) <-
-
     # Test with custom ingredients DEBUG
-    ingredients = ['olive oil']
-    recipe_names = []
+    ingredients = ['pepper', 'beans']
+
+    ingredients = idr.ingredient_search(text)
 
     print "Step 3.5"
-    getRecipesWithAllIngredients(recipe_names, ingredients)
-    print "Len recipes:", len(recipe_names)
+    getRecipesWithAllIngredients(recipe_all_ings, ingredients)
+    print "Recipes containing all ingredients:", len(recipe_all_ings)
 
     print "Step 4"
     # Search recipes based on ingredients received from intent
-    getRecipesByIngredients(recipe_names, ingredients)
-    print "Len recipes:", len(recipe_names)
+    getRecipesByIngredients(recipe_partial_ings, ingredients)
+    print "Recipes containing some ings:", len(recipe_partial_ings)
 
     print "Step 5"
     # Search recipes based on ingredients in recipe title
     # recipe_names += getRecipesByKeywordInName(recipe_names, ingredients)
-    print "Len recipes:", len(recipe_names)
+    # print "Len recipes:", len(recipe_names)
 
     print "Step 6"
     # Get recipes TODO: Main bottleneck is currently here
 
     # Old: recipe_list = []
-    recipe_list = recipe_names
+    recipe_list = recipe_all_ings + recipe_partial_ings
 
     # for r in recipe_names:
     #    recipe_list += [getRecipeByName(r)]

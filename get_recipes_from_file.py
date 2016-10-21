@@ -53,7 +53,9 @@ def getRecipesWithAllIngredients(recipe_names, ingredients):
             for recipe in data:
 
                 debug -= 1
-
+                # print "###########################\n", recipe['title']
+                if recipe['title'] == None or recipe['title'] == "null":
+                    continue
                 ing_copy = copy.deepcopy(ingredients)
                 recipe_output = recipe['title'] + '\n'
 

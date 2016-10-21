@@ -171,7 +171,10 @@ if __name__ == "__main__":
     # Recipe list
     recipe_list = []
 
-    for page in range(2):
+    start = 32
+    stop = start + 10
+
+    for page in range(start, stop):
 
         print "################# PAGE %d ##################" % (page + 1)
 
