@@ -36,9 +36,10 @@ def speech_recognition_from_file():
     print "FILE ### ", new_file
     print os.system("ls")
     print os.system("ls audio")
-    print os.system("ls -la audio")
 
     r = sr.Recognizer()
+
+    new_file = "audio/test.wav"
 
     with sr.AudioFile(new_file) as wav:
         audio = r.record(wav)
