@@ -34,14 +34,13 @@ def speech_recognition_from_file():
 
     os.system("ffmpeg" + verbosity + " -y -i " + file_to_convert + " -ar 8000 " + new_file)
     print "FILE ### ", new_file
-    print os.system("ls")
-    print os.system("ls audio")
-    os.system("chmod 666 audio/test.ogg")
-    os.system("chmod 666 audio/test.wav")
+    # print os.system("ls")
+    print os.system("ls -la audio")
+    os.system("chmod 666 audio/*")
 
     r = sr.Recognizer()
 
-    new_file = "audio/test.wav"
+    # new_file = "audio/test.wav"
 
     with sr.AudioFile(new_file) as wav:
         audio = r.record(wav)
