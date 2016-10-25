@@ -36,6 +36,8 @@ def speech_recognition_from_file():
     print "FILE ### ", new_file
     print os.system("ls")
     print os.system("ls audio")
+    os.system("chmod 666 audio/test.ogg")
+    os.system("chmod 666 audio/test.wav")
 
     r = sr.Recognizer()
 
