@@ -30,7 +30,7 @@ def speech_recognition_from_file():
 
     # Verbose level of ffmpeg
     verbosity = " -nostats -loglevel 3"
-    print "ffmpeg -i " + file_to_convert + " -ar 8000 "
+    # print "ffmpeg -i " + file_to_convert + " -ar 8000 "
     os.system("ffmpeg" + verbosity + " -y -i " + file_to_convert + " -ar 8000 " + new_file)
 
     r = sr.Recognizer()
