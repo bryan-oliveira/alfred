@@ -17,7 +17,9 @@ RECOMMENDED_RECIPE_LIST_SIZE = 8
 
 def getUserName():
     # TODO: Consider stashing everything in session var
-    return current_user.fullname.split()[0]
+    if "fullname" in current_user:
+        return current_user.fullname.split()[0]
+    return None
 
 
 # Alfred main page
