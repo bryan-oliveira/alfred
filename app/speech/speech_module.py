@@ -35,6 +35,8 @@ def speech_recognition_from_file():
     os.system("ffmpeg" + verbosity + " -y -i " + file_to_convert + " -ar 8000 " + new_file)
     print "FILE ### ", new_file
     print os.system("ls")
+    print os.system("ls audio")
+    print os.system("ls -la audio")
 
     r = sr.Recognizer()
 
