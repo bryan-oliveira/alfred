@@ -25,20 +25,20 @@ def speech_recognition_from_file():
 
     folder_path = app.app.config['UPLOAD_FOLDER']
 
-    # file_to_convert = folder_path + "test.ogg"
-    # new_file = os.path.join(folder_path, 'test.wav')
-    file_to_convert = "audio/test.ogg"
-    new_file = "audio/test.wav"
+    file_to_convert = folder_path + "test.ogg"
+    new_file = os.path.join(folder_path, 'test.wav')
+
+    # file_to_convert = "audio/test.ogg"
+    # new_file = "audio/test.wav"
 
     # Verbose level of ffmpeg
     verbosity = " -nostats -loglevel 3"
-    verbosity = ""
-    print "ffmpeg", verbosity, " -y -i " + file_to_convert + " -ar 8000 " + new_file
 
+    print "ffmpeg", verbosity, " -y -i " + file_to_convert + " -ar 8000 " + new_file
     os.system("ffmpeg" + verbosity + " -y -i " + file_to_convert + " -ar 8000 " + new_file)
+
     print "#####", os.system("ffmpeg" + verbosity + " -y -i " + file_to_convert + " -ar 8000 " + new_file)
     print "FILE ### ", new_file
-    # print os.system("ls")
     os.system("chmod 666 audio/*")
     print os.system("ls -la audio")
 

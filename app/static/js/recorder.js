@@ -41,26 +41,6 @@ if (navigator.getUserMedia) {
         }
 
         mediaRecorder.onstop = function (e) {
-            //console.log("data available after MediaRecorder.stop() called.");
-
-            /*
-            var clipName = ""; // prompt('Enter a name for your sound clip?','My unnamed clip');
-            console.log(clipName);
-            var clipContainer = document.createElement('article');
-            var clipLabel = document.createElement('p');
-            var audio = document.createElement('audio');
-            var deleteButton = document.createElement('button');
-
-            clipContainer.classList.add('clip');
-            audio.setAttribute('controls', '');
-            deleteButton.className = 'delete';
-
-            clipContainer.appendChild(audio);
-            clipContainer.appendChild(clipLabel);
-            clipContainer.appendChild(deleteButton);
-
-            audio.controls = true;
-            */
 
             var blob = new Blob(chunks, {'type': 'audio/ogg;'});
             console.log('Chunks size:' + chunks.length);
@@ -71,13 +51,6 @@ if (navigator.getUserMedia) {
             //audio.src = audioURL;
 
             console.log("recorder stopped");
-
-            /*
-            deleteButton.onclick = function (e) {
-                var evtTgt = e.target;
-                evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
-            }
-            */
 
             // Send blob to server
             var formData = new FormData();
@@ -94,6 +67,7 @@ if (navigator.getUserMedia) {
 
             xhr.onload = function (e) {
                 console.log('NEW MESSAGE');
+                console.log(e);
             }
 
             xhr.send(formData);

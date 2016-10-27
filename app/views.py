@@ -38,9 +38,6 @@ def index():
         # Loads recipes from fie JSON format, returns random X at random
         recipes = getRecipesFromFile()
 
-        # Sends login form TODO: Put a condition in template. No need to send form to logged user
-        form = LoginForm()
-
         # Send first name to template
         user = getUserName()
 
@@ -69,14 +66,13 @@ def index():
         return render_template('categories.html',
                                title='Home',
                                recipe_suggestions=return_recipes,
-                               form=form,
+                               form=getForm(),
                                user=user,
                                wavfile=alfred_voice)
 
     else:
         # Loads recipes from fie JSON format, returns random X at random
         recipes = getRecipesFromFile()
-        form = LoginForm()
 
         print "Current User not auth:", current_user
 
@@ -84,12 +80,13 @@ def index():
         return render_template('categories.html',
                                title='Home',
                                recipe_suggestions=return_recipes,
-                               form=form)
+                               form=getForm())
 
 
 # Get recipe by name
 @app.route('/search')
 def search_recipe():
+
     # Get any args passed through GET|POST
     recipe_search = request.args.get('recipe_name')
 
@@ -106,12 +103,18 @@ def search_recipe():
                            title=recipe['title'],
                            recipe_suggestions=return_recipes,
                            recipe=recipe,
-                           user=getUserName())
+                           user=getUserName(),
+                           form=getForm())
+
+
+def getForm():
+    return LoginForm()
 
 
 # Upload audio clip to flask | Clicking on Microphone icon triggers this
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
+    print "Client Sendin Audio --- Starting Upload"
     # Get spoken audio clip
     audio = request.files['audio']
 
@@ -139,9 +142,9 @@ def register():
             # Registered user with success
             return redirect(url_for('index'))
         else:
-            return render_template('register.html', error_msg=result[1])
+            return render_template('register.html', error_msg=result[1], form=getForm())
 
-    return render_template('register.html')
+    return render_template('register.html', form=getForm())
 
 
 @app.route('/login', methods=['GET', 'POST'])
