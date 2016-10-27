@@ -13,6 +13,7 @@ def alfred_brain(audio_phrase):
     print "Step 1"
     # Save audio file to disk
     audio_phrase.save(os.path.join(app.config['UPLOAD_FOLDER'], 'test.ogg'))
+    print "\taudio file path:", os.path.join(app.config['UPLOAD_FOLDER'], 'test.ogg')
 
     print "Step 2"
     # Perform voice recognition
