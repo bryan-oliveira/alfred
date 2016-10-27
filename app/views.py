@@ -118,6 +118,8 @@ def upload():
     # Get spoken audio clip
     audio = request.files['audio']
 
+    print audio
+
     # Send to alfred brain, receive recipes ready to show
     recipes = alfred_brain(audio)
 
