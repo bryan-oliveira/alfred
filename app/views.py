@@ -22,6 +22,47 @@ def getUserName():
     return None
 
 
+@app.route('/test')
+def validate_recipes():
+    recipes = getRecipesFromFile()
+    list_ = []
+    title = 0
+    img = 0
+    description = 0
+    chef = 0
+    nutrition = 0
+    ings = 0
+    for recipe in recipes:
+        print "------"
+        if recipe['title'] is None or recipe['title'] == "Null":
+            title += 1
+        elif recipe["imgURL"] is None:
+            img += 1
+        elif recipe["description"] is None:
+            description += 1
+        elif recipe["yield"] is None:
+            print "NONE yield"
+        elif recipe["activeTime"] is None:
+            print "NONE active time"
+        elif recipe["totalTime"] is None:
+            print "NONE total time"
+        elif recipe["ingredientList"] is None or recipe['ingredientList'] == "None":
+            ings += 1
+        elif recipe["nutritionInfo"] is None:
+            nutrition += 1
+        elif recipe["chefNotes"] is None:
+            chef += 1
+        elif recipe["tags"] is None:
+            print "NONE tags"
+        else:
+            list_.append(recipe['title'])
+
+    print "Missing:\n\tTitle:%d\n\tImage:%d\n\tDescription:%d\n\tChef Notes:%d\n\tNutrition Info:%d\n\t" \
+          "Ingredients:%d" % (title, img, description, chef, nutrition, ings)
+
+    return render_template("test.html", list=list_)
+
+
 # Alfred main page
 @app.route('/')
 @app.route('/index')
@@ -114,16 +155,15 @@ def getForm():
 # Upload audio clip to flask | Clicking on Microphone icon triggers this
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    print "Client Sendin Audio --- Starting Upload"
     # Get spoken audio clip
     audio = request.files['audio']
-
-    print audio
 
     # Send to alfred brain, receive recipes ready to show
     recipes = alfred_brain(audio)
 
-    # TODO: Scalability: call getRecipesFromFile once and share it to session var; Update every 5m vs every call;
+    # TODO: Scalability: call getRecipesFromFile once and share it to session var;
+    # Update every 5m vs every call;
+
     # Loads recipes from fie JSON format, returns random 20 at random
     recipe_list = getRecipesFromFile()
     return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
@@ -171,12 +211,10 @@ def login():
         login_user(user, remember=True)
 
         flash('Logged in successfully!')
-        print 'Logged in successfully!'
 
         next_ = request.args.get('next')
 
         if not next_is_valid(next_):
-            print "abort!!!"
             return abort(400)
 
         return redirect(url_for('index'))

@@ -22,6 +22,7 @@ def parse_recipe(url):
     # html = urllib.urlopen("http://www.epicurious.com/recipes/food/views/gluten-free-cauliflower-pizza-with-mozzarella-kale-and-lemon")
     # Preparation Sub lists
     # html = urllib.urlopen("http://www.epicurious.com/recipes/food/views/creme-fraiche-potato-salad-with-salmon-roe-green-cabbage-slaw-and-smoked-salmon")
+
     soup = BeautifulSoup(html, "lxml")
 
     imgDiv = soup.find("div", {"class": "recipe-image"})
@@ -60,6 +61,8 @@ def parse_recipe(url):
 
     # Get title
     titleDiv = soup.find("div", {"class": "title-source"})
+    if titleDiv is None:
+        return False
     title = titleDiv.find("h1").string
     # print "title:", title
 
@@ -93,6 +96,8 @@ def parse_recipe(url):
 
     # Get ingredient list
     ingredientDiv = soup.find_all("ul", {"class": "ingredients"})
+    if ingredientDiv is None:
+        return False
     ingredientlist = {}
     for subList in ingredientDiv:
         ings = []
@@ -145,7 +150,6 @@ def parse_recipe(url):
     for tag in tagListDiv:
         tagList.append(tag.string)
     # print "tagList:", tagList
-
 
     # Create recipe structure
     new_recipe = {"title": title,

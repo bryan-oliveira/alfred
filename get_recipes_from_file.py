@@ -13,7 +13,6 @@ def getRecipesFromFile():
     if not is_empty_file(RECIPE_FILE):
         with open(RECIPE_FILE, 'r') as data_file:
             data = json.load(data_file)
-
             return data
     
 
