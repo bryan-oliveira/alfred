@@ -1,7 +1,0 @@
-{
-"vegetables":[["pepper", "peppers"],["tomato", "tomatos", "tomatoes"],["onion", "onions"],["carrot", "carrots"],["potato", "potatoes"],["avocado","avocados"],["bean", "beans"]],
-"dairy":[["egg", "eggs"],["milk"]],
-"fruit":[["orange", "oranges"],["strawberry", "strawberries"],["apple", "apples"],["apricot","apricots"]],
-"meat":[["steak", "steaks"]],
-"spices":[]
-}

@@ -1,4 +1,6 @@
-from file_operations import is_empty_file
+# -*- coding: utf-8 -*-
+
+from file_operations import is_empty_file, overwrite_recipe_file
 from config import RECIPE_FILE
 import json
 import copy
@@ -252,14 +254,42 @@ def remove_recipes_with_missing_fields():
         i += 1
 
     print "Recipes missing:\n\tTitle:%d\n\tImage:%d\n\tDescription:%d\n\tChef Notes:%d\n\tNutrition Info:%d\n\t" \
-          "Ingredients:%d" % (counter[0], counter[1], counter[2], counter[3], counter[4], counter[5])
+          "Ingredients:%d" % (counter[0], counter[1], counter[2], counter[5], counter[4], counter[3])
     print "Total:", len(recipes)
 
-    with codecs.open(RECIPE_FILE, encoding='utf-8', mode='w') as f:
-        json.dump(recipes, f, encoding='utf-8')
+    # Update recipe file
+    overwrite_recipe_file(recipes)
 
-    return True,
+    return True
+
+
+def remove_recipe_by_name(name):
+    recipes = getRecipesFromFile()
+    name = name.lower()
+    index = 0
+    for recipe in recipes:
+
+        if name in recipe['title'].lower():
+
+            inp = raw_input("Delete recipe: %s (y/N)?" % recipe['title'])
+            if inp == 'y' or inp == 'Y':
+                del recipes[index]
+                print "Removed:", recipe['title']
+
+                # Update recipe file
+                overwrite_recipe_file(recipes)
+                print "Updated recipe db"
+                return True
+        index += 1
+    print "Recipe title not found"
+    return False
+
 
 if __name__ == '__main__':
-    pass
+    if False:
+        remove_recipes_with_missing_fields()
+
+    if True:
+        remove_recipe_by_name("PENNE WITH TOMATO")
+        remove_recipe_by_name("SUGAR SNAP PEAS AND POTATOES")
 

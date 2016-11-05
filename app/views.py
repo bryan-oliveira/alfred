@@ -25,7 +25,9 @@ def getUserName():
     return None
 
 
-# @app.route('/test')
+@app.route('/test')
+def test():
+    pass
 
 
 # Alfred main page

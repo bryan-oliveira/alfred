@@ -9,8 +9,8 @@ import os
 
 def alfred_brain(audio_phrase):
     # Save all recipes to this list
-    recipe_all_ings = []
-    recipe_partial_ings = []
+    recipes_with_all_ings = []
+    recipes_with_partial_ings = []
 
     print "Step 1"
     # Save audio file to disk
@@ -34,23 +34,19 @@ def alfred_brain(audio_phrase):
 
     # Ex: {"fruits":["apple","strawberry"],"vegetables":["pepper","onion"]}
     # ingredient_dictionary = idr.ingredient_search(text)
-    ingredient_dictionary = idr.ingredient_search("hey alfred, I have leftover peppers milk apple onions chicken and avocado")
+    ingredient_dictionary = idr.ingredient_search("hey alfred, I have leftover pepper onion avocado beans")
 
     # Maintain compatibility: add all ings to list regardless of type
-    ingredients = []
-    for ing_type in ingredient_dictionary:
-        for ing in ingredient_dictionary[ing_type]:
-            ingredients.append(ing)
-    print "DEBUG:", ingredients
+    ingredients = ingredient_dictionary
 
     print "Step 3.5"
-    getRecipesWithAllIngredients(recipe_all_ings, ingredients)
-    print "Recipes containing all ingredients:", len(recipe_all_ings)
+    getRecipesWithAllIngredients(recipes_with_all_ings, ingredients)
+    print "Recipes containing all ingredients:", len(recipes_with_all_ings)
 
     print "Step 4"
     # Search recipes based on ingredients received from intent
-    getRecipesByIngredients(recipe_partial_ings, ingredients)
-    print "Recipes containing some ings:", len(recipe_partial_ings)
+    getRecipesByIngredients(recipes_with_partial_ings, ingredients)
+    print "Recipes containing some ings:", len(recipes_with_partial_ings)
 
     print "Step 5"
     # Search recipes based on ingredients in recipe title
@@ -58,7 +54,7 @@ def alfred_brain(audio_phrase):
     # print "Len recipes:", len(recipe_names)
 
     print "Step 6"
-    recipe_list = recipe_all_ings + recipe_partial_ings
+    recipe_list = recipes_with_all_ings + recipes_with_partial_ings
 
     print "Step 7"
     # Return recipes
