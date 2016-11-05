@@ -175,7 +175,7 @@ if __name__ == "__main__":
     # Recipe list
     recipe_list = []
 
-    start = 32
+    start = 778
     stop = start + 10
 
     for page in range(start, stop):
@@ -183,7 +183,7 @@ if __name__ == "__main__":
         print "################# PAGE %d ##################" % (page + 1)
 
         # Get HTML code for page X
-        url = baseURL + pageNumber + str(page + 1)  # 1-based pages
+        url = baseURL + pageNumber + str(page + 1)  # Page 1 instead of 0
         print url
         html = urllib.urlopen(url)
 
