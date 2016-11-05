@@ -1,5 +1,5 @@
 """
-This module parses USDA food files to a usable json format for Alfred
+This module parses USDA food files. Food ingredients are then saved to json format.
 """
 
 from config import USDA_FRUIT_DATA, USDA_VEGETABLE_DATA, DATA_FOLDER, VEGETABLE_DB
@@ -35,4 +35,5 @@ def createFruitDB():
     return False
 
 if __name__ == '__main__':
-    createFruitDB()
+    # createFruitDB()
+    pass

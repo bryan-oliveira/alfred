@@ -11,6 +11,9 @@ from .forms import LoginForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from app.speech.alfred_tts import get_raw_wav
 
+from config import RECIPE_FILE
+import json
+import codecs
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
 
@@ -22,45 +25,7 @@ def getUserName():
     return None
 
 
-@app.route('/test')
-def validate_recipes():
-    recipes = getRecipesFromFile()
-    list_ = []
-    title = 0
-    img = 0
-    description = 0
-    chef = 0
-    nutrition = 0
-    ings = 0
-    for recipe in recipes:
-        print "------"
-        if recipe['title'] is None or recipe['title'] == "Null":
-            title += 1
-        elif recipe["imgURL"] is None:
-            img += 1
-        elif recipe["description"] is None:
-            description += 1
-        elif recipe["yield"] is None:
-            print "NONE yield"
-        elif recipe["activeTime"] is None:
-            print "NONE active time"
-        elif recipe["totalTime"] is None:
-            print "NONE total time"
-        elif recipe["ingredientList"] is None or recipe['ingredientList'] == "None":
-            ings += 1
-        elif recipe["nutritionInfo"] is None:
-            nutrition += 1
-        elif recipe["chefNotes"] is None:
-            chef += 1
-        elif recipe["tags"] is None:
-            print "NONE tags"
-        else:
-            list_.append(recipe['title'])
-
-    print "Missing:\n\tTitle:%d\n\tImage:%d\n\tDescription:%d\n\tChef Notes:%d\n\tNutrition Info:%d\n\t" \
-          "Ingredients:%d" % (title, img, description, chef, nutrition, ings)
-
-    return render_template("test.html", list=list_)
+# @app.route('/test')
 
 
 # Alfred main page
@@ -114,7 +79,7 @@ def index():
     else:
         # Loads recipes from fie JSON format, returns random X at random
         recipes = getRecipesFromFile()
-
+        print "#Recipes:", len(recipes)
         print "Current User not auth:", current_user
 
         return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)

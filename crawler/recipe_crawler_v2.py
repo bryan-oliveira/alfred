@@ -64,6 +64,8 @@ def parse_recipe(url):
     if titleDiv is None:
         return False
     title = titleDiv.find("h1").string
+    if title is None:
+        return False  # Bug. With above check, ome recipes still don't have a title
     # print "title:", title
 
     # Get description
