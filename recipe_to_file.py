@@ -3,7 +3,7 @@ import codecs
 from file_operations import is_empty_file
 from config import RECIPE_FILE
 
-NEW_RECIPE_FILE = RECIPE_FILE
+# NEW_RECIPE_FILE = RECIPE_FILE
 
 
 class Recipe(object):
@@ -18,12 +18,12 @@ def save_recipe(new_recipe):
         Output: Saves recipes in JSON format. """
 
     # Two cases, file is empty or not
-    empty_file = is_empty_file(NEW_RECIPE_FILE)
+    empty_file = is_empty_file(RECIPE_FILE)
 
     # Case 1: Empty file, we just write to disk
     if empty_file:
 
-        with codecs.open(NEW_RECIPE_FILE, encoding='utf-8', mode='w') as f:
+        with codecs.open(RECIPE_FILE, encoding='utf-8', mode='w') as f:
             json.dump(new_recipe, f, encoding='utf-8')
 
         print "Saved %d recipes to file." % len(new_recipe)
@@ -32,16 +32,16 @@ def save_recipe(new_recipe):
 
         json_structure = []
 
-        with open(NEW_RECIPE_FILE, 'r') as f:
+        with open(RECIPE_FILE, 'r') as f:
             json_structure = json.load(f)
 
         # Erase 
-        open(NEW_RECIPE_FILE, 'w')
+        open(RECIPE_FILE, 'w')
 
         for recipe in new_recipe:
             json_structure.append(recipe)
 
-        with codecs.open(NEW_RECIPE_FILE, encoding='utf-8', mode='w') as f:
+        with codecs.open(RECIPE_FILE, encoding='utf-8', mode='w') as f:
             json.dump(json_structure, f, encoding='utf-8')
 
         print "Saved %d recipes to file." % len(json_structure)

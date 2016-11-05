@@ -2,6 +2,7 @@ from file_operations import is_empty_file
 from config import RECIPE_FILE
 import json
 import copy
+import codecs
 
 # Recipe file defined in application config.py
 RECIPE_FILE = RECIPE_FILE
@@ -221,6 +222,43 @@ def getRecipesByKeywordInName(recipe_names, keywords):
     # print recipes_with_ingredients
     return recipes_with_keywords
 
+
+def remove_recipes_with_missing_fields():
+    """
+    Iterates over recipe list and removes recipes with missing fields.
+    :return: True, Number of recipes removed
+    """
+    recipes = getRecipesFromFile()
+    # title, image, description, chef notes, nutrition, ingredient list
+    counter = [0, 0, 0, 0, 0, 0]
+    i = 0  # index - used to remove recipe
+
+    for recipe in recipes:
+
+        if recipe['title'] is None:
+            counter[0] += 1
+            del recipes[i]
+        elif recipe["imgURL"] is None:
+            counter[1] += 1
+        elif recipe["description"] is None:
+            counter[2] += 1
+        elif recipe["ingredientList"] is None:
+            counter[3] += 1
+        elif recipe["nutritionInfo"] is None:
+            counter[4] += 1
+        elif recipe["chefNotes"] is None:
+            counter[5] += 1
+
+        i += 1
+
+    print "Recipes missing:\n\tTitle:%d\n\tImage:%d\n\tDescription:%d\n\tChef Notes:%d\n\tNutrition Info:%d\n\t" \
+          "Ingredients:%d" % (counter[0], counter[1], counter[2], counter[3], counter[4], counter[5])
+    print "Total:", len(recipes)
+
+    with codecs.open(RECIPE_FILE, encoding='utf-8', mode='w') as f:
+        json.dump(recipes, f, encoding='utf-8')
+
+    return True,
 
 if __name__ == '__main__':
     pass
