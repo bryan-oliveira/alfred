@@ -5,7 +5,7 @@ from app import db
 def insert_user(user, allergies):
     print user, allergies
 
-    if not isinstance(user, Users) and  not isinstance(allergies, Allergy):
+    if not isinstance(user, Users) and not isinstance(allergies, Allergy):
         return False, '[Insert User] Invalid user info.'
 
     # Insert a Person in the users table
