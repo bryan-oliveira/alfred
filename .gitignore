@@ -2,8 +2,7 @@
 # Created by https://www.gitignore.io/api/pycharm,python
 
 # SSL Keys
-ssl-keys/
-alfred-aws.pem
+keys/
 
 ### PyCharm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
