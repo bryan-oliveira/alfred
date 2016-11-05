@@ -1,21 +1,29 @@
 import os
 
+# Application root path
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-# RECIPE_FILE = os.path.join(basedir, 'recipe_data/recipe.data')
-RECIPE_FILE = os.path.join(basedir, 'recipe_data/recipes_epicurious.data')
+# Recipe data files
+# RECIPE_FILE = os.path.join(basedir, 'data/recipe.data')
+RECIPE_FILE = os.path.join(basedir, 'data/recipes_epicurious.data')
 
-UPLOAD_FOLDER = os.path.join(basedir, "audio/")
-ROOT_FOLDER = '.'
+# Ingredient data files
+INGREDIENT_TRANSLATION_FILE = os.path.join(basedir, 'ingredientDB.dat')
 
+# Audio file upload folder
+UPLOAD_FOLDER = os.path.join(basedir, "data/audio/")
+
+# Flask securty settings
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'you-will-never-guess'
 
+" SQLAlchemy data"
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'database.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-ROOT_FOLDER = ROOT_FOLDER
+
+INGREDIENT_TRANSLATION_FILE = INGREDIENT_TRANSLATION_FILE
 UPLOAD_FOLDER = UPLOAD_FOLDER
 RECIPE_FILE = RECIPE_FILE
 

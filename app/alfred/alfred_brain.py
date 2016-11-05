@@ -1,3 +1,5 @@
+from rdflib.plugins.parsers.pyRdfa.rdfs.process import return_graph
+
 from app.speech import speech_module as ss
 from app.intent import intent_decipher as idr
 from get_recipes_from_file import getRecipesByIngredients, getRecipeByName, getRecipesByKeywordInName, getRecipesWithAllIngredients
@@ -12,24 +14,34 @@ def alfred_brain(audio_phrase):
 
     print "Step 1"
     # Save audio file to disk
-    print "\taudio file path:", os.path.join(app.config['UPLOAD_FOLDER'], 'test.ogg')
-    audio_phrase.save(os.path.join(app.config['UPLOAD_FOLDER'], 'test.ogg'))
+    # print "\taudio file path:", os.path.join(app.config['UPLOAD_FOLDER'], 'test.ogg')
+
+    # audio_phrase.save(os.path.join(app.config['UPLOAD_FOLDER'], 'test.ogg'))
 
     print "Step 2"
     # Perform voice recognition
 
-    text = ss.speech_recognition_from_file()
+    # text = ss.speech_recognition_from_file()
 
     # Extract intent from text
-    command_type, ingredients, meal_course = idr.intent_brain(text)
+    # command_type, ingredients, meal_course = idr.intent_brain(text)
 
     print "Step 3"
     # Searches for ingredients within text
 
     # Test with custom ingredients DEBUG
-    ingredients = ['pepper', 'beans']
+    # ingredients = ['pepper', 'beans']
 
-    ingredients = idr.ingredient_search(text)
+    # Ex: {"fruits":["apple","strawberry"],"vegetables":["pepper","onion"]}
+    # ingredient_dictionary = idr.ingredient_search(text)
+    ingredient_dictionary = idr.ingredient_search("hey alfred, I have leftover peppers milk apple onions chicken and avocado")
+
+    # Maintain compatibility: add all ings to list regardless of type
+    ingredients = []
+    for ing_type in ingredient_dictionary:
+        for ing in ingredient_dictionary[ing_type]:
+            ingredients.append(ing)
+    print "DEBUG:", ingredients
 
     print "Step 3.5"
     getRecipesWithAllIngredients(recipe_all_ings, ingredients)
@@ -46,14 +58,7 @@ def alfred_brain(audio_phrase):
     # print "Len recipes:", len(recipe_names)
 
     print "Step 6"
-    # Get recipes TODO: Main bottleneck is currently here
-
-    # Old: recipe_list = []
     recipe_list = recipe_all_ings + recipe_partial_ings
-
-    # for r in recipe_names:
-    #    recipe_list += [getRecipeByName(r)]
-    #    print r
 
     print "Step 7"
     # Return recipes
@@ -61,17 +66,4 @@ def alfred_brain(audio_phrase):
     return recipe_list
 
 if __name__ == '__main__':
-
-    if "test whether we get recipes based on ingredients provided":
-        ingredients = ['tomato', 'soup']
-        # Search recipes based on ingredients received from intent
-        recipe_names1 = getRecipesByIngredients(ingredients)
-
-        # print recipe_names1
-
-        # Get recipes
-        recipes = []
-        for recipe in recipe_names1:
-            recipes += [getRecipeByName(recipe)]
-        # print recipes
-
+    alfred_brain("")

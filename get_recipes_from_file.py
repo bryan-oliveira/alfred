@@ -36,7 +36,7 @@ def getRecipesWithAllIngredients(recipe_names, ingredients):
     recipes_with_all_ingredients = recipe_names
 
     DEBUG = False
-    print "getRecipesWithAllIngredients\tDEBUG:", DEBUG
+    # print "getRecipesWithAllIngredients\tDEBUG:", DEBUG
 
     if not is_empty_file(RECIPE_FILE):
         with open(RECIPE_FILE, 'r') as data_file:
@@ -53,7 +53,7 @@ def getRecipesWithAllIngredients(recipe_names, ingredients):
 
                 debug -= 1
                 # print "###########################\n", recipe['title']
-                if recipe['title'] == None or recipe['title'] == "null":
+                if recipe['title'] is None or recipe['title'] == "null":
                     continue
                 ing_copy = copy.deepcopy(ingredients)
                 recipe_output = recipe['title'] + '\n'
@@ -113,7 +113,7 @@ def getRecipesByIngredients(recipe_names, ingredients):
 
     recipes_with_ingredients = recipe_names
     DEBUG = False
-    print "getRecipesByIngredients\tDEBUG:", DEBUG
+    # print "getRecipesByIngredients\tDEBUG:", DEBUG
 
     if not is_empty_file(RECIPE_FILE):
         with open(RECIPE_FILE, 'r') as data_file:

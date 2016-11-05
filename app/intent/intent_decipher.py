@@ -1,6 +1,7 @@
 import nltk
 from nltk import word_tokenize
 from nltk import pos_tag
+from file_operations import checkIngredient
 
 from config import basedir
 import os
@@ -30,7 +31,15 @@ def intent_brain(usr_input):
     return command_type, ingredients, meal_course
 
 
-def ingredient_search(usr_input):
+def old_ingredient_search(usr_input):
+    """
+    Deprecated: Reason - NLTK false positive and false negative classification rate
+    Tokenize input. Since ingredients are all nouns.
+    Extract and return singular and plural nouns.
+    :param usr_input: User input
+    :return: List of nouns
+    """
+
     # Tokenize word
     command = word_tokenize(usr_input)
 
@@ -49,6 +58,22 @@ def ingredient_search(usr_input):
 
     print "Ingredients found: ", ingredients
     return ingredients
+
+
+def ingredient_search(usr_input):
+    ing_list = {}
+
+    # Tokenize word
+    words = word_tokenize(usr_input)
+    print words
+
+    result = checkIngredient(words)
+
+    if result[0] is True:
+        ing_list = result[1]
+
+    print "Ingredients found: ", ing_list
+    return ing_list
 
 
 def recipe_type_search(usr_input):
@@ -134,6 +159,7 @@ def question_intent(action_type, usr_input):
 
 
 if __name__ == '__main__':
+    pass
     # pos_noun_search("i would like some tomato soup")
     # pos_noun_search("show me some tomato soup recipes")
     # pos_noun_search("i would like a salad with beans and avocado")
@@ -141,13 +167,14 @@ if __name__ == '__main__':
     # recipe_type_search("alfred, I would like some cheesecake")
     # recipe_type_search("I feel like having some dessert")
 
-    detect_question("how can I make scrambled eggs?")
-    detect_question("how do you make scrambled eggs?")
-    detect_question("how can you make scrambled eggs?")
+    # detect_question("how can I make scrambled eggs?")
+    # detect_question("how do you make scrambled eggs?")
+    # detect_question("how can you make scrambled eggs?")
 
-    detect_question("what is the weather like tomorrow?")
-    detect_question("what is the weather like tomorrow in Algarve?")
-    detect_question("what can I make with eggs and mushrooms?")
+    # detect_question("what is the weather like tomorrow?")
+    # detect_question("what is the weather like tomorrow in Algarve?")
+    # detect_question("what can I make with eggs and mushrooms?")
+    # new_ingredient_search("hey alfred, get me some recipes with onions peppers and brocoli")
 
 
 
