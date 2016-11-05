@@ -1,7 +1,6 @@
 import os
 import json
-
-INGREDIENT_TRANSLATION_FILE = ""
+from config import VEGETABLE_DB
 
 
 def is_empty_file(fpath):
@@ -15,28 +14,30 @@ def checkIngredient(ingredient_list):
     :param ingredient_list: string
     :return: False, Error msg | True, Ingredient dictionary
     """
-    if not is_empty_file(INGREDIENT_TRANSLATION_FILE):
-        with open(INGREDIENT_TRANSLATION_FILE, 'r') as f:
+
+    # TODO: Iterate over all relevant files
+    # check = [ VEGETABLE_DB ]
+    ing_dict = {"vegetables": [], "fruit": []}
+
+    if not is_empty_file(VEGETABLE_DB):
+        with open(VEGETABLE_DB, 'r') as f:
             data = json.load(f)
 
-            ing_dict = {"vegetables": [], "dairy": [], "meat": [], "fruit": []}
+            """
+            for item in data:
+                print "item:", item, " --- ", ingredient_list
+                for ing in ingredient_list:
+                    if ing in item:
+                        print "### --- ", ing, "-", item
+                        ing_dict['vegetables'] = ing
+            """
+            a = set(ingredient_list)
+            b = set(data)
+            c = a.intersection(b)
 
-            # Ex: vegetable / fruit / dairy
-            for ing_type in data:
-                # print "Type:", ing_type
-
-                # Ex: strawberry / strawberries
-                for ings in data[ing_type]:
-                    # print "\tIngs:", ings
-
-                    for word in ingredient_list:
-                        # print "\t\tWords:", word, "-", word, " in ", ings, ":", word in ings
-
-                        if word in ings:
-                            ing_dict[ing_type].append(ings[0])
-
-            if len(ing_dict) > 0:
-                return True, ing_dict
+            # if len(ing_dict['vegetables']) > 0 or len(ing_dict['fruit']) > 0:
+            #    return True, ing_dict
+            return True, c
 
     return False, "Not found"
 

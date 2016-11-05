@@ -174,7 +174,7 @@ if __name__ == '__main__':
     # detect_question("what is the weather like tomorrow?")
     # detect_question("what is the weather like tomorrow in Algarve?")
     # detect_question("what can I make with eggs and mushrooms?")
-    # new_ingredient_search("hey alfred, get me some recipes with onions peppers and brocoli")
+    ingredient_search("with onion pepper and broccoli")
 
 
 
