@@ -1,4 +1,4 @@
-from rdflib.plugins.parsers.pyRdfa.rdfs.process import return_graph
+# from rdflib.plugins.parsers.pyRdfa.rdfs.process import return_graph
 
 from app.speech import speech_module as ss
 from app.intent import intent_decipher as idr
