@@ -72,7 +72,7 @@ def ingredient_search(usr_input):
     if result[0] is True:
         ing_list = result[1]
 
-    print "Ingredients found: ", ing_list
+    print "Ingredients found> Vegetables:", ing_list['vegetables'], " >> Fruits:", ing_list['fruits']
     return ing_list
 
 
@@ -157,6 +157,36 @@ def question_intent(action_type, usr_input):
 
     cooking_keywords = ['make', 'cook']
 
+
+def add_ingredients_in_singular_plural(ingredient_list):
+    ingredient_list = [[each] for each in ingredient_list]
+    print "Before:", ingredient_list
+
+    for sub_list in ingredient_list:
+        ing = sub_list[0]
+
+        # -ies ending use case; Strawberries/Strawberry
+        if ing[-3:] == 'ies' and ing[:-3] + 'y' not in sub_list:
+            sub_list.append(ing[:-3] + 'y')
+
+        # -oes ending; potatoes/potato
+        elif ing[-3:] == 'oes' and ing[:-2] + 's' not in sub_list:
+            sub_list.append(ing[:-2] + 's')
+
+        # -s plural ending; peppers/pepper
+        elif ing[-1] == 's' and ing[:-1] not in sub_list:
+            sub_list.append(ing[:-1])
+
+        # -y ending; strawberry/strawberries
+        elif ing[-1] == 'y' and ing[:-1] + 'ies' not in sub_list:
+            sub_list.append(ing[:-1] + 'ies')
+
+        # -singular ending; avocado/avocados
+        elif ing + 's' not in sub_list and ing[-1] is not 's':
+            sub_list.append(ing + 's')
+
+    print "After:", ingredient_list
+    return ingredient_list
 
 if __name__ == '__main__':
     pass

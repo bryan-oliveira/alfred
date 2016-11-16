@@ -1,4 +1,4 @@
-from app.database.db_query import is_username_free
+from app.database.users.db_query import is_username_free
 
 from app.database.users.db_insert import insert_user
 from app.models import Users, Allergy

@@ -31,13 +31,12 @@ def getRecipeByName(recipe_name):
             return None
 
 
-def getRecipesWithAllIngredients(recipe_names, ingredients):
+def getRecipesWithAllIngredients(recipe_names, ingredients, recipe_titles):
     """ Input: Ingredients to search in recipes.
         Output: Return N_RECIPES amount of recipes.
         TODO: Change from i to N_RECIPES. """
 
     recipes_with_all_ingredients = recipe_names
-
     DEBUG = False
     # print "getRecipesWithAllIngredients\tDEBUG:", DEBUG
 
@@ -48,16 +47,13 @@ def getRecipesWithAllIngredients(recipe_names, ingredients):
             i = 0
             next_recipe = False
             ing_copy = ingredients
-
             debug = 3
 
             # For each recipe
             for recipe in data:
-
                 debug -= 1
                 # print "###########################\n", recipe['title']
-                if recipe['title'] is None or recipe['title'] == "null":
-                    continue
+
                 ing_copy = copy.deepcopy(ingredients)
                 recipe_output = recipe['title'] + '\n'
 
@@ -68,25 +64,25 @@ def getRecipesWithAllIngredients(recipe_names, ingredients):
 
                     # For each ingredient string in recipe Ex: '1/2 onion'
                     for recipe_ingredient in recipe['ingredientList'][title]:
-
                         # print recipe_ingredient, ing_copy
 
-                        # For each ingredient we are looking for
-                        for ing in ing_copy:
-                            # print "\t", "ing:", ing, "recipe ing:", recipe_ingredient
-                            if ing in recipe_ingredient:
-                                if DEBUG:
-                                    string = '\tFound ing: ' + ing + ' in ' + recipe_ingredient + '\n'
-                                    recipe_output += string
-                                    print 'found ->', ing, 'left:', ing_copy, len(ing_copy)
+                        for sub_list in ing_copy:
+                            # For each ingredient we are looking for
+                            for ing in sub_list:
+                                # print "\t", "ing:", ing, "recipe ing:", recipe_ingredient
+                                if ing in recipe_ingredient:
+                                    if DEBUG:
+                                        string = '\tFound ing: ' + ing + ' in ' + recipe_ingredient + '\n'
+                                        recipe_output += string
+                                        print 'found ->', ing, 'left:', ing_copy, len(ing_copy)
 
-                                ing_copy.remove(ing)
-                                break
+                                    ing_copy.remove(sub_list)
+                                    break
 
                         # TODO: Check whether duplicate recipes are being inserted
-                        # Old: if ing_counter == n_ings and recipe['name'] not in recipes_with_all_ingredients:
                         if len(ing_copy) == 0:
                             recipes_with_all_ingredients += [recipe]
+                            recipe_titles.append(recipe['title'])
                             next_recipe = True
                             i += 1
 
@@ -109,73 +105,45 @@ def getRecipesWithAllIngredients(recipe_names, ingredients):
     return recipes_with_all_ingredients
 
 
-def getRecipesByIngredients(recipe_names, ingredients):
+def getRecipesByIngredients(recipe_names, ingredients, recipe_titles):
     """ Input: Ingredients to search in recipes.
         Output: Return N_RECIPES amount of recipes.
         TODO: Change from i to N_RECIPES. """
 
-    recipes_with_ingredients = recipe_names
-    DEBUG = False
-    # print "getRecipesByIngredients\tDEBUG:", DEBUG
+    data = getRecipesFromFile()
+    recipe_count = 0
+    next_recipe = False  # When ingredient found, skip to next recipe
 
-    if not is_empty_file(RECIPE_FILE):
-        with open(RECIPE_FILE, 'r') as data_file:
-            data = json.load(data_file)
+    # For each recipe
+    for recipe in data:
 
-            i = 0
-            x = 0
-            next_recipe = False  # When ingredient found, skip to next recipe
-            skip = False  # If recipe already in list, go to next
+        # Skip duplicate recipes
+        if recipe['title'] in recipe_titles:
+            continue
 
-            # For each recipe
-            for recipe in data:
-                # Skip if current recipe is already in list
-                for xs in recipes_with_ingredients:
-                    # print recipe['title'], xs['title'], ":", (recipe['title'] == xs['title'])
-                    if recipe['title'] == xs['title']:
-                        skip = True
+        for title in recipe['ingredientList']:
+            # For each ingredient in said recipe
+            for recipe_ingredient in recipe['ingredientList'][title]:
 
-                if skip is True:
-                    skip = False
-                    continue
-
-                # For each subtype (if available) in ingList
-                x += 1
-                if DEBUG:
-                    print "Title:", recipe['title'], x
-
-                for title in recipe['ingredientList']:
-                    # For each ingredient in said recipe
-                    if DEBUG:
-                        print "Title", title
-                    for recipe_ingredient in recipe['ingredientList'][title]:
-                        if DEBUG is True:
-                            print "Ingredient:", recipe_ingredient
-                        # For each ingredient we are looking for
-                        for ing1 in ingredients:
-                            # Keep the recipe names that contain the ingredients
-                            if ing1 in recipe_ingredient:
-                                # Don't save duplicates
-                                if recipe['title'] not in recipes_with_ingredients:
-                                    # Old: recipes_with_ingredients += [recipe['name']]
-                                    recipes_with_ingredients += [recipe]
-                                    i += 1
-                                    # print "Ingr: Saving -->", recipe['name']
-                                    next_recipe = True
-                                    break
-
-                        if next_recipe is True:
+                for sublist in ingredients:
+                    # For each ingredient we are looking for
+                    for ing in sublist:
+                        # Keep the recipe names that contain the ingredients
+                        if ing in recipe_ingredient:
+                            recipe_names += [recipe]
+                            recipe_count += 1
+                            next_recipe = True
                             break
 
-                    if next_recipe is True:
-                        next_recipe = False
-                        break
-
-                if i > 11:
-                    print "Ingr: i>10 getRecipesByIngredient"
+                if next_recipe is True:
                     break
 
-    return recipes_with_ingredients
+            if next_recipe is True:
+                next_recipe = False
+                break
+
+        if recipe_count > 11:
+            break
 
 
 def getRecipesByKeywordInName(recipe_names, keywords):
@@ -290,6 +258,7 @@ if __name__ == '__main__':
         remove_recipes_with_missing_fields()
 
     if True:
-        remove_recipe_by_name("PENNE WITH TOMATO")
+        remove_recipe_by_name("BLT Burgers")
         remove_recipe_by_name("SUGAR SNAP PEAS AND POTATOES")
+        remove_recipe_by_name("DIPPING BISCUITS")
 

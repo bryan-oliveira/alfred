@@ -35,7 +35,7 @@ def checkIngredient(ingredient_list):
                 b = set(data)
                 c = a.intersection(b)
 
-                print a, b, c
+                # print a, b, c
 
                 # Add found ingredient to matching food type
                 [ing_dict[name].append(ing) for ing in c]
@@ -43,8 +43,6 @@ def checkIngredient(ingredient_list):
                 # Remove identified ingredients from list
                 ingredient_list = a.difference(c)
 
-    # Return set elements
-    print "Debug:", ing_dict
     return True, ing_dict
 
 
