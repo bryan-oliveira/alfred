@@ -10,7 +10,7 @@ from app.models import Users
 from .forms import LoginForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from app.speech.alfred_tts import get_raw_wav
-
+import sys
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
 
@@ -32,7 +32,7 @@ def test():
 @app.route('/index')
 def index():
 
-    print "Debug:", session
+    print >> sys.stderr, "Debug:", session
 
     # If user is authenticated
     if current_user.is_authenticated:
@@ -50,7 +50,7 @@ def index():
         if 'time' in session:
             now = datetime.utcnow()
             duration = now - session['time']
-            print "Now:", now, "Stamp:", session['time'], "Duration:", duration
+            print >> sys.stderr, "Now:", now, "Stamp:", session['time'], "Duration:", duration
 
             if duration > timedelta(minutes=10):
                 alfred_greeting = True
@@ -61,7 +61,7 @@ def index():
 
         if alfred_greeting:
             phrase = 'Hello ' + user + ', how may I help you?'
-            print phrase
+            print >> sys.stderr, phrase
             alfred_voice = get_raw_wav(phrase)
 
         return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
@@ -76,8 +76,8 @@ def index():
     else:
         # Loads recipes from fie JSON format, returns random X at random
         recipes = getRecipesFromFile()
-        print "#Recipes:", len(recipes)
-        print "Current User not auth:", current_user
+        print >> sys.stderr, "#Recipes:", len(recipes)
+        print >> sys.stderr, "Current User not auth:", current_user
 
         return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
         return render_template('categories.html',
@@ -157,14 +157,14 @@ def login():
 
     # validate_on_submit runs all validation specs defined in forms.py and returns
     # true if data is valid, safe and ready for processing
-    print form.username.data, form.password.data
+    print >> sys.stderr, form.username.data, form.password.data
 
     username = form.username.data
     password = form.password.data
 
     if form.validate_on_submit():
         user = Users.query.filter_by(username=username, password=password).first()
-        print user
+        print >> sys.stderr, user
         if user is None:
             # TODO: Implement message flashing in main index page
             flash('Username or Password is invalid')
@@ -200,7 +200,7 @@ def logout():
 
 def next_is_valid(url):
     """This function receives an url, and must check whether it is valid/safe"""
-    print "######", url
+    print >> sys.stderr, "######", url
     return True
 
 

@@ -1,13 +1,14 @@
 from app.database.users.db_query import is_username_free
-
 from app.database.users.db_insert import insert_user
 from app.models import Users, Allergy
+import sys
+
 
 debug_mode = False
 
 
 def register_account(form):
-    print 'Registering new Account'
+    print >> sys.stderr, 'Registering new Account'
     fullname = form['fullname']
     username = form['username']
     pwd = form['pwd']
@@ -35,17 +36,17 @@ def register_account(form):
     # If False, return with corresponding error message
     data_is_valid = validate_data(u1)
     if debug_mode:
-        print "register_account<data_is_valid: ", data_is_valid
+        print >> sys.stderr, "register_account<data_is_valid: ", data_is_valid
 
     if not data_is_valid[0]:
         if debug_mode:
-            print "register_account<data_is_valid<inside IF>: ", data_is_valid
+            print >> sys.stderr, "register_account<data_is_valid<inside IF>: ", data_is_valid
         return data_is_valid
 
     # Return True if user added to database, or return False and error message
     result = insert_user(u1, a1)
     if debug_mode:
-        print "register_account>result:", result
+        print >> sys.stderr, "register_account>result:", result
     return result
 
 
@@ -80,16 +81,16 @@ def check_valid_age(form, field):
     if field in form:
         try:
             if int(form[field]) < 0 or int(form[field]) > 120:
-                print "check_valid_age: False. Invalid age. Please insert valid age."
+                print >> sys.stderr, "check_valid_age: False. Invalid age. Please insert valid age."
                 return False, 'Invalid age. Please insert valid age.'
             else:
                 # Returns age
-                print "check_valid_age:", form[field]
+                print >> sys.stderr, "check_valid_age:", form[field]
                 return form[field], ''
         except ValueError:
-            print "check_valid_age: False."
+            print >> sys.stderr, "check_valid_age: False."
             return False, 'Invalid age. Please try again'
 
-    print "Should never reach here. But then again..."
+    print >> sys.stderr, "Should never reach here. But then again..."
     return False, ''
 

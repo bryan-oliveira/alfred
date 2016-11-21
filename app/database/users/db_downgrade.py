@@ -5,7 +5,7 @@ from config import SQLALCHEMY_MIGRATE_REPO
 v = api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
 api.downgrade(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO, v - 1)
 v = api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
-print('Current database version: ' + str(v))
+print >> sys.stderr,('Current database version: ' + str(v))
 
 """
 It is not a common need to have to downgrade a database to an old format,

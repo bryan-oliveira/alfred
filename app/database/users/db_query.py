@@ -2,17 +2,18 @@
 # from sqlalchemy_init import get_session
 # from sqlalchemy import and_
 from app import models
+import sys
 
 
 # Make a query to find all Persons in the database
 def query_all_users():
 
     users = models.Users.query.all()
-    print "Users:", users
+    print >> sys.stderr, "Users:", users
 
     for person in users:
         # Return the first Person from all Persons in the database
-        print "Full Name:", person.fullname, "Password:", person.password, "Username:", person.username, \
+        print >> sys.stderr, "Full Name:", person.fullname, "Password:", person.password, "Username:", person.username, \
             "Age:", person.age, "Gender:", person.gender, "ID:", person.id
 
         """

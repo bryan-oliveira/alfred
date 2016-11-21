@@ -2,9 +2,10 @@ import nltk
 from nltk import word_tokenize
 from nltk import pos_tag
 from file_operations import checkIngredient
-
 from config import basedir
 import os
+import sys
+
 
 path = os.path.join(basedir, 'nltk_data')
 nltk.data.path.append(path)
@@ -45,7 +46,7 @@ def old_ingredient_search(usr_input):
 
     # Separate into parts of speech
     pos = pos_tag(command)
-    print pos
+    print >> sys.stderr, pos
 
     # Ingredient list
     ingredients = []
@@ -56,7 +57,7 @@ def old_ingredient_search(usr_input):
         if pair[1] == 'NN' or pair[1] == 'NNS':
             ingredients += [pair[0]]
 
-    print "Ingredients found: ", ingredients
+    print >> sys.stderr, "Ingredients found: ", ingredients
     return ingredients
 
 
@@ -65,14 +66,14 @@ def ingredient_search(usr_input):
 
     # Tokenize word
     words = word_tokenize(usr_input)
-    print words
+    print >> sys.stderr, words
 
     result = checkIngredient(words)
 
     if result[0] is True:
         ing_list = result[1]
 
-    print "Ingredients found> Vegetables:", ing_list['vegetables'], " >> Fruits:", ing_list['fruits']
+    print >> sys.stderr, "Ingredients found> Vegetables:", ing_list['vegetables'], " >> Fruits:", ing_list['fruits']
     return ing_list
 
 
@@ -88,7 +89,7 @@ def recipe_type_search(usr_input):
             if (word in _type or word[:-1] in _type) and len(word) > 2:
                 found += [_type]
 
-    print "Recipe type(s) found:", found
+    print >> sys.stderr, "Recipe type(s) found:", found
     return found
 
 
@@ -125,7 +126,7 @@ def detect_question(usr_input):
             if word == kw:
                 found += [word]
 
-    print "Question found:", found
+    print >> sys.stderr, "Question found:", found
 
     if len(found) > 0:
         question_intent(usr_input)
@@ -143,7 +144,7 @@ def question_intent(action_type, usr_input):
     tokens = word_tokenize(usr_input)
     pos = pos_tag(tokens)
 
-    print pos
+    print >> sys.stderr, pos
 
     if action_type == 'how':
         # Example Q: how can I make scrambled eggs?
@@ -160,7 +161,7 @@ def question_intent(action_type, usr_input):
 
 def add_ingredients_in_singular_plural(ingredient_list):
     ingredient_list = [[each] for each in ingredient_list]
-    print "Before:", ingredient_list
+    print >> sys.stderr, "Before:", ingredient_list
 
     for sub_list in ingredient_list:
         ing = sub_list[0]
@@ -185,7 +186,7 @@ def add_ingredients_in_singular_plural(ingredient_list):
         elif ing + 's' not in sub_list and ing[-1] is not 's':
             sub_list.append(ing + 's')
 
-    print "After:", ingredient_list
+    print >> sys.stderr, "After:", ingredient_list
     return ingredient_list
 
 if __name__ == '__main__':
