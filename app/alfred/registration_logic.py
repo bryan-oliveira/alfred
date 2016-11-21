@@ -4,7 +4,7 @@ from app.models import Users, Allergy
 import sys
 
 
-debug_mode = False
+debug_mode = True
 
 
 def register_account(form):
