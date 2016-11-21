@@ -21,7 +21,7 @@ def insert_user(user, allergies):
     # [#] print>> sys.stderr, 'USER:', user.fullname, user.age, user.gender, user.password, user.username
 
     # [#] print>> sys.stderr, 'Obj > Name:', new_person.fullname, 'User:', new_person.username, 'Age:', new_person.age, \
-        'Gender:', new_person.gender, 'Pass:', new_person.password
+    #    'Gender:', new_person.gender, 'Pass:', new_person.password
 
     """
      print 'Milk:', new_person.allergies.milk, 'Soy:', new_person.allergies.soy, \

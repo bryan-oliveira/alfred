@@ -14,7 +14,7 @@ def query_all_users():
     for person in users:
         # Return the first Person from all Persons in the database
         # [#] print>> sys.stderr, "Full Name:", person.fullname, "Password:", person.password, "Username:", person.username, \
-            "Age:", person.age, "Gender:", person.gender, "ID:", person.id
+        #    "Age:", person.age, "Gender:", person.gender, "ID:", person.id
 
         """
         print "Allergies - User ID:", person.allergies.user_id, "Milk:", person.allergies.milk, \
