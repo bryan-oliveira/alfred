@@ -5,101 +5,113 @@
     <div class="columns">
 
 
-        <!-- Second 1/4 of Screen -->
+        <!-- 1/2 of Screen (Centered) -->
         <div class="column is-half">
 
             {% if error_msg %}
-            <article class="message is-danger">
-                <div class="message-body"> {{ error_msg }}</div>
-            </article>
+                <article class="message is-danger">
+                    <div class="message-body"> {{ error_msg }}</div>
+                </article>
             {% endif %}
 
             <form action="/register" method="post">
 
-            <!-- Name, Password, Gender, Age -->
-            <label class="label">Name</label>
-            <p class="control">
-                <input class="input" type="text" placeholder="Full Name" name="fullname">
-            </p>
+                <!-- Name, Password, Gender, Age -->
+                <label class="label">Name</label>
+                <p class="control">
+                    <input class="input" type="text" placeholder="Full Name" name="fullname">
+                </p>
 
-            <label class="label">User Name</label>
-            <p class="control">
-                <input class="input" type="text" placeholder="User Name" name="username">
-            </p>
+                <label class="label">User Name</label>
+                <p class="control">
+                    <input class="input" type="text" placeholder="User Name" name="username">
+                </p>
 
-            <label class="label">Password</label>
-            <p class="control">
-                <input class="input" type="password" placeholder="Password" name="pwd">
-            </p>
+                <label class="label">Password</label>
+                <p class="control">
+                    <input class="input" type="password" placeholder="Password" name="pwd">
+                </p>
 
-            <label class="label">Gender</label>
-            <p class="control is-horizontal">
-                <span class="select">
-                    <select name="gender">
-                        <option>Male</option>
-                        <option>Female</option>
-                    </select>
-                </span>
-            </p>
+                <div class="columns">
+                    <div class="column is-half">
+                        <label class="label">Gender</label>
+                        <p class="control is-horizontal">
+                            <span class="select">
+                                <select name="gender">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                </select>
+                            </span>
+                        </p>
 
-            <label class="label">Age</label>
-            <p class="control">
-                <input class="input" type="text" placeholder="Age" name="age">
-            </p>
+                    </div>
 
-
-            <!-- Allergy Section -->
-            <label class="label">Allergies</label>
-
-            <div class="columns">
-                <!-- First column of allergy items -->
-                <div class="column is-one-half">
-                    <p class="control">
-                        <label class="checkbox">
-                        <input type="checkbox" name="milk">Milk</label>
-                    </p>
-
-                    <p class="control">
-                        <label class="checkbox">
-                        <input type="checkbox" name="eggs">Eggs</label>
-                    </p>
-
-                    <p class="control">
-                        <label class="checkbox">
-                        <input type="checkbox" name="soy">Soy</label>
-                    </p>
-
-                    <p class="control">
-                        <label class="checkbox">
-                        <input type="checkbox" name="gluten">Gluten</label>
-                    </p>
+                    <div class="column">
+                        <label class="label">Age</label>
+                        <p class="control">
+                            <input class="input" type="text" placeholder="Age" name="age">
+                        </p>
+                    </div>
                 </div>
 
-                <!-- Second column of allergy items -->
-                <div class="column is-one-half">
-                    <p class="control">
-                        <label class="checkbox">
-                        <input type="checkbox" name="nuts">Nuts</label>
-                    </p>
+                <!-- Allergy Section -->
+                <label class="label">Allergies</label>
 
-                    <p class="control">
-                        <label class="checkbox">
-                        <input type="checkbox" name="fish">Fish</label>
-                    </p>
+                <div class="columns">
+                    <!-- First column of allergy items -->
+                    <div class="column is-one-half">
+                        <p class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="milk">Low Cholesterol</label>
+                        </p>
 
-                    <p class="control">
-                        <label class="checkbox">
-                        <input type="checkbox" name="sesame">Sesame</label>
-                    </p>
+                        <p class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="eggs">High Cholesterol</label>
+                        </p>
 
+                        <p class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="soy">Over Weight</label>
+                        </p>
+
+                        <p class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="soy">Under Weight</label>
+                        </p>
+
+                    </div>
+
+                    <!-- Second column of allergy items -->
+                    <div class="column is-one-half">
+                        <p class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="gluten">Gluten</label>
+                        </p>
+
+                        <p class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="nuts">Nuts</label>
+                        </p>
+
+                        <p class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="fish">Fish</label>
+                        </p>
+
+                        <p class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="sesame">Sesame</label>
+                        </p>
+
+                    </div>
                 </div>
-            </div>
 
-            <!-- Buttons -->
-            <p class="control">
-                <input type="submit" class="button is-dark" />
-                <a class="button" href="/index">Cancel</a>
-            </p>
+                <!-- Buttons -->
+                <p class="control">
+                    <input type="submit" class="button is-dark"/>
+                    <a class="button" href="/index">Cancel</a>
+                </p>
 
             </form>
         </div>
