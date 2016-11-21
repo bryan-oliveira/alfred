@@ -4,7 +4,7 @@ from app.models import Users, Allergy
 import sys
 
 
-debug_mode = True
+debug_mode = False
 
 
 def register_account(form):
@@ -36,17 +36,17 @@ def register_account(form):
     # If False, return with corresponding error message
     data_is_valid = validate_data(u1)
     if debug_mode:
-        # [#] print>> sys.stderr, "register_account<data_is_valid: ", data_is_valid
+        print>> sys.stderr, "register_account<data_is_valid: ", data_is_valid
 
     if not data_is_valid[0]:
         if debug_mode:
-            # [#] print>> sys.stderr, "register_account<data_is_valid<inside IF>: ", data_is_valid
+            print>> sys.stderr, "register_account<data_is_valid<inside IF>: ", data_is_valid
         return data_is_valid
 
     # Return True if user added to database, or return False and error message
     result = insert_user(u1, a1)
     if debug_mode:
-        # [#] print>> sys.stderr, "register_account>result:", result
+        print>> sys.stderr, "register_account>result:", result
     return result
 
 
