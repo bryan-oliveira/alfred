@@ -1,9 +1,10 @@
 from app.models import Allergy, Users
 from app import db
+import sys
 
 
 def insert_user(user, allergies):
-    print user, allergies
+    # [#] print>> sys.stderr, user, allergies
 
     if not isinstance(user, Users) and not isinstance(allergies, Allergy):
         return False, '[Insert User] Invalid user info.'
@@ -17,10 +18,10 @@ def insert_user(user, allergies):
                                    sesame=allergies.sesame)
     """
 
-    print 'USER:', user.fullname, user.age, user.gender, user.password, user.username
+    # [#] print>> sys.stderr, 'USER:', user.fullname, user.age, user.gender, user.password, user.username
 
-    print 'Obj > Name:', new_person.fullname, 'User:', new_person.username, 'Age:', new_person.age, \
-        'Gender:', new_person.gender, 'Pass:', new_person.password
+    # [#] print>> sys.stderr, 'Obj > Name:', new_person.fullname, 'User:', new_person.username, 'Age:', new_person.age, \
+    #    'Gender:', new_person.gender, 'Pass:', new_person.password
 
     """
      print 'Milk:', new_person.allergies.milk, 'Soy:', new_person.allergies.soy, \
@@ -29,10 +30,13 @@ def insert_user(user, allergies):
         'Eggs:', new_person.allergies.eggs
     """
 
+    # [#] print>> sys.stderr, "Adding user to db."
     db.session.add(new_person)
+    # [#] print>> sys.stderr, "Added !"
+    # [#] print>> sys.stderr, "Commiting..."
     db.session.commit()
 
-    print 'User added!'
+    # [#] print>> sys.stderr, 'User added!'
     return True, ''
 
 if __name__ == '__main__':

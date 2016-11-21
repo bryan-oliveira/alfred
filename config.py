@@ -32,7 +32,7 @@ UPLOAD_FOLDER = os.path.join(basedir, "data/audio/")
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'you-will-never-guess'
 
-" SQLAlchemy data"
+# SQLAlchemy data
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir + '/data', 'database.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -41,7 +41,5 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 UPLOAD_FOLDER = UPLOAD_FOLDER
 RECIPE_FILE = RECIPE_FILE
 DATA_FOLDER = DATA_FOLDER
-
-
 
 

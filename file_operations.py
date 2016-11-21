@@ -18,6 +18,7 @@ def checkIngredient(ingredient_list):
     """
     Check whether input contains ingredients. Return dictionary of ingredient types, and names, if any.
     Ingredient name is always singular (opposite of plural form).
+
     :param ingredient_list: string
     :return: False, Error msg | True, Ingredient dictionary
     """

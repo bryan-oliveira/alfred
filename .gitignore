@@ -1,7 +1,12 @@
 
 # Created by https://www.gitignore.io/api/pycharm,python
 
+# DB file
+data/database.db
+
 # SSL Keys
+ssl_keys/
+ssl_keys2/
 keys/
 ssl_keys/
 

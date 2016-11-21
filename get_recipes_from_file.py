@@ -5,6 +5,8 @@ from config import RECIPE_FILE
 import json
 import copy
 import codecs
+import sys
+
 
 # Recipe file defined in application config.py
 RECIPE_FILE = RECIPE_FILE
@@ -57,8 +59,8 @@ def getRecipesWithAllIngredients(recipe_names, ingredients, recipe_titles):
                 ing_copy = copy.deepcopy(ingredients)
                 recipe_output = recipe['title'] + '\n'
 
-                if DEBUG:
-                    print recipe['title']
+                #if DEBUG:
+                    # [#] print>> sys.stderr, recipe['title']
 
                 for title in recipe['ingredientList']:
 
@@ -74,7 +76,7 @@ def getRecipesWithAllIngredients(recipe_names, ingredients, recipe_titles):
                                     if DEBUG:
                                         string = '\tFound ing: ' + ing + ' in ' + recipe_ingredient + '\n'
                                         recipe_output += string
-                                        print 'found ->', ing, 'left:', ing_copy, len(ing_copy)
+                                        # [#] print>> sys.stderr, 'found ->', ing, 'left:', ing_copy, len(ing_copy)
 
                                     ing_copy.remove(sub_list)
                                     break
@@ -86,8 +88,8 @@ def getRecipesWithAllIngredients(recipe_names, ingredients, recipe_titles):
                             next_recipe = True
                             i += 1
 
-                            if DEBUG:
-                                print "FOUND RECIPE - ", recipe_output, '\n'
+                            #if DEBUG:
+                                # [#] print>> sys.stderr, "FOUND RECIPE - ", recipe_output, '\n'
 
                             break
 
@@ -98,7 +100,7 @@ def getRecipesWithAllIngredients(recipe_names, ingredients, recipe_titles):
                         next_recipe = False
                         break
                 if i > 11:
-                    print "Ingr: i > 11 - getRecipesByAllIngredient"
+                    # [#] print>> sys.stderr, "Ingr: i > 11 - getRecipesByAllIngredient"
                     break
 
     # print recipes_with_all_ingredients
@@ -150,8 +152,8 @@ def getRecipesByKeywordInName(recipe_names, keywords):
     """ Input: Keyword to search in recipe name.
         Output: Return N_RECIPES amount of recipes.
         TODO: Change from i to N_RECIPES. """
-    print "getRecipesByKeywordInName"
-    print "Keywords:", keywords
+    # [#] print>> sys.stderr, "getRecipesByKeywordInName"
+    # [#] print>> sys.stderr, "Keywords:", keywords
 
     recipes_with_keywords = recipe_names
     if not is_empty_file(RECIPE_FILE):
@@ -165,7 +167,7 @@ def getRecipesByKeywordInName(recipe_names, keywords):
                 skip = False
                 # Skip if current recipe is already in list
                 for xs in recipes_with_keywords:
-                    print recipe['title'], xs['title'], ":", (recipe['title'] == xs['title'])
+                    # [#] print>> sys.stderr, recipe['title'], xs['title'], ":", (recipe['title'] == xs['title'])
                     if recipe['title'] == xs['title']:
                         skip = True
 
@@ -186,7 +188,7 @@ def getRecipesByKeywordInName(recipe_names, keywords):
                             break
 
                 if i > N_RECIPES:
-                    print "Title: i>10 getRecipesByIngredient"
+                    # [#] print>> sys.stderr, "Title: i>10 getRecipesByIngredient"
                     break
 
     # print recipes_with_ingredients
@@ -221,9 +223,9 @@ def remove_recipes_with_missing_fields():
 
         i += 1
 
-    print "Recipes missing:\n\tTitle:%d\n\tImage:%d\n\tDescription:%d\n\tChef Notes:%d\n\tNutrition Info:%d\n\t" \
-          "Ingredients:%d" % (counter[0], counter[1], counter[2], counter[5], counter[4], counter[3])
-    print "Total:", len(recipes)
+    # [#] print>> sys.stderr, "Recipes missing:\n\tTitle:%d\n\tImage:%d\n\tDescription:%d\n\tChef Notes:%d\n\tNutrition Info:%d\n\t" \
+    #      "Ingredients:%d" % (counter[0], counter[1], counter[2], counter[5], counter[4], counter[3])
+    # [#] print>> sys.stderr, "Total:", len(recipes)
 
     # Update recipe file
     overwrite_recipe_file(recipes)
@@ -242,14 +244,14 @@ def remove_recipe_by_name(name):
             inp = raw_input("Delete recipe: %s (y/N)?" % recipe['title'])
             if inp == 'y' or inp == 'Y':
                 del recipes[index]
-                print "Removed:", recipe['title']
+                # [#] print>> sys.stderr, "Removed:", recipe['title']
 
                 # Update recipe file
                 overwrite_recipe_file(recipes)
-                print "Updated recipe db"
+                # [#] print>> sys.stderr, "Updated recipe db"
                 return True
         index += 1
-    print "Recipe title not found"
+    # [#] print>> sys.stderr, "Recipe title not found"
     return False
 
 

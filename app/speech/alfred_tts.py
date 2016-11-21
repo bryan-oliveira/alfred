@@ -1,6 +1,8 @@
 import base64
 import json
 import requests
+import sys
+
 
 OXFORD_SPEECH_API = "2f3bcd576a404153a32724a54e7d6e6b"
 
@@ -18,13 +20,13 @@ ACCESS_TOKEN_URL = ACCESS_TOKEN_HOST + ACCESS_TOKEN_PATH
 def get_access_token():
     try:
         r = requests.post(ACCESS_TOKEN_URL, headers=ACCESS_TOKEN_HEADERS, data=ACCESS_TOKEN_PAYLOAD)
-        print "Access token status code: " + str(r.status_code)
+        # [#] print>> sys.stderr, "Access token status code: " + str(r.status_code)
         data = r.content
         return str(json.loads(data)['access_token'])
 
     # except NewConnectionError:
     except:
-        print "Error: No response received"
+        # [#] print>> sys.stderr, "Error: No response received"
         return None
 
 
@@ -39,14 +41,14 @@ TTS_URL = TTSHOST + "/synthesize"
 
 
 def get_raw_wav(text="hello world"):
-    print 'getting wav', text
+    # [#] print>> sys.stderr, 'getting wav', text
 
     body = "<speak version='1.0' xml:lang='en-us'><voice xml:lang='en-gb' xml:gender='Male' " \
            "name='Microsoft Server Speech Text to Speech Voice (en-GB, George, Apollo)'>" + text + \
            "</voice></speak>"
 
     r = requests.post(TTS_URL, headers=TTS_HEADERS, data=body)
-    print "TTS Status Code: " + str(r.status_code)
+    # [#] print>> sys.stderr, "TTS Status Code: " + str(r.status_code)
     data = r.content
 
     # Debug from file

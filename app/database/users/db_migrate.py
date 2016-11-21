@@ -4,6 +4,9 @@ from migrate.versioning import api
 from app import db
 from config import SQLALCHEMY_DATABASE_URI
 from config import SQLALCHEMY_MIGRATE_REPO
+import sys
+
+
 v = api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
 migration = SQLALCHEMY_MIGRATE_REPO + ('/versions/%03d_migration.py' % (v+1))
 tmp_module = imp.new_module('old_model')
@@ -13,5 +16,5 @@ script = api.make_update_script_for_model(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MI
 open(migration, "wt").write(script)
 api.upgrade(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
 v = api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
-print('New migration saved as ' + migration)
-print('Current database version: ' + str(v))
+# [#] print>> sys.stderr,('New migration saved as ' + migration)
+# [#] print>> sys.stderr,('Current database version: ' + str(v))
