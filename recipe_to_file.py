@@ -28,7 +28,7 @@ def save_recipe(new_recipe):
         with codecs.open(RECIPE_FILE, encoding='utf-8', mode='w') as f:
             json.dump(new_recipe, f, encoding='utf-8')
 
-        print >> sys.stderr, "Saved %d recipes to file." % len(new_recipe)
+        # [#] print>> sys.stderr, "Saved %d recipes to file." % len(new_recipe)
     # Case 2: Non empty file. We must append recipe to current structure
     else:
 
@@ -46,7 +46,7 @@ def save_recipe(new_recipe):
         with codecs.open(RECIPE_FILE, encoding='utf-8', mode='w') as f:
             json.dump(json_structure, f, encoding='utf-8')
 
-        print >> sys.stderr, "Saved %d recipes to file." % len(json_structure)
+        # [#] print>> sys.stderr, "Saved %d recipes to file." % len(json_structure)
 
     return True
 

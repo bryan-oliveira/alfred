@@ -42,12 +42,12 @@ def create_DB_Of_FoodType(food_type):
                 elif curr[-1] == 's' and curr[:-1] not in food_list:
                     food_list.append(curr[:-1])
 
-            print >> sys.stderr, "Total ingredients:", data['list']['total'], "Unique", count
-            print >> sys.stderr, food_list
+            # [#] print>> sys.stderr, "Total ingredients:", data['list']['total'], "Unique", count
+            # [#] print>> sys.stderr, food_list
 
             with open(food_types[food_type][1], 'w') as f2:
                 json.dump(food_list, f2)
-                print >> sys.stderr, "Wrote %s db to disk." % food_types[food_type][1]
+                # [#] print>> sys.stderr, "Wrote %s db to disk." % food_types[food_type][1]
         return True
     return False
 

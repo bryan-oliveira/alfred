@@ -14,19 +14,19 @@ def alfred_brain(audio_phrase):
     recipes_with_partial_ings = []
     recipe_titles = []
 
-    print >> sys.stderr, "Step 1"
+    # [#] print>> sys.stderr, "Step 1"
     # Save audio file to disk
     # print "\taudio file path:", os.path.join(app.config['UPLOAD_FOLDER'], 'test.ogg')
     audio_phrase.save(os.path.join(app.config['UPLOAD_FOLDER'], 'test.ogg'))
 
-    print >> sys.stderr, "Step 2"
+    # [#] print>> sys.stderr, "Step 2"
     # Perform voice recognition
     text = ss.speech_recognition_from_file()
 
     # Extract intent from text
     # command_type, ingredients, meal_course = idr.intent_brain(text)
 
-    print >> sys.stderr, "Step 3"
+    # [#] print>> sys.stderr, "Step 3"
     # Searches for ingredients within text
 
     # Test with custom ingredients DEBUG
@@ -39,26 +39,26 @@ def alfred_brain(audio_phrase):
     ingredients = ingredient_dict['vegetables'] + ingredient_dict['fruits']
 
     ingredients = idr.add_ingredients_in_singular_plural(ingredients)
-    print >> sys.stderr, ingredients
+    # [#] print>> sys.stderr, ingredients
 
-    print >> sys.stderr, "Step 3.5"
+    # [#] print>> sys.stderr, "Step 3.5"
     getRecipesWithAllIngredients(recipes_with_all_ings, ingredients, recipe_titles)
-    print >> sys.stderr, "Recipes containing all ingredients:", len(recipes_with_all_ings)
+    # [#] print>> sys.stderr, "Recipes containing all ingredients:", len(recipes_with_all_ings)
 
-    print >> sys.stderr, "Step 4"
+    # [#] print>> sys.stderr, "Step 4"
     # Search recipes based on ingredients received from intent
     getRecipesByIngredients(recipes_with_partial_ings, ingredients, recipe_titles)
-    print >> sys.stderr, "Recipes containing some ings:", len(recipes_with_partial_ings)
+    # [#] print>> sys.stderr, "Recipes containing some ings:", len(recipes_with_partial_ings)
 
-    print >> sys.stderr, "Step 5"
+    # [#] print>> sys.stderr, "Step 5"
     # Search recipes based on ingredients in recipe title
     # recipe_names += getRecipesByKeywordInName(recipe_names, ingredients)
     # print "Len recipes:", len(recipe_names)
 
-    print >> sys.stderr, "Step 6"
+    # [#] print>> sys.stderr, "Step 6"
     recipe_list = recipes_with_all_ings + recipes_with_partial_ings
 
-    print >> sys.stderr, "Step 7"
+    # [#] print>> sys.stderr, "Step 7"
     # Return recipes
 
     return recipe_list
