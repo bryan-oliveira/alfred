@@ -7,7 +7,7 @@ import sys
 
 api.upgrade(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
 v = api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
-print >> sys.stderr,('Current database version: ' + str(v))
+# [#] print>> sys.stderr,('Current database version: ' + str(v))
 
 """
 If you have database migration support, then when you are ready to release the new version
