@@ -29,7 +29,10 @@ def insert_user(user, allergies):
         'Eggs:', new_person.allergies.eggs
     """
 
+    print "Adding user to db."
     db.session.add(new_person)
+    print "Added !"
+    print "Commiting..."
     db.session.commit()
 
     print 'User added!'
