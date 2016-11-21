@@ -3,6 +3,7 @@
 
 # SSL Keys
 ssl_keys/
+ssl_keys2/
 keys/
 
 ### PyCharm ###
