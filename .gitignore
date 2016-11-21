@@ -2,6 +2,7 @@
 # Created by https://www.gitignore.io/api/pycharm,python
 
 # SSL Keys
+ssl_keys/
 keys/
 
 ### PyCharm ###
