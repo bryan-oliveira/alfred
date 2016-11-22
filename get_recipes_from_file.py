@@ -19,6 +19,7 @@ def getRecipesFromFile():
         with open(RECIPE_FILE, 'r') as data_file:
             data = json.load(data_file)
             return data
+    return False
     
 
 def getRecipeByName(recipe_name):
@@ -31,6 +32,19 @@ def getRecipeByName(recipe_name):
                 if recipe['title'] == recipe_name:
                     return recipe
             return None
+
+
+def get_recipes_by_tag(tag):
+    """Return all recipes that contain <tag>"""
+    data = getRecipesFromFile()
+    recipes = []
+    for recipe in data:
+        for tag_ in recipe['tags']:
+            if tag == tag_.lower() and recipe not in recipes:
+                recipes += [recipe]
+
+    print tag, "found", len(recipes)
+    return recipes
 
 
 def getRecipesWithAllIngredients(recipe_names, ingredients, recipe_titles):

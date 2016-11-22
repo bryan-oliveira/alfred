@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, g, flash, abort
 from flask.globals import session
 from datetime import datetime, timedelta
 from app import app, lm
-from get_recipes_from_file import getRecipesFromFile, getRecipeByName
+import get_recipes_from_file as grff
 from alfred.alfred_brain import alfred_brain
 from alfred.registration_logic import register_account
 import random
@@ -41,7 +41,7 @@ def index():
         alfred_greeting = False
 
         # Loads recipes from fie JSON format, returns random X at random
-        recipes = getRecipesFromFile()
+        recipes = grff.getRecipesFromFile()
 
         # Send first name to template
         user = getUserName()
@@ -75,7 +75,7 @@ def index():
 
     else:
         # Loads recipes from fie JSON format, returns random X at random
-        recipes = getRecipesFromFile()
+        recipes = grff.getRecipesFromFile()
         # [#] print>> sys.stderr, "#Recipes:", len(recipes)
         # [#] print>> sys.stderr, "Current User not auth:", current_user
 
@@ -94,10 +94,10 @@ def search_recipe():
     recipe_search = request.args.get('recipe_name')
 
     # Loads recipes from fie JSON format, returns random 20 at random
-    recipes = getRecipesFromFile()
+    recipes = grff.getRecipesFromFile()
     return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
 
-    recipe = getRecipeByName(recipe_search)
+    recipe = grff.getRecipeByName(recipe_search)
 
     if recipe is None:
         return render_template('error_page.html')
@@ -114,6 +114,15 @@ def getForm():
     return LoginForm()
 
 
+@app.route('/tag/<tag_name>', methods=['GET', 'POST'])
+def get_recipes_by_tag(tag_name):
+    recipes = grff.get_recipes_by_tag(tag_name)
+
+    return render_template('show_recipe_results.html',
+                           recipes=recipes,
+                           user=getUserName())
+
+
 # Upload audio clip to flask | Clicking on Microphone icon triggers this
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -127,7 +136,7 @@ def upload():
     # Update every 5m vs every call;
 
     # Loads recipes from fie JSON format, returns random 20 at random
-    recipe_list = getRecipesFromFile()
+    recipe_list = grff.getRecipesFromFile()
     return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
 
     return render_template('show_recipe_results.html',

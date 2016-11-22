@@ -1,6 +1,9 @@
 
 # Created by https://www.gitignore.io/api/pycharm,python
 
+.gitig*
+run.py
+
 # DB file
 data/database.db
 
