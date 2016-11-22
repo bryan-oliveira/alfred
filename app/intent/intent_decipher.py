@@ -73,7 +73,8 @@ def ingredient_search(usr_input):
     if result[0] is True:
         ing_list = result[1]
 
-    # [#] print>> sys.stderr, "Ingredients found> Vegetables:", ing_list['vegetables'], " >> Fruits:", ing_list['fruits']
+    # [#] print>> sys.stderr, "Ingredients found> Vegetables:", ing_list['vegetables'],
+    # " >> Fruits:", ing_list['fruits']
     return ing_list
 
 

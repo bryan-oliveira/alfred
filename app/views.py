@@ -130,10 +130,7 @@ def upload():
     audio = request.files['audio']
 
     # Send to alfred brain, receive recipes ready to show
-    recipes = alfred_brain(audio)
-
-    # TODO: Scalability: call getRecipesFromFile once and share it to session var;
-    # Update every 5m vs every call;
+    recipes = alfred_brain(current_user.fullname, audio)
 
     # Loads recipes from fie JSON format, returns random 20 at random
     recipe_list = grff.getRecipesFromFile()
