@@ -25,7 +25,7 @@ h2                  { font-size: 1.2em; }
 .recipe_list        { padding: 10px 0px 0px 10px; }
 .directions_steps   { margin-bottom: 10px; }
 .no_underline       { text-decoration: none; }
-.no-border td       { border-width: 0 0 0px; border: 0px; }
+.no-border td       { border-width: 0 0 0px; }
 .no-top-margin      { margin-top: 0px;}
 .microphone         { width: 200px; height: 175px; margin: 10px; float: left; bottom: 10px; position: fixed;}
 .alfred             { font-family: allura; font-size: 90px; color: white; }
@@ -44,3 +44,34 @@ h2                  { font-size: 1.2em; }
                         /* Center image */
                         margin: 0 auto;
                     }
+
+/* Tooltip container */
+.tooltip {
+    position: fixed;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 270px;
+    background-color: dimgray;
+    color: #eee;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 15px;
+
+    /* Position the tooltip text */
+    position: fixed;
+    z-index: 1;
+    left: 20px;
+    bottom: 25%;
+
+
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}

@@ -5,7 +5,7 @@ from app.intent import intent_decipher as idr
 from get_recipes_from_file import getRecipesByIngredients, getRecipesByKeywordInName, getRecipesWithAllIngredients
 import os
 from app import app
-import sys
+from config import DEBUG
 
 
 def alfred_brain(audio_phrase):
@@ -19,9 +19,14 @@ def alfred_brain(audio_phrase):
     # print "\taudio file path:", os.path.join(app.config['UPLOAD_FOLDER'], 'test.ogg')
     audio_phrase.save(os.path.join(app.config['UPLOAD_FOLDER'], 'test.ogg'))
 
-    # [#] print>> sys.stderr, "Step 2"
+    if DEBUG:
+        print "Step 2"
+
     # Perform voice recognition
     text = ss.speech_recognition_from_file()
+
+    if DEBUG:
+        print "Text:", text
 
     # Extract intent from text
     # command_type, ingredients, meal_course = idr.intent_brain(text)
@@ -39,7 +44,9 @@ def alfred_brain(audio_phrase):
     ingredients = ingredient_dict['vegetables'] + ingredient_dict['fruits']
 
     ingredients = idr.add_ingredients_in_singular_plural(ingredients)
-    # [#] print>> sys.stderr, ingredients
+
+    if DEBUG:
+        print "Searching for:", ingredients
 
     # [#] print>> sys.stderr, "Step 3.5"
     getRecipesWithAllIngredients(recipes_with_all_ings, ingredients, recipe_titles)
