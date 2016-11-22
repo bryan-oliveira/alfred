@@ -19,7 +19,7 @@ def getUserName():
     # TODO: Consider stashing everything in session var
     if current_user.is_authenticated:
         return current_user.fullname.split()[0]
-    return None
+    return 'Anonymous'
 
 
 @app.route('/test')
@@ -129,8 +129,11 @@ def upload():
     # Get spoken audio clip
     audio = request.files['audio']
 
+    # Get username
+    user = getUserName()
+
     # Send to alfred brain, receive recipes ready to show
-    recipes = alfred_brain(current_user.fullname, audio)
+    recipes = alfred_brain(user, audio)
 
     # Loads recipes from fie JSON format, returns random 20 at random
     recipe_list = grff.getRecipesFromFile()
@@ -139,7 +142,7 @@ def upload():
     return render_template('show_recipe_results.html',
                            recipes=recipes,
                            recipe_suggestions=return_recipes,
-                           user=getUserName())
+                           user=user)
 
 
 # Register view
