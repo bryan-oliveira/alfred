@@ -117,7 +117,7 @@ def getForm():
 @app.route('/tag/<tag_name>', methods=['GET', 'POST'])
 def get_recipes_by_tag(tag_name):
     recipes = grff.get_recipes_by_tag(tag_name)
-
+    recipes = random.sample(recipes, 24)
     return render_template('show_recipe_results.html',
                            recipes=recipes,
                            user=getUserName())
