@@ -2,7 +2,7 @@
 # Created by https://www.gitignore.io/api/pycharm,python
 
 # Log files
-log/
+#log/
 
 # DB file
 data/database.db
