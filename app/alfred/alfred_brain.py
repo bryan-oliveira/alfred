@@ -35,8 +35,6 @@ def alfred_brain(usr_name, audio_phrase):
     # [#] print>> sys.stderr, "Step 3"
     # Searches for ingredients within text
 
-    text = 'hey Alfred, let me see recipes with avocados and peppers'
-
     ingredient_dict = idr.ingredient_search(text)
 
     # Ingredient_search returns dict; Join all ingredients regardless of type

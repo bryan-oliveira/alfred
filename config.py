@@ -47,4 +47,4 @@ DATA_FOLDER = DATA_FOLDER
 RECIPE_REQUESTS_LOG = os.path.join(LOG_FOLDER, 'recipe_requests.log')
 
 # Dev mode
-DEBUG = True
+DEBUG = False
