@@ -161,7 +161,7 @@ def register():
         if result[0]:
             user = Users.query.filter_by(username=username, password=password).first()
             login_user(user, remember=True)
-            flash('Registration successful!')
+            flash('Registration successful!', 'success')
             return redirect(url_for('index'))
         else:
             return render_template('register.html', error_msg=result[1], form=getForm())

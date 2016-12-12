@@ -29,7 +29,7 @@ def register_account(form):
 
     u1 = Users(fullname=fullname, username=username, age=age, gender=gender, password=pwd)
     a1 = Allergy(lowchol=lowchol, highchol=highchol, overw=overw, underw=underw, nuts=nuts,
-                 gluten=gluten, fish=fish, sesame=sesame)
+                 gluten=gluten, fish=fish, sesame=sesame, vegetarian=vegetarian, vegan=vegan)
 
     # If False, return with corresponding error message
     data_is_valid = validate_data(u1)
@@ -91,7 +91,6 @@ def is_field_checked(form, field):
 def is_valid_age(age):
     # Checks if age field is an integer between 0 and 120
     age = int(age)
-    print age
     try:
         if age < 0 or age > 120:
             return False

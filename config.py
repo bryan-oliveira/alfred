@@ -26,6 +26,10 @@ USDA_LEGUMES_DATA = os.path.join(USDA_FOLDER, 'usda_legumes.dat')
 # Ingredient data files
 VEGETABLE_DB = os.path.join(DATA_FOLDER, 'veggie_db.dat')
 FRUIT_DB = os.path.join(DATA_FOLDER, 'fruit_db.dat')
+MEAT_POULTRY_DB = os.path.join(DATA_FOLDER, 'meat_poultry_db.dat')
+FISH_DB = os.path.join(DATA_FOLDER, 'fish_db.dat')
+SEAFOOD_DB = os.path.join(DATA_FOLDER, 'seafood_db.dat')
+
 
 # Audio file upload folder
 UPLOAD_FOLDER = os.path.join(basedir, "data/audio/")

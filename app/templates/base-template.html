@@ -34,6 +34,23 @@
 
     <div class="container">
 
+        <!-- Flashed messages -->
+
+        {% with messages = get_flashed_messages(category_filter=['success']) %}
+            {% if messages %}
+                <div class="columns spacer">
+                    <div class="column is-one-third is-offset-one-third">
+                        {% for message in messages %}
+                            <article class="message is-success">
+                                <div class="message-body"> {{ message }}</div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+
         <!-- Fullscreen Content -->
         {% block fullscreen %}
 

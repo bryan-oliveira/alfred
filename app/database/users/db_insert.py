@@ -1,38 +1,16 @@
 from app.models import Allergy, Users
 from app import db
 
-
 def insert_user(user, allergies):
     # [#] print sys.stderr, user, allergies
 
     if not isinstance(user, Users) and not isinstance(allergies, Allergy):
-        return False, '[Insert User] Invalid user info.'
+        return False, 'Error inserting user. Invalid user info.'
 
     # Insert a Person in the users table
-    new_person = Users(fullname=user.fullname, username=user.username, age=user.age,
-                       gender=user.gender, password=user.password)
-    """
-    new_person.allergies = Allergy(soy=allergies.soy, milk=allergies.milk, eggs=allergies.eggs,
-                                   nuts=allergies.nuts, gluten=allergies.gluten, fish=allergies.fish,
-                                   sesame=allergies.sesame)
-    """
+    user.allergy = allergies
 
-    # [#] print>> sys.stderr, 'USER:', user.fullname, user.age, user.gender, user.password, user.username
-
-    # [#] print>> sys.stderr, 'Obj > Name:', new_person.fullname, 'User:', new_person.username,
-    # 'Age:', new_person.age, 'Gender:', new_person.gender, 'Pass:', new_person.password
-
-    """
-     print 'Milk:', new_person.allergies.milk, 'Soy:', new_person.allergies.soy, \
-        'Gluten:', new_person.allergies.gluten, 'Fish:', new_person.allergies.fish, \
-        'Sesame:', new_person.allergies.sesame, 'Nuts:', new_person.allergies.nuts, \
-        'Eggs:', new_person.allergies.eggs
-    """
-
-    # [#] print>> sys.stderr, "Adding user to db."
-    db.session.add(new_person)
-    # [#] print>> sys.stderr, "Added !"
-    # [#] print>> sys.stderr, "Commiting..."
+    db.session.add(user)
     db.session.commit()
 
     return True, ''
