@@ -150,9 +150,18 @@ def upload():
 def register():
 
     if request.method == 'POST':
+        # Save user credentials
+        username = request.form['username']
+        password = request.form['pwd']
+
+        # Register user account
         result = register_account(request.form)
+
+        # User registered successfully, perform login and redirect to index
         if result[0]:
-            # Registered user with success
+            user = Users.query.filter_by(username=username, password=password).first()
+            login_user(user, remember=True)
+            flash('Registration successful!')
             return redirect(url_for('index'))
         else:
             return render_template('register.html', error_msg=result[1], form=getForm())
@@ -166,7 +175,6 @@ def login():
 
     # validate_on_submit runs all validation specs defined in forms.py and returns
     # true if data is valid, safe and ready for processing
-    # [#] print>> sys.stderr, form.username.data, form.password.data
 
     username = form.username.data
     password = form.password.data

@@ -32,7 +32,7 @@ h2                  { font-size: 1.2em; }
 .top_margin_20px    { margin-top: 20px; }
 .bottom_margin_10px { margin-bottom: 10px; }
 .tag-buttons        { margin: 5px; }
-.spacer             { margin: 10px; }
+.spacer             { margin: 20px; }
 .image-cropper      {
                         border-radius: 50%;
                         overflow: hidden;
