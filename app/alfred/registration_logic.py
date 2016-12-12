@@ -8,45 +8,45 @@ debug_mode = False
 
 
 def register_account(form):
-    # [#] print>> sys.stderr, 'Registering new Account'
+    # User information
     fullname = form['fullname']
     username = form['username']
     pwd = form['pwd']
+    age = form['age']
+    gender = form['gender']
 
-    # Optional Fields
-    age = check_valid_age(form, 'age')
-    if not age[0]:  # If age False, return error
-        return age
-
-    age = age[0]  # Strip error message
-
-    gender = 'M'
-
-    milk = is_field_checked(form, 'milk')
-    eggs = is_field_checked(form, 'eggs')
-    soy = is_field_checked(form, 'soy')
+    # Allergies/Restrictions
+    lowchol = is_field_checked(form, 'lowchol')
+    highchol = is_field_checked(form, 'highchol')
+    overw = is_field_checked(form, 'overw')
+    underw = is_field_checked(form, 'underw')
     nuts = is_field_checked(form, 'nuts')
     fish = is_field_checked(form, 'fish')
     sesame = is_field_checked(form, 'sesame')
     gluten = is_field_checked(form, 'gluten')
+    vegetarian = is_field_checked(form, 'vegetarian')
+    vegan = is_field_checked(form, 'vegan')
 
     u1 = Users(fullname=fullname, username=username, age=age, gender=gender, password=pwd)
-    a1 = Allergy(soy=soy, milk=milk, eggs=eggs, nuts=nuts, gluten=gluten, fish=fish, sesame=sesame)
+    a1 = Allergy(lowchol=lowchol, highchol=highchol, overw=overw, underw=underw, nuts=nuts,
+                 gluten=gluten, fish=fish, sesame=sesame)
 
     # If False, return with corresponding error message
     data_is_valid = validate_data(u1)
     if debug_mode:
-        print>> sys.stderr, "register_account<data_is_valid: ", data_is_valid
+        print "register_account<data_is_valid: ", data_is_valid
 
     if not data_is_valid[0]:
         if debug_mode:
-            print>> sys.stderr, "register_account<data_is_valid<inside IF>: ", data_is_valid
+            print "register_account<data_is_valid<inside IF>: ", data_is_valid
         return data_is_valid
 
     # Return True if user added to database, or return False and error message
     result = insert_user(u1, a1)
+
     if debug_mode:
-        print>> sys.stderr, "register_account>result:", result
+        print sys.stderr, "register_account>result:", result
+
     return result
 
 
@@ -65,7 +65,19 @@ def validate_data(user):
     if len(user.password) < 5:
         return False, 'Password must have at least 5 characters.'
 
+    if not is_valid_age(user.age):
+        return False, 'Invalid age. Please insert valid age.'
+
+    if not is_valid_gender(user.gender):
+        return False, 'Invalid gender.'
+
     return True, ''
+
+
+def is_valid_gender(gender):
+    if gender == 'Male' or gender == 'Female':
+        return True
+    return False
 
 
 def is_field_checked(form, field):
@@ -76,21 +88,16 @@ def is_field_checked(form, field):
     return False
 
 
-def check_valid_age(form, field):
+def is_valid_age(age):
     # Checks if age field is an integer between 0 and 120
-    if field in form:
-        try:
-            if int(form[field]) < 0 or int(form[field]) > 120:
-                # [#] print>> sys.stderr, "check_valid_age: False. Invalid age. Please insert valid age."
-                return False, 'Invalid age. Please insert valid age.'
-            else:
-                # Returns age
-                # [#] print>> sys.stderr, "check_valid_age:", form[field]
-                return form[field], ''
-        except ValueError:
-            # [#] print>> sys.stderr, "check_valid_age: False."
-            return False, 'Invalid age. Please try again'
+    age = int(age)
+    print age
+    try:
+        if age < 0 or age > 120:
+            return False
+        else:
+            return True
+    except ValueError:
+        return False
 
-    # [#] print>> sys.stderr, "Should never reach here. But then again..."
-    return False, ''
 

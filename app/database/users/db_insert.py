@@ -1,10 +1,9 @@
 from app.models import Allergy, Users
 from app import db
-import sys
 
 
 def insert_user(user, allergies):
-    # [#] print>> sys.stderr, user, allergies
+    # [#] print sys.stderr, user, allergies
 
     if not isinstance(user, Users) and not isinstance(allergies, Allergy):
         return False, '[Insert User] Invalid user info.'
@@ -20,8 +19,8 @@ def insert_user(user, allergies):
 
     # [#] print>> sys.stderr, 'USER:', user.fullname, user.age, user.gender, user.password, user.username
 
-    # [#] print>> sys.stderr, 'Obj > Name:', new_person.fullname, 'User:', new_person.username, 'Age:', new_person.age, \
-    #    'Gender:', new_person.gender, 'Pass:', new_person.password
+    # [#] print>> sys.stderr, 'Obj > Name:', new_person.fullname, 'User:', new_person.username,
+    # 'Age:', new_person.age, 'Gender:', new_person.gender, 'Pass:', new_person.password
 
     """
      print 'Milk:', new_person.allergies.milk, 'Soy:', new_person.allergies.soy, \
@@ -36,17 +35,16 @@ def insert_user(user, allergies):
     # [#] print>> sys.stderr, "Commiting..."
     db.session.commit()
 
-    # [#] print>> sys.stderr, 'User added!'
     return True, ''
 
 if __name__ == '__main__':
-    u1 = Users(fullname='Bryan Oliveira', username='bryan', age=30, gender='M', password='1234')
+    u1 = Users(fullname='Bryan Oliveira', username='bryan', age=30, gender='M', password='123123')
     a1 = Allergy(soy=True, milk=False, eggs=False, nuts=False, gluten=False, fish=False, sesame=False, )
 
-    u2 = Users(fullname='Zyanya Garrido', username='bebito', age=26, gender='F', password='1234')
+    u2 = Users(fullname='Zyanya Garrido', username='bebito', age=26, gender='F', password='123123')
     a2 = Allergy(soy=False, milk=False, eggs=False, nuts=False, gluten=False, fish=False, sesame=True)
 
-    u3 = Users(fullname='Francisco Mendes', username='balao', age=29, gender='M', password='1234')
+    u3 = Users(fullname='Francisco Mendes', username='balao', age=29, gender='M', password='123123')
     a3 = Allergy(soy=False, milk=False, eggs=True, nuts=False, gluten=True, fish=False, sesame=False)
 
     insert_user(u1, a1)

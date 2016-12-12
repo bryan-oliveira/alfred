@@ -2,91 +2,115 @@
 
 {% block content %}
 
-    <div class="columns is-multiline top_margin_20px">
+    <div class="columns is-multiline top_margin_20px" xmlns="http://www.w3.org/1999/html">
 
         <div class="column has-text-centered">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/appetizer.png') }}" alt="">
-            </figure>
-            <label class="label">Appetizer</label>
+            <a href="" onclick="get_recipes_by_tag('/tag/side')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/appetizer.png') }}" alt="">
+                </figure>
+                <label class="label">Appetizer</label>
+            </a>
         </div>
 
         <div class="column has-text-centered">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/breakfast-brunch.png') }}" alt="">
-            </figure>
-            <label class="label">Breakfast &amp; Brunch</label>
+            <a onclick="get_recipes_by_tag('/tag/breakfast')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/breakfast-brunch.png') }}" alt="">
+                </figure>
+                <label class="label">Breakfast &amp; Brunch</label>
+            </a>
         </div>
 
         <div class="column has-text-centered ">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/chicken.png') }}" alt="">
-            </figure>
-            <label class="label">Chicken</label>
+            <a onclick="get_recipes_by_tag('/tag/chicken')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/chicken.png') }}" alt="">
+                </figure>
+                <label class="label">Chicken</label>
+            </a>
         </div>
 
         <div class="column has-text-centered">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/dessert.png') }}" alt="">
-            </figure>
-            <label class="label">Dessert</label>
+            <a onclick="get_recipes_by_tag('/tag/dessert')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/dessert.png') }}" alt="">
+                </figure>
+                <label class="label">Dessert</label>
+            </a>
         </div>
 
         <div class="column has-text-centered">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/healthy.png') }}" alt="">
-            </figure>
-            <label class="label">Healthy</label>
+            <a onclick="get_recipes_by_tag('/tag/healthy')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/healthy.png') }}" alt="">
+                </figure>
+                <label class="label">Healthy</label>
+            </a>
         </div>
 
         <div class="column has-text-centered">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/holidays-events.png') }}" alt="">
-            </figure>
-            <label class="label">Holidays &amp; Events</label>
+            <a onclick="get_recipes_by_tag('/tag/holidays')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/holidays-events.png') }}" alt="">
+                </figure>
+                <label class="label">Holidays &amp; Events</label>
+            </a>
         </div>
 
         <div class="column has-text-centered">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/main-dish.png') }}" alt="">
-            </figure>
-            <label class="label">Main Dish</label>
+            <a onclick="get_recipes_by_tag('/tag/dinner')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/main-dish.png') }}" alt="">
+                </figure>
+                <label class="label">Main Dish</label>
+            </a>
         </div>
 
         <div class="column has-text-centered">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/quick-easy.png') }}" alt="">
-            </figure>
-            <label class="label">Quick &amp; Easy</label>
+            <a onclick="get_recipes_by_tag('/tag/quick-and-easy')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/quick-easy.png') }}" alt="">
+                </figure>
+                <label class="label">Quick &amp; Easy</label>
+            </a>
         </div>
 
         <div class="column has-text-centered">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/slow-cooker.png') }}" alt="">
-            </figure>
-            <label class="label">Slow Cooker</label>
+            <a onclick="get_recipes_by_tag('/tag/slow-cooker')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/slow-cooker.png') }}" alt="">
+                </figure>
+                <label class="label">Slow Cooker</label>
+            </a>
         </div>
 
         <div class="column has-text-centered">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/vegetarian.png') }}" alt="">
-            </figure>
-            <label class="label">Vegetarian</label>
+            <a onclick="get_recipes_by_tag('/tag/vegetarian')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/vegetarian.png') }}" alt="">
+                </figure>
+                <label class="label">Vegetarian</label>
+            </a>
         </div>
 
         <div class="column has-text-centered">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/meat-poultry.png') }}" alt="">
-            </figure>
-            <label class="label">Meat &amp; Poultry</label>
+            <a onclick="get_recipes_by_tag('/tag/meat')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/meat-poultry.png') }}" alt="">
+                </figure>
+                <label class="label">Meat &amp; Poultry</label>
+            </a>
         </div>
 
         <div class="column has-text-centered">
-            <figure class="image is-128x128 image-cropper">
-                <img src="{{ url_for('static', filename='images/meal-course-types/seafood.png') }}" alt="">
-            </figure>
-            <label class="label">Seafood</label>
+            <a onclick="get_recipes_by_tag('/tag/seafood')">
+                <figure class="image is-128x128 image-cropper">
+                    <img src="{{ url_for('static', filename='images/meal-course-types/seafood.png') }}" alt="">
+                </figure>
+                <label class="label">Seafood</label>
         </div>
+        </a>
     </div>
 
 {% endblock %}

@@ -11,67 +11,78 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 
     <!-- Custom CSS -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 
 </head>
+
 <body>
-    <div class="container is-fluid">
+<div class="container is-fluid">
 
-        <!-- Invisible audio player -->
-        {% if wavfile %}
-            <audio autoplay src="data:audio/wav;base64,{{ wavfile }}">Your browser does not support this audio format.</audio>
-        {% endif %}
+    <!-- Invisible audio player -->
+    {% if wavfile %}
+        <audio autoplay src="data:audio/wav;base64,{{ wavfile }}">Your browser does not support this audio format.
+        </audio>
+    {% endif %}
 
 
-        <!-- Header -->
-        {% include 'header.html' %}
+    <!-- Header -->
+    {% include 'header.html' %}
 
-        <div class="container">
+    <div class="container">
 
-            <!-- Fullscreen Content -->
-            {% block fullscreen %}
+        <!-- Fullscreen Content -->
+        {% block fullscreen %}
 
-                <!-- Column Section-->
-                <div class="columns">
+            <!-- Column Section-->
+            <div class="columns">
 
-                    <!-- Left 1/4 of screen -->
-                    <div class="column is-one-quarter">
+                <!-- Left 1/4 of screen -->
+                <div class="column is-one-quarter">
 
-                        <h3 class="title is-3">Recipes</h3>
-                        {% for recipe in recipe_suggestions %}
-                            <!-- TODO Make a clickable link by POSTing recipe name -->
-                            <p><a href="/search?recipe_name={{recipe.title|urlencode }}">{{ recipe.title }}</a></p>
-                        {% endfor %}
+                    <h3 class="title is-3">Recipes</h3>
+                    {% for recipe in recipe_suggestions %}
+                        <p><a href="/search?recipe_name={{ recipe.title|urlencode }}">{{ recipe.title }}</a></p>
+                    {% endfor %}
 
-                    </div>
+                </div>
 
-                    <!-- Right 3/4 of screen -->
-                    <div class="column is-three-quarters">
+                <!-- Right 3/4 of screen -->
+                <div class="column is-three-quarters">
 
-                        <div class="recipe_list">
-                            {% block content %}
-                            {% endblock %}
-                        </div>
-
+                    <div class="recipe_list">
+                        {% block content %}
+                        {% endblock %}
                     </div>
 
                 </div>
 
-            {% endblock %}
+            </div>
 
-        </div>
+        {% endblock %}
 
     </div>
 
-    <!-- Microphone recorder functions -->
-    <img src="{{ url_for('static', filename='images/alfred2.png') }}" class="microphone" onclick="startRecording()">
-    <script src="{{ url_for('static', filename='js/recorder.js')}}"></script>
+</div>
 
-    <!-- Login modal -->
-    {% include "login.html" %}
+<!-- Microphone recorder functions -->
+<div class="tooltip">
+    <a>
+        <img src="{{ url_for('static', filename='images/alfred2.png') }}" class="microphone" onclick="startRecording()">
+    </a>
+    <span class="tooltiptext">Click Alfred to start speaking<br>Click again to when finished speaking</span>
+</div>
+
+<script src="{{ url_for('static', filename='js/recorder.js') }}"></script>
+
+<!-- Javascript functions -->
+<script src="{{ url_for('static', filename='js/js-functions.js') }}"></script>
+
+<!-- Login modal -->
+{% include "login.html" %}
 
 </body>
 </html>
