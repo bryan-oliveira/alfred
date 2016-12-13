@@ -1,4 +1,5 @@
 from app import db
+from flask.ext.login import AnonymousUserMixin
 
 
 # u = Users(username="newuser", fullname="New User", gender="Male", age=20, password="123123")
@@ -61,4 +62,14 @@ class Allergy(db.Model):
                (self.lowchol, self.highchol, self.overw,self.underw, self.gluten, self.nuts,
                 self.fish, self.sesame, self.vegetarian, self.vegan)
 
+
+class AnonymousUser(AnonymousUserMixin):
+    # Initializes anonymous guest credentials. Currently used for
+    # logging purposes.
+    def __init__(self):
+        self.username = 'Guest'
+        self.id = 0
+
+    def __repr__(self):
+        return "Username: %r id: %r" % (self.username, self.id)
 

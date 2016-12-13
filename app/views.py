@@ -121,11 +121,11 @@ def upload():
     # Get spoken audio clip
     audio = request.files['audio']
 
-    # Get username
+    # Send first name to show in header
     user = getUserName()
 
     # Send to alfred brain, receive recipes ready to show
-    recipes = alfred_brain(user, audio)
+    recipes = alfred_brain(current_user, audio)
 
     # Loads recipes from fie JSON format, returns random 20 at random
     recipe_list = grff.getRecipesFromFile()

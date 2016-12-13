@@ -1,14 +1,18 @@
 import config as cfg
 import json as jsn
 import datetime as dt
+from app.models import Users
 
 
-def save_recipe_search_log_entry(usr_name, text, ingredients):
+def save_recipe_search_log_entry(user, text, ingredients):
     with open(cfg.RECIPE_REQUESTS_LOG, 'a+') as f:
-        entry = {'timestamp': str(dt.datetime.utcnow()),
-                 'username': usr_name,
+        timestamp = dt.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+        entry = {'timestamp': timestamp,
+                 'username': user.username,
+                 'id': user.id,
                  'full_text': text,
                  'ingredients': ingredients}
+
         f.write(jsn.dumps(entry))
         f.write('\n')
 

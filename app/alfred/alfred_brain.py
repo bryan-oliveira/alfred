@@ -1,5 +1,4 @@
 from app.intent import intent_decipher as idr
-from app.speech import speech_module as ss
 from config import DEBUG
 from os import path as os_path
 from app import app
@@ -8,7 +7,7 @@ import get_recipes_from_file as grff
 import logging_functions as lf
 
 
-def alfred_brain(usr_name, audio_phrase):
+def alfred_brain(current_user, audio_phrase):
 
     # Save all recipes to this list
     recipes_with_all_ings = []
@@ -24,7 +23,7 @@ def alfred_brain(usr_name, audio_phrase):
         print "Step 2"
 
     # Perform voice recognition
-    text = ss.speech_recognition_from_file()
+    text = ""  # ss.speech_recognition_from_file()
 
     if DEBUG:
         print "Text:", text
@@ -46,8 +45,9 @@ def alfred_brain(usr_name, audio_phrase):
 
     ingredients = idr.add_ingredients_in_singular_plural(ingredients)
 
+    lf.save_recipe_search_log_entry(current_user, text, ingredients)
+
     if DEBUG:
-        lf.save_recipe_search_log_entry(usr_name, text, ingredients)
         print "Searching for:", ingredients
 
     # [#] print>> sys.stderr, "Step 3.5"
