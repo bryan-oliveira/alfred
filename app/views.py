@@ -1,17 +1,19 @@
-from flask import render_template, redirect, request, url_for, flash, abort
-from flask.globals import session
+import random
 from datetime import datetime, timedelta
-from app import app, lm
-import get_recipes_from_file as grff
+
+from flask import render_template, redirect, request, url_for, flash, abort
+from flask.ext.login import login_user, logout_user, login_required, current_user
+from flask.globals import session
+
+import app.database.recipes.recipe_search as rs
 from alfred.alfred_brain import alfred_brain
 from alfred.registration_logic import register_account
-import random
-from app.models import Users, Allergy
+from app import app, lm
 from app.database.users.db_insert import edit_user
-from .forms import LoginForm, RegisterForm
-from flask.ext.login import login_user, logout_user, login_required, current_user
-from app.speech.alfred_tts import get_raw_wav
 from app.database.users.db_query import get_user_by_id
+from app.models import Users, Allergy
+from app.speech.alfred_tts import get_raw_wav
+from .forms import LoginForm, RegisterForm, ProfileForm
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
 
@@ -36,7 +38,7 @@ def index():
     form = LoginForm()
 
     # Loads recipes from fie JSON format, returns random X at random
-    recipes = grff.getRecipesFromFile()
+    recipes = rs.get_recipes_from_file()
 
     # Randomize suggested recipes
     return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
@@ -90,10 +92,10 @@ def search_recipe():
     recipe_search = request.args.get('recipe_name')
 
     # Loads recipes from fie JSON format, returns random 20 at random
-    recipes = grff.getRecipesFromFile()
+    recipes = rs.get_recipes_from_file()
     return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
 
-    recipe = grff.getRecipeByName(recipe_search)
+    recipe = rs.get_recipe_by_name(recipe_search)
 
     if recipe is None:
         return render_template('error_page.html')
@@ -108,8 +110,9 @@ def search_recipe():
 
 @app.route('/tag/<tag_name>', methods=['GET', 'POST'])
 def get_recipes_by_tag(tag_name):
-    recipes = grff.get_recipes_by_tag(tag_name)
-    recipes = random.sample(recipes, 24)
+    recipes = rs.get_recipes_by_tag(tag_name)
+    if len(recipes) > 23:
+        recipes = random.sample(recipes, 24)
     return render_template('show_recipe_results.html',
                            recipes=recipes,
                            user=getUserName())
@@ -128,7 +131,7 @@ def upload():
     recipes = alfred_brain(current_user, audio)
 
     # Loads recipes from fie JSON format, returns random 20 at random
-    recipe_list = grff.getRecipesFromFile()
+    recipe_list = rs.get_recipes_from_file()
     return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
 
     return render_template('show_recipe_results.html',
@@ -173,7 +176,7 @@ def login():
     password = form.password.data
 
     # Loads recipes from fie JSON format, returns random 20 at random
-    recipe_list = grff.getRecipesFromFile()
+    recipe_list = rs.get_recipes_from_file()
     return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
 
     if form.validate_on_submit():
@@ -200,7 +203,7 @@ def login():
 @app.route("/profile", methods=['GET', 'POST'])
 def profile_page():
 
-    form = RegisterForm()
+    form = ProfileForm()
 
     if form.validate_on_submit():
         print "Form submitted success"
@@ -209,7 +212,8 @@ def profile_page():
         form.populate_obj(user)
         form.populate_obj(allergy)
         edit_user(user, allergy)
-        return render_template("user_template.html",
+        flash('Profile updated successfully!', 'success')
+        return render_template("profile.html",
                                form=form,
                                user=getUserName(),
                                url=url_for('profile_page'))
@@ -218,13 +222,13 @@ def profile_page():
         print "Form submitted error OR GET request"
         print form.errors
         user, allergy = get_user_by_id(current_user.id)
-        form = RegisterForm(obj=user)
+        form = ProfileForm(obj=user)
         form.populate_obj(user)
         # Populate form with object data
         populate_form(form, user, allergy)
         pass
 
-    return render_template("profile.html", form=form, user=getUserName(), url=url_for('profile_page'))
+    return render_template("profile.html", form=form, user=getUserName(), url='/profile')
 
 
 @app.route("/admin", methods=['GET'])

@@ -1,7 +1,7 @@
 import nltk
 from nltk import word_tokenize
 from nltk import pos_tag
-from file_operations import checkIngredient
+from app.database.recipes.recipe_search import checkIngredient
 from config import basedir
 import os
 import sys

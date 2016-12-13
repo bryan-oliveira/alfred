@@ -30,7 +30,7 @@
                 </article>
             {% endif %}
 
-            <form action={{ url }}method="post">
+            <form action="{{ url }}" method="post">
 
                 {{ form.hidden_tag() }}
 
@@ -41,11 +41,6 @@
                 <p class="control">
                     {{ form.username.label(class_="label") }}
                     {{ form.username(class_="input") }}
-                </p>
-
-                <p class="control">
-                    {{ form.password.label(class_="label") }}
-                    {{ form.password(class_="input") }}
                 </p>
 
                 <!-- Gender and Age fields on same row-->
@@ -69,12 +64,11 @@
 
 
                 <!-- Allergy Section -->
-                <label class="label">Allergies/Restrictions/Preferences</label>
-                <div class="spacer"></div>
-
                 <div class="columns">
                     <!-- First column of allergy items -->
                     <div class="column is-one-third">
+                        <label class="label">Restrictions</label>
+                        <div class="spacer"></div>
 
                         <p class="control">
                             <label class="checkbox">
@@ -109,6 +103,8 @@
 
                     <!-- Second column of allergy items -->
                     <div class="column is-one-third">
+                        <label class="label">Allergies</label>
+                        <div class="spacer"></div>
 
                         <p class="control">
                             <label class="checkbox">
@@ -124,12 +120,6 @@
                         </p>
                         <p class="control">
                             <label class="checkbox">
-                                {{ form.fish(class_="checkbox") }}
-                                {{ form.fish.label }}
-                            </label>
-                        </p>
-                        <p class="control">
-                            <label class="checkbox">
                                 {{ form.sesame(class_="checkbox") }}
                                 {{ form.sesame.label }}
                             </label>
@@ -139,6 +129,8 @@
 
                     <!-- Third column of allergy items -->
                     <div class="column is-one-third">
+                        <label class="label">Preferences</label>
+                        <div class="spacer"></div>
                         <p class="control">
                             <label class="checkbox">
                                 {{ form.vegetarian(class_="checkbox") }}
@@ -149,6 +141,12 @@
                             <label class="checkbox">
                                 {{ form.vegan(class_="checkbox") }}
                                 {{ form.vegan.label }}
+                            </label>
+                        </p>
+                        <p class="control">
+                            <label class="checkbox">
+                                {{ form.fish(class_="checkbox") }}
+                                {{ form.fish.label }}
                             </label>
                         </p>
 

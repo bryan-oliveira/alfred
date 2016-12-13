@@ -1,28 +1,70 @@
-# -*- coding: utf-8 -*-
-
-from file_operations import is_empty_file, overwrite_recipe_file
-from config import RECIPE_FILE
-import json
 import copy
-import codecs
+import json
 import sys
+from config import VEGETABLE_DB, FRUIT_DB, MEAT_POULTRY_DB, FISH_DB, SEAFOOD_DB, RECIPE_FILE
+from file_operations import is_empty_file, overwrite_recipe_file
+
+N_RECIPES = 14
 
 
-# Recipe file defined in application config.py
-RECIPE_FILE = RECIPE_FILE
-N_RECIPES = 10
+def checkIngredient(ingredient_list):
+    """
+    Check whether input contains ingredients. Return dictionary of ingredient types, and names, if any.
+    Ingredient name is always singular form (opposite of plural).
+
+    :param ingredient_list: string
+    :return: False, Error msg | True, Ingredient dictionary
+    """
+
+    food_types = {"vegetables": VEGETABLE_DB,
+                  "fruits": FRUIT_DB,
+                  "meat_poultry": MEAT_POULTRY_DB,
+                  "fish": FISH_DB,
+                  "seafood": SEAFOOD_DB}
+
+    ing_dict = {"vegetables": [],
+                "fruits": [],
+                "meat_poultry": [],
+                "fish": [],
+                "seafood": []}
+
+    for name in food_types:
+        if not is_empty_file(food_types[name]):
+            with open(food_types[name], 'r') as f:
+                data = json.load(f)
+
+                # Check for ingredients
+                a = set(ingredient_list)
+                b = set(data)
+                c = a.intersection(b)
+
+                # print a, b, c
+
+                # Add found ingredient to matching food type
+                [ing_dict[name].append(ing) for ing in c]
+
+                # Remove identified ingredients from list
+                ingredient_list = a.difference(c)
+
+    print ing_dict
+    return True, ing_dict
 
 
-def getRecipesFromFile():
+if __name__ == '__main__':
+    checkIngredient(["orange", "onion", "pepper", "avocado", "apple"])
+    checkIngredient(["crab", "chicken", "steak"])
+
+
+def get_recipes_from_file():
 
     if not is_empty_file(RECIPE_FILE):
         with open(RECIPE_FILE, 'r') as data_file:
             data = json.load(data_file)
             return data
     return False
-    
 
-def getRecipeByName(recipe_name):
+
+def get_recipe_by_name(recipe_name):
 
     if not is_empty_file(RECIPE_FILE):
         with open(RECIPE_FILE, 'r') as data_file:
@@ -34,10 +76,10 @@ def getRecipeByName(recipe_name):
             return None
 
 
-def get_recipes_by_tag(tag):
+def get_recipes_by_tag(tag, recipes=[]):
     """Return all recipes that contain <tag>"""
-    data = getRecipesFromFile()
-    recipes = []
+    data = get_recipes_from_file()
+    recipes = recipes
     for recipe in data:
         for tag_ in recipe['tags']:
             if tag == tag_.lower() and recipe not in recipes:
@@ -47,75 +89,69 @@ def get_recipes_by_tag(tag):
     return recipes
 
 
-def getRecipesWithAllIngredients(recipe_names, ingredients, recipe_titles):
+def get_recipes_with_all_ingredients(recipe_names, ingredients, recipe_titles, restricted_recipes=None):
     """ Input: Ingredients to search in recipes.
         Output: Return N_RECIPES amount of recipes.
         TODO: Change from i to N_RECIPES. """
 
     recipes_with_all_ingredients = recipe_names
     DEBUG = False
-    # print "getRecipesWithAllIngredients\tDEBUG:", DEBUG
 
-    if not is_empty_file(RECIPE_FILE):
-        with open(RECIPE_FILE, 'r') as data_file:
-            data = json.load(data_file)
+    if restricted_recipes is not None:
+        data = restricted_recipes
+    else:
+        if not is_empty_file(RECIPE_FILE):
+            with open(RECIPE_FILE, 'r') as data_file:
+                data = json.load(data_file)
 
-            i = 0
-            next_recipe = False
-            ing_copy = ingredients
-            debug = 3
+    i = 0
+    next_recipe = False
+    ing_copy = ingredients
+    debug = 3
 
-            # For each recipe
-            for recipe in data:
-                debug -= 1
-                # print "###########################\n", recipe['title']
+    # For each recipe
+    for recipe in data:
+        debug -= 1
+        ing_copy = copy.deepcopy(ingredients)
+        recipe_output = recipe['title'] + '\n'
 
-                ing_copy = copy.deepcopy(ingredients)
-                recipe_output = recipe['title'] + '\n'
+        for title in recipe['ingredientList']:
 
-                #if DEBUG:
-                    # [#] print>> sys.stderr, recipe['title']
+            # For each ingredient string in recipe Ex: '1/2 onion'
+            for recipe_ingredient in recipe['ingredientList'][title]:
+                # print recipe_ingredient, ing_copy
 
-                for title in recipe['ingredientList']:
+                for sub_list in ing_copy:
+                    # For each ingredient we are looking for
+                    for ing in sub_list:
+                        # print "\t", "ing:", ing, "recipe ing:", recipe_ingredient
+                        if ing in recipe_ingredient:
+                            if DEBUG:
+                                string = '\tFound ing: ' + ing + ' in ' + recipe_ingredient + '\n'
+                                recipe_output += string
+                                # [#] print>> sys.stderr, 'found ->', ing, 'left:', ing_copy, len(ing_copy)
 
-                    # For each ingredient string in recipe Ex: '1/2 onion'
-                    for recipe_ingredient in recipe['ingredientList'][title]:
-                        # print recipe_ingredient, ing_copy
-
-                        for sub_list in ing_copy:
-                            # For each ingredient we are looking for
-                            for ing in sub_list:
-                                # print "\t", "ing:", ing, "recipe ing:", recipe_ingredient
-                                if ing in recipe_ingredient:
-                                    if DEBUG:
-                                        string = '\tFound ing: ' + ing + ' in ' + recipe_ingredient + '\n'
-                                        recipe_output += string
-                                        # [#] print>> sys.stderr, 'found ->', ing, 'left:', ing_copy, len(ing_copy)
-
-                                    ing_copy.remove(sub_list)
-                                    break
-
-                        # TODO: Check whether duplicate recipes are being inserted
-                        if len(ing_copy) == 0:
-                            recipes_with_all_ingredients += [recipe]
-                            recipe_titles.append(recipe['title'])
-                            next_recipe = True
-                            i += 1
-
-                            #if DEBUG:
-                                # [#] print>> sys.stderr, "FOUND RECIPE - ", recipe_output, '\n'
-
+                            ing_copy.remove(sub_list)
                             break
 
-                        if next_recipe is True:
-                            break
-
-                    if next_recipe is True:
-                        next_recipe = False
-                        break
-                if i > 11:
-                    # [#] print>> sys.stderr, "Ingr: i > 11 - getRecipesByAllIngredient"
+                # TODO: Check whether duplicate recipes are being inserted
+                if len(ing_copy) == 0:
+                    recipes_with_all_ingredients += [recipe]
+                    recipe_titles.append(recipe['title'])
+                    next_recipe = True
+                    i += 1
                     break
+
+                if next_recipe is True:
+                    break
+
+            if next_recipe is True:
+                next_recipe = False
+                break
+        # Break when x recipes found
+        if i > 20 and False:
+            # print "Ingr: i > 20 - getRecipesByAllIngredient"
+            break
 
     # print recipes_with_all_ingredients
     return recipes_with_all_ingredients
@@ -126,7 +162,7 @@ def getRecipesByIngredients(recipe_names, ingredients, recipe_titles):
         Output: Return N_RECIPES amount of recipes.
         TODO: Change from i to N_RECIPES. """
 
-    data = getRecipesFromFile()
+    data = get_recipes_from_file()
     recipe_count = 0
     next_recipe = False  # When ingredient found, skip to next recipe
 
@@ -162,7 +198,7 @@ def getRecipesByIngredients(recipe_names, ingredients, recipe_titles):
             break
 
 
-def getRecipesByKeywordInName(recipe_names, keywords):
+def get_recipes_by_keyword_in_name(recipe_names, keywords):
     """ Input: Keyword to search in recipe name.
         Output: Return N_RECIPES amount of recipes.
         TODO: Change from i to N_RECIPES. """
@@ -181,7 +217,7 @@ def getRecipesByKeywordInName(recipe_names, keywords):
                 skip = False
                 # Skip if current recipe is already in list
                 for xs in recipes_with_keywords:
-                    # [#] print>> sys.stderr, recipe['title'], xs['title'], ":", (recipe['title'] == xs['title'])
+                    # [#] print recipe['title'], xs['title'], ":", (recipe['title'] == xs['title'])
                     if recipe['title'] == xs['title']:
                         skip = True
 
@@ -214,7 +250,7 @@ def remove_recipes_with_missing_fields():
     Iterates over recipe list and removes recipes with missing fields.
     :return: True, Number of recipes removed
     """
-    recipes = getRecipesFromFile()
+    recipes = get_recipes_from_file()
     # title, image, description, chef notes, nutrition, ingredient list
     counter = [0, 0, 0, 0, 0, 0]
     i = 0  # index - used to remove recipe
@@ -237,9 +273,9 @@ def remove_recipes_with_missing_fields():
 
         i += 1
 
-    # [#] print>> sys.stderr, "Recipes missing:\n\tTitle:%d\n\tImage:%d\n\tDescription:%d\n\tChef Notes:%d\n\tNutrition Info:%d\n\t" \
-    #      "Ingredients:%d" % (counter[0], counter[1], counter[2], counter[5], counter[4], counter[3])
-    # [#] print>> sys.stderr, "Total:", len(recipes)
+    print "Recipes missing:\n\tTitle:%d\n\tImage:%d\n\tDescription:%d\n\tChef Notes:%d\n\tNutrition Info:%d\n" \
+          "\tIngredients:%d" % (counter[0], counter[1], counter[2], counter[5], counter[4], counter[3])
+    print "Total:", len(recipes)
 
     # Update recipe file
     overwrite_recipe_file(recipes)
@@ -248,7 +284,7 @@ def remove_recipes_with_missing_fields():
 
 
 def remove_recipe_by_name(name):
-    recipes = getRecipesFromFile()
+    recipes = get_recipes_from_file()
     name = name.lower()
     index = 0
     for recipe in recipes:
@@ -258,23 +294,12 @@ def remove_recipe_by_name(name):
             inp = raw_input("Delete recipe: %s (y/N)?" % recipe['title'])
             if inp == 'y' or inp == 'Y':
                 del recipes[index]
-                # [#] print>> sys.stderr, "Removed:", recipe['title']
+                print sys.stderr, "Removed:", recipe['title']
 
                 # Update recipe file
                 overwrite_recipe_file(recipes)
-                # [#] print>> sys.stderr, "Updated recipe db"
+                print "Updated recipe db"
                 return True
         index += 1
-    # [#] print>> sys.stderr, "Recipe title not found"
+    print "Recipe title not found"
     return False
-
-
-if __name__ == '__main__':
-    if False:
-        remove_recipes_with_missing_fields()
-
-    if True:
-        remove_recipe_by_name("BLT Burgers")
-        remove_recipe_by_name("SUGAR SNAP PEAS AND POTATOES")
-        remove_recipe_by_name("DIPPING BISCUITS")
-

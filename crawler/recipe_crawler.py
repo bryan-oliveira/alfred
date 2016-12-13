@@ -1,6 +1,8 @@
-from bs4 import BeautifulSoup
-from recipe_to_file import save_recipe
 import urllib
+
+from bs4 import BeautifulSoup
+
+from app.database.recipes.recipe_to_file import save_recipe
 
 # Base URL
 baseURL = "http://www.foodnetwork.com"

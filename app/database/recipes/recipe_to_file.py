@@ -4,9 +4,6 @@ from file_operations import is_empty_file
 from config import RECIPE_FILE
 
 
-# NEW_RECIPE_FILE = RECIPE_FILE
-
-
 class Recipe(object):
     def __init__(self, ingredients, directions, name):
         self.ingredients = ingredients
