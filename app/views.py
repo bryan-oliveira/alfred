@@ -172,27 +172,29 @@ def login():
     username = form.username.data
     password = form.password.data
 
+    # Loads recipes from fie JSON format, returns random 20 at random
+    recipe_list = grff.getRecipesFromFile()
+    return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
+
     if form.validate_on_submit():
         user = Users.query.filter_by(username=username, password=password).first()
-        print user
-        if user is None:
-            flash('Username or Password is invalid')
+
+        if user is not None:
+            login_user(user, remember=True)
+            flash('Logged in successfully!')
+
+            next_ = request.args.get('next')
+
+            if not next_is_valid(next_):
+                return abort(400)
+
             return redirect(url_for('index'))
 
-        login_user(user, remember=True)
-        flash('Logged in successfully!')
-
-        next_ = request.args.get('next')
-
-        if not next_is_valid(next_):
-            return abort(400)
-
-        return redirect(url_for('index'))
-
-    flash('Username or Password is invalid')
+    flash('Invalid username/password.', 'error')
     return render_template('categories.html',
                            title='Sign In',
-                           form=form)
+                           form=form,
+                           recipe_suggestions=return_recipes)
 
 
 @app.route("/profile", methods=['GET', 'POST'])

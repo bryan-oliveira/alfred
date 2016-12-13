@@ -17,17 +17,17 @@
             {% endif %}
 
             {% if form.errors %}
-                <ul class="errors">
-                    {% for field_name, field_errors in form.errors|dictsort if field_errors %}
-                        {% for error in field_errors %}
-                            <article class="message is-danger">
-                                <div class="message-body">
+                <article class="message is-danger">
+                    <div class="message-body">
+                        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                            {% for error in field_errors %}
+                                <p>
                                     {{ form[field_name].label }} {{ error }}
-                                </div>
-                            </article>
+                                </p>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                </ul>
+                    </div>
+                </article>
             {% endif %}
 
             <form action={{ url }}method="post">
