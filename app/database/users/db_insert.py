@@ -1,6 +1,7 @@
 from app.models import Allergy, Users
 from app import db
 
+
 def insert_user(user, allergies):
     # [#] print sys.stderr, user, allergies
 
@@ -14,6 +15,25 @@ def insert_user(user, allergies):
     db.session.commit()
 
     return True, ''
+
+
+def edit_user(user, allergy):
+    u = Users.query.get(user.id)
+    u.fullname = user.fullname
+    u.age = user.age
+    u.gender = user.gender
+    u.allergy.lowchol = allergy.lowchol
+    u.allergy.highchol = allergy.highchol
+    u.allergy.underw = allergy.underw
+    u.allergy.overw = allergy.overw
+    u.allergy.gluten = allergy.gluten
+    u.allergy.nuts = allergy.nuts
+    u.allergy.fish = allergy.fish
+    u.allergy.sesame = allergy.sesame
+    u.allergy.vegetarian = allergy.vegetarian
+    u.allergy.vegan = allergy.vegan
+    print db.session.commit()
+
 
 if __name__ == '__main__':
     u1 = Users(fullname='Bryan Oliveira', username='bryan', age=30, gender='M', password='123123')

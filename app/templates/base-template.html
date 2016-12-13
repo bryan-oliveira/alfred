@@ -39,7 +39,7 @@
         {% with messages = get_flashed_messages(category_filter=['success']) %}
             {% if messages %}
                 <div class="columns spacer">
-                    <div class="column is-one-third is-offset-one-third">
+                    <div class="column has-text-centered">
                         {% for message in messages %}
                             <article class="message is-success">
                                 <div class="message-body"> {{ message }}</div>

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, g, flash, abort
+from flask import render_template, redirect, request, url_for, flash, abort
 from flask.globals import session
 from datetime import datetime, timedelta
 from app import app, lm
@@ -6,11 +6,12 @@ import get_recipes_from_file as grff
 from alfred.alfred_brain import alfred_brain
 from alfred.registration_logic import register_account
 import random
-from app.models import Users
-from .forms import LoginForm
+from app.models import Users, Allergy
+from app.database.users.db_insert import edit_user
+from .forms import LoginForm, RegisterForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from app.speech.alfred_tts import get_raw_wav
-import sys
+from app.database.users.db_query import get_user_by_id
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
 
@@ -149,10 +150,12 @@ def upload():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 
-    if request.method == 'POST':
+    form = RegisterForm()
+
+    if form.validate_on_submit():
         # Save user credentials
         username = request.form['username']
-        password = request.form['pwd']
+        password = request.form['password']
 
         # Register user account
         result = register_account(request.form)
@@ -164,9 +167,9 @@ def register():
             flash('Registration successful!', 'success')
             return redirect(url_for('index'))
         else:
-            return render_template('register.html', error_msg=result[1], form=getForm())
+            return render_template('user_template.html', error_msg=result[1], form=form)
 
-    return render_template('register.html', form=getForm())
+    return render_template('user_template.html', form=form, url=url_for('register'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -183,12 +186,10 @@ def login():
         user = Users.query.filter_by(username=username, password=password).first()
         # [#] print>> sys.stderr, user
         if user is None:
-            # TODO: Implement message flashing in main index page
             flash('Username or Password is invalid')
             return redirect(url_for('index'))
 
         login_user(user, remember=True)
-
         flash('Logged in successfully!')
 
         next_ = request.args.get('next')
@@ -201,6 +202,36 @@ def login():
     return render_template('categories.html',
                            title='Sign In',
                            form=form)
+
+
+@app.route("/profile", methods=['GET', 'POST'])
+def profile_page():
+
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+        print "Form submitted success"
+        user, allergy = get_user_by_id(current_user.id)
+        allergy = Allergy()
+        form.populate_obj(user)
+        form.populate_obj(allergy)
+        edit_user(user, allergy)
+        return render_template("user_template.html",
+                               form=form,
+                               user=getUserName(),
+                               url=url_for('profile_page'))
+    else:
+        # Error validating form, reload form
+        print "Form submitted error OR GET request"
+        print form.errors
+        user, allergy = get_user_by_id(current_user.id)
+        form = RegisterForm(obj=user)
+        form.populate_obj(user)
+        # Populate form with object data
+        populate_form(form, user, allergy)
+        pass
+
+    return render_template("profile.html", form=form, user=getUserName(), url=url_for('profile_page'))
 
 
 @app.route("/admin", methods=['GET'])
@@ -224,4 +255,17 @@ def next_is_valid(url):
 @lm.user_loader
 def load_user(id_):
     return Users.query.get(int(id_))
+
+
+def populate_form(form, user, allergy):
+    form.lowchol.data = allergy.lowchol
+    form.highchol.data = allergy.highchol
+    form.underw.data = allergy.underw
+    form.overw.data = allergy.overw
+    form.gluten.data = allergy.gluten
+    form.nuts.data = allergy.nuts
+    form.fish.data = allergy.fish
+    form.sesame.data = allergy.sesame
+    form.vegetarian.data = allergy.vegetarian
+    form.vegan.data = allergy.vegan
 

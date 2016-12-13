@@ -1,0 +1,168 @@
+{% extends "base-template.html" %}
+
+{% block fullscreen %}
+
+    <div class="columns">
+
+        <!-- 1/2 of Screen (Centered) -->
+        <div class="column is-half is-offset-one-quarter">
+            <div class="spacer"></div>
+            <h3 class="title is-2">Sign Up</h3>
+
+
+            {% if error_msg %}
+                <article class="message is-danger">
+                    <div class="message-body"> {{ error_msg }}</div>
+                </article>
+            {% endif %}
+
+            {% if form.errors %}
+                <ul class="errors">
+                    {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                        {% for error in field_errors %}
+                            <article class="message is-danger">
+                                <div class="message-body">
+                                    {{ form[field_name].label }} {{ error }}
+                                </div>
+                            </article>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <form action={{ url }}method="post">
+
+                {{ form.hidden_tag() }}
+
+                <p class="control">
+                    {{ form.fullname.label(class_="label") }}
+                    {{ form.fullname(class_="input") }}
+                </p>
+                <p class="control">
+                    {{ form.username.label(class_="label") }}
+                    {{ form.username(class_="input") }}
+                </p>
+
+                <p class="control">
+                    {{ form.password.label(class_="label") }}
+                    {{ form.password(class_="input") }}
+                </p>
+
+                <!-- Gender and Age fields on same row-->
+                <div class="columns">
+                    <div class="column is-half">
+                        {{ form.gender.label(class_="label") }}
+                        <p class="control is-horizontal">
+                            <span class="select">
+                                {{ form.gender(class_="select") }}
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="column is-half">
+                        <p class="control">
+                            {{ form.age.label(class_="label") }}
+                            {{ form.age(class_="input") }}
+                        </p>
+                    </div>
+                </div>
+
+
+                <!-- Allergy Section -->
+                <label class="label">Allergies/Restrictions/Preferences</label>
+                <div class="spacer"></div>
+
+                <div class="columns">
+                    <!-- First column of allergy items -->
+                    <div class="column is-one-third">
+
+                        <p class="control">
+                            <label class="checkbox">
+                                {{ form.lowchol(class_="checkbox") }}
+                                {{ form.lowchol.label }}
+                            </label>
+                        </p>
+
+                        <p class="control">
+                            <label class="checkbox">
+                                {{ form.highchol(class_="checkbox") }}
+                                {{ form.highchol.label }}
+                            </label>
+                        </p>
+
+                        <p class="control">
+                            <label class="checkbox">
+                                {{ form.underw(class_="checkbox") }}
+                                {{ form.underw.label }}
+                            </label>
+                        </p>
+
+                        <p class="control">
+                            <label class="checkbox">
+                                {{ form.overw(class_="checkbox") }}
+                                {{ form.overw.label }}
+                            </label>
+                        </p>
+
+
+                    </div>
+
+                    <!-- Second column of allergy items -->
+                    <div class="column is-one-third">
+
+                        <p class="control">
+                            <label class="checkbox">
+                                {{ form.gluten(class_="checkbox") }}
+                                {{ form.gluten.label }}
+                            </label>
+                        </p>
+                        <p class="control">
+                            <label class="checkbox">
+                                {{ form.nuts(class_="checkbox") }}
+                                {{ form.nuts.label }}
+                            </label>
+                        </p>
+                        <p class="control">
+                            <label class="checkbox">
+                                {{ form.fish(class_="checkbox") }}
+                                {{ form.fish.label }}
+                            </label>
+                        </p>
+                        <p class="control">
+                            <label class="checkbox">
+                                {{ form.sesame(class_="checkbox") }}
+                                {{ form.sesame.label }}
+                            </label>
+                        </p>
+
+                    </div>
+
+                    <!-- Third column of allergy items -->
+                    <div class="column is-one-third">
+                        <p class="control">
+                            <label class="checkbox">
+                                {{ form.vegetarian(class_="checkbox") }}
+                                {{ form.vegetarian.label }}
+                            </label>
+                        </p>
+                        <p class="control">
+                            <label class="checkbox">
+                                {{ form.vegan(class_="checkbox") }}
+                                {{ form.vegan.label }}
+                            </label>
+                        </p>
+
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <p class="control">
+                    {{ form.submit(class_="button is-dark") }}
+                </p>
+
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}

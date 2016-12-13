@@ -11,7 +11,7 @@ def register_account(form):
     # User information
     fullname = form['fullname']
     username = form['username']
-    pwd = form['pwd']
+    pwd = form['password']
     age = form['age']
     gender = form['gender']
 
@@ -75,7 +75,7 @@ def validate_data(user):
 
 
 def is_valid_gender(gender):
-    if gender == 'Male' or gender == 'Female':
+    if gender == 'M' or gender == 'F':
         return True
     return False
 

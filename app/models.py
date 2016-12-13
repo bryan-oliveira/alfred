@@ -34,8 +34,8 @@ class Users(db.Model):
             return str(self.id)  # python 3
 
     def __repr__(self):
-        return '<id:%r Name:%r Username:%r Gender:%r Password:%r Age:%r>' \
-               % (self.id, self.username, self.fullname, self.gender, self.password, self.age)
+        return '<id:%r fullname:%r username:%r gender:%r age:%r allergy:%r>' \
+               % (self.id, self.username, self.fullname, self.gender, self.age, self.allergy)
 
 
 # a = Allergy(lowchol=False, highchol=False, overw=False, underw=False, gluten=False,
@@ -60,3 +60,5 @@ class Allergy(db.Model):
                'Gluten:%r Nuts:%r Fish:%r Sesame:%r Vegatarian:%r Vegan:%r>' % \
                (self.lowchol, self.highchol, self.overw,self.underw, self.gluten, self.nuts,
                 self.fish, self.sesame, self.vegetarian, self.vegan)
+
+

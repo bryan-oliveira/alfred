@@ -38,7 +38,12 @@ def alfred_brain(usr_name, audio_phrase):
     ingredient_dict = idr.ingredient_search(text)
 
     # Ingredient_search returns dict; Join all ingredients regardless of type
-    ingredients = ingredient_dict['vegetables'] + ingredient_dict['fruits']
+    ingredients = (ingredient_dict['vegetables'] +
+                   ingredient_dict['fruits'] +
+                   ingredient_dict['meat_poultry'] +
+                   ingredient_dict['fish'] +
+                   ingredient_dict['seafood'])
+
     ingredients = idr.add_ingredients_in_singular_plural(ingredients)
 
     if DEBUG:
