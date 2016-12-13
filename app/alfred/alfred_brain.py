@@ -1,4 +1,3 @@
-from _mysql import result
 from os import path as os_path
 import app.database.recipes.recipe_search as rs
 import logging_functions as lf
@@ -6,15 +5,14 @@ from app import app
 from app.intent import intent_decipher as idr
 from config import DEBUG
 from app.database.users.db_query import get_user_restriciton_tags
-
-DEBUG = True
+from app.speech.speech_module import speech_recognition_from_file
 
 
 def alfred_brain(current_user, audio_phrase):
 
     # Get list of user restrictions
     restrictions = get_user_restriciton_tags(current_user.id, 0)
-    print "User restrictions:", restrictions
+    # print "User restrictions:", restrictions
 
     # Save all recipes to this list
     recipes_with_all_ings = []
@@ -29,7 +27,7 @@ def alfred_brain(current_user, audio_phrase):
         print "Step 2 - Voice Recognition"
 
     # Perform voice recognition
-    text = "peppers"  # ss.speech_recognition_from_file()
+    text = speech_recognition_from_file()
 
     if DEBUG:
         print "\tText:", text
@@ -60,7 +58,7 @@ def alfred_brain(current_user, audio_phrase):
     # If user has restrictions, use them to narrow recipe results
     for tag in restrictions:
         recipes_with_tag = rs.get_recipes_by_tag(tag)
-    print "Recipes containing restriction in tag:", len(recipes_with_all_ings)
+    # print "Recipes containing restriction in tag:", len(recipes_with_all_ings)
 
     if DEBUG:
         print "Step 4 - Searching for recipes with all ingredients", ingredients
@@ -73,7 +71,7 @@ def alfred_brain(current_user, audio_phrase):
                                         recipe_titles,
                                         recipes_with_tag)
 
-    print "Recipes containing all ingredients:", len(recipes_with_all_ings)
+    # print "Recipes containing all ingredients:", len(recipes_with_all_ings)
 
     if DEBUG:
         print "Step 6 - Searching for recipes with any of the ingredients", ingredients

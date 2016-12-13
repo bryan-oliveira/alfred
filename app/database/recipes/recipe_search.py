@@ -46,7 +46,7 @@ def checkIngredient(ingredient_list):
                 # Remove identified ingredients from list
                 ingredient_list = a.difference(c)
 
-    print ing_dict
+    # print ing_dict
     return True, ing_dict
 
 
@@ -85,7 +85,7 @@ def get_recipes_by_tag(tag, recipes=[]):
             if tag == tag_.lower() and recipe not in recipes:
                 recipes += [recipe]
 
-    print tag, "found", len(recipes)
+    # print tag, "found", len(recipes)
     return recipes
 
 

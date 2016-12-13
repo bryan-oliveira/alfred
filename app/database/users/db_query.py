@@ -93,6 +93,6 @@ def list_all_users():
         print user, user.password
 
 if __name__ == '__main__':
-    # list_all_users()
-    get_user_restriciton_tags(1)
+    list_all_users()
+    # get_user_restriciton_tags(1)
 
