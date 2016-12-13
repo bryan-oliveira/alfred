@@ -1,6 +1,5 @@
-from app import db
 from flask.ext.login import AnonymousUserMixin
-
+from app import db
 
 # u = Users(username="newuser", fullname="New User", gender="Male", age=20, password="123123")
 class Users(db.Model):
