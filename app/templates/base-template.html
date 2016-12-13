@@ -38,7 +38,7 @@
 
         {% with messages = get_flashed_messages(category_filter=['success']) %}
             {% if messages %}
-                <div class="columns spacer">
+                <div class="columns">
                     <div class="column has-text-centered">
                         {% for message in messages %}
                             <article class="message is-success">
@@ -50,6 +50,21 @@
             {% endif %}
         {% endwith %}
 
+        <!-- Invalid login error message -->
+        {% if form.errors %}
+            <article class="message is-danger">
+                <div class="message-body has-text-centered">
+                    Invalid username/password. Please try again.
+                    <!--
+                    {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                        {% for error in field_errors %}
+                            {{ form[field_name].label }} {{ error }}
+                        {% endfor %}
+                    {% endfor %}
+                    -->
+                </div>
+            </article>
+        {% endif %}
 
         <!-- Fullscreen Content -->
         {% block fullscreen %}

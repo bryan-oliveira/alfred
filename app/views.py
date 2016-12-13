@@ -33,16 +33,19 @@ def test():
 @app.route('/index')
 def index():
 
-    # [#] print>> sys.stderr, "Debug:", session
+    form = LoginForm()
+
+    # Loads recipes from fie JSON format, returns random X at random
+    recipes = grff.getRecipesFromFile()
+
+    # Randomize suggested recipes
+    return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
 
     # If user is authenticated
     if current_user.is_authenticated:
 
         alfred_voice = None
         alfred_greeting = False
-
-        # Loads recipes from fie JSON format, returns random X at random
-        recipes = grff.getRecipesFromFile()
 
         # Send first name to template
         user = getUserName()
@@ -62,35 +65,27 @@ def index():
 
         if alfred_greeting:
             phrase = 'Hello ' + user + ', how may I help you?'
-            # [#] print>> sys.stderr, phrase
             alfred_voice = get_raw_wav(phrase)
-
-        return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
 
         return render_template('categories.html',
                                title='Home',
                                recipe_suggestions=return_recipes,
-                               form=getForm(),
+                               form=form,
                                user=user,
                                wavfile=alfred_voice)
 
     else:
-        # Loads recipes from fie JSON format, returns random X at random
-        recipes = grff.getRecipesFromFile()
-        # [#] print>> sys.stderr, "#Recipes:", len(recipes)
         # [#] print>> sys.stderr, "Current User not auth:", current_user
-
-        return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
         return render_template('categories.html',
                                title='Home',
                                recipe_suggestions=return_recipes,
-                               form=getForm())
+                               form=form)
 
 
 # Get recipe by name
 @app.route('/search')
 def search_recipe():
-
+    form = LoginForm()
     # Get any args passed through GET|POST
     recipe_search = request.args.get('recipe_name')
 
@@ -108,11 +103,7 @@ def search_recipe():
                            recipe_suggestions=return_recipes,
                            recipe=recipe,
                            user=getUserName(),
-                           form=getForm())
-
-
-def getForm():
-    return LoginForm()
+                           form=form)
 
 
 @app.route('/tag/<tag_name>', methods=['GET', 'POST'])
@@ -178,13 +169,12 @@ def login():
 
     # validate_on_submit runs all validation specs defined in forms.py and returns
     # true if data is valid, safe and ready for processing
-
     username = form.username.data
     password = form.password.data
 
     if form.validate_on_submit():
         user = Users.query.filter_by(username=username, password=password).first()
-        # [#] print>> sys.stderr, user
+        print user
         if user is None:
             flash('Username or Password is invalid')
             return redirect(url_for('index'))
@@ -199,6 +189,7 @@ def login():
 
         return redirect(url_for('index'))
 
+    flash('Username or Password is invalid')
     return render_template('categories.html',
                            title='Sign In',
                            form=form)

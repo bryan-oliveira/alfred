@@ -5,8 +5,8 @@ from wtforms.validators import DataRequired, NumberRange, Length
 
 
 class LoginForm(Form):
-    username = StringField('username', validators=[DataRequired()])
-    password = PasswordField('password', validators=[DataRequired()])
+    username = StringField('', validators=[DataRequired(message="Missing Username.")])
+    password = PasswordField('', validators=[DataRequired(message="Missing Password.")])
     remember_me = BooleanField('remember_me', default=False)
 
 
