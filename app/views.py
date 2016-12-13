@@ -5,7 +5,7 @@ from flask import render_template, redirect, request, url_for, flash, abort
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from flask.globals import session
 
-import app.database.recipes.recipe_search as rs
+import database.recipes.recipe_search as rs
 from alfred.alfred_brain import alfred_brain
 from alfred.registration_logic import register_account
 from app import app, lm
