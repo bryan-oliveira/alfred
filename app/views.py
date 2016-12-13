@@ -206,7 +206,7 @@ def profile_page():
     form = ProfileForm()
 
     if form.validate_on_submit():
-        print "Form submitted success"
+        # print "Form submitted success"
         user, allergy = get_user_by_id(current_user.id)
         allergy = Allergy()
         form.populate_obj(user)
@@ -219,8 +219,8 @@ def profile_page():
                                url=url_for('profile_page'))
     else:
         # Error validating form, reload form
-        print "Form submitted error OR GET request"
-        print form.errors
+        # print "Form submitted error OR GET request"
+        # print form.errors
         user, allergy = get_user_by_id(current_user.id)
         form = ProfileForm(obj=user)
         form.populate_obj(user)
