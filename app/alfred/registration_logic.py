@@ -81,9 +81,9 @@ def is_valid_gender(gender):
 
 
 def is_field_checked(form, field):
-    # HTML Checkbox fields come in on/off form. This function converts on/off to True/False equivalent
+    # Checkbox fields come in True/False form
     if field in form:
-        if form[field] == 'on':  # Redundant ?
+        if form[field]:
             return True
     return False
 

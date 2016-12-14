@@ -150,7 +150,7 @@ def register():
         # Save user credentials
         username = request.form['username']
         password = request.form['password']
-
+        print form.data
         # Register user account
         result = register_account(request.form)
 
@@ -161,9 +161,9 @@ def register():
             flash('Registration successful!', 'success')
             return redirect(url_for('index'))
         else:
-            return render_template('user_template.html', error_msg=result[1], form=form)
+            return render_template('user_info_template.html', error_msg=result[1], form=form)
 
-    return render_template('user_template.html', form=form, url=url_for('register'))
+    return render_template('user_info_template.html', form=form, url=url_for('register'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -204,7 +204,7 @@ def login():
 def profile_page():
 
     form = ProfileForm()
-
+    user_name = getUserName()
     if form.validate_on_submit():
         # print "Form submitted success"
         user, allergy = get_user_by_id(current_user.id)
@@ -213,10 +213,11 @@ def profile_page():
         form.populate_obj(allergy)
         edit_user(user, allergy)
         flash('Profile updated successfully!', 'success')
-        return render_template("profile.html",
+        return render_template("user_info_template.html",
                                form=form,
-                               user=getUserName(),
-                               url=url_for('profile_page'))
+                               user=user_name,
+                               url=url_for('profile_page'),
+                               title=user_name + '\'s Profile')
     else:
         # Error validating form, reload form
         # print "Form submitted error OR GET request"
@@ -228,7 +229,11 @@ def profile_page():
         populate_form(form, user, allergy)
         pass
 
-    return render_template("profile.html", form=form, user=getUserName(), url='/profile')
+    return render_template("user_info_template.html",
+                           form=form,
+                           user=user_name,
+                           url='/profile',
+                           title=user_name + '\'s Profile')
 
 
 @app.route("/admin", methods=['GET'])
