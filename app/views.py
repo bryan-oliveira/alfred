@@ -169,7 +169,7 @@ def register():
             # print user
             token = generate_confirmation_token(user.email)
             confirm_url = url_for('user.confirm_email', token=token, _external=True)
-            html = render_template('user/activate.html', confirm_url=confirm_url)
+            html = render_template('emails/activate_account_email.html', confirm_url=confirm_url)
             subject = "Please confirm your email"
             send_email(user.email, subject, html)
 
