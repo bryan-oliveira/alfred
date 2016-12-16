@@ -1,9 +1,9 @@
 {% block content %}
 
-    {% if form %}
+    {% if login_form %}
 
-    <div class="modal">
-        <div class="modal-background" onclick="$('div.modal').toggleClass('is-active');"></div>
+        <div class="modal">
+            <div class="modal-background" onclick="$('div.modal').toggleClass('is-active');"></div>
             <div class="modal-container">
                 <div class="modal-card">
                     <!-- Any other Bulma elements you want -->
@@ -11,22 +11,22 @@
                         <h3 class="title is-3">Sign In</h3>
                         <form action="/login" method="post" name="login">
 
-                            {{ form.hidden_tag() }}
+                            {{ login_form.hidden_tag() }}
 
                             <label class="label">User Name</label>
                             <p class="control">
-                                {{ form.username(size=20, class="input") }}<br>
+                                {{ login_form.username(size=20, class="input") }}<br>
                             </p>
 
                             <label class="label">Password</label>
                             <p class="control">
-                                {{ form.password(size=20, class="input") }}<br>
+                                {{ login_form.password(size=20, class="input") }}<br>
                             </p>
 
-                            <p>{{ form.remember_me }} Remember Me</p>
+                            <p>{{ login_form.remember_me }} Remember Me</p>
 
                             <p class="control">
-                                <input type="submit" value="Sign In" class="button is-dark" />
+                                <input type="submit" value="Sign In" class="button is-dark"/>
                                 <a class="button is-link"
                                    onclick="$('div.modal').toggleClass('is-active');">Cancel</a>
                             </p>
@@ -35,8 +35,8 @@
                     </section>
                 </div>
             </div>
-        <button class="modal-close" onclick="$('div.modal').toggleClass('is-active');"></button>
-    </div>
+            <button class="modal-close" onclick="$('div.modal').toggleClass('is-active');"></button>
+        </div>
 
     {% endif %}
 

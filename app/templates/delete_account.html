@@ -1,0 +1,43 @@
+{% block delete_modal %}
+
+    {% if delete_form %}
+
+        <div class="modal" id="delete_modal">
+
+            <div class="modal-background"
+                 onclick="$('#delete_modal').toggleClass('is-active');">
+            </div>
+
+            <div class="modal-container">
+                <div class="modal-card">
+                    <!-- Any other Bulma elements you want -->
+
+                    <section class="modal-card-body">
+                        <h3 class="title is-3">Delete Account</h3>
+                        <form action="{{ url_for("delete_account") }}" method="post" name="delete">
+
+                            {{ delete_form.hidden_tag() }}
+
+                            <label class="label">Password</label>
+                            <p class="control">
+                                {{ delete_form.password(size=20, class="input is-danger") }}<br>
+                            </p>
+
+                            <p class="control is-pulled-right">
+                                <a class="button is-link"
+                                   onclick="$('#delete_modal').toggleClass('is-active');">Cancel</a>
+                                <input type="submit" value="Delete Account" class="button is-danger"/>
+                            </p>
+
+                        </form>
+                    </section>
+                </div>
+            </div>
+
+            <button class="modal-close"
+                    onclick="$('#delete_modal').toggleClass('is-active');">
+            </button>
+        </div>
+    {% endif %}
+
+{% endblock %}

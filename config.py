@@ -52,3 +52,6 @@ RECIPE_REQUESTS_LOG = os.path.join(LOG_FOLDER, 'recipe_requests.log')
 
 # Dev mode
 DEBUG = False
+
+# email token generator
+SECURITY_PASSWORD_SALT = 'dsDds3fFDd23'

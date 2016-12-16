@@ -1,6 +1,6 @@
 from app.database.users.db_query import is_username_free
 from app.database.users.db_insert import insert_user
-from app.models import Users, Allergy
+from app.models import User, Allergy
 import sys
 
 
@@ -11,7 +11,8 @@ def register_account(form):
     # User information
     fullname = form['fullname']
     username = form['username']
-    pwd = form['password']
+    email = form['email']
+    password = form['password']
     age = form['age']
     gender = form['gender']
 
@@ -27,7 +28,20 @@ def register_account(form):
     vegetarian = is_field_checked(form, 'vegetarian')
     vegan = is_field_checked(form, 'vegan')
 
-    u1 = Users(fullname=fullname, username=username, age=age, gender=gender, password=pwd)
+    if password != form.password_conf:
+        return False, 'Passwords don\'t match. Please verify.'
+
+    u1 = User(
+        fullname=fullname,
+        username=username,
+        email=email,
+        password=password,
+        age=age,
+        gender=gender,
+        confirmed=False,
+        confirmed_on=False,
+        admin=False)
+
     a1 = Allergy(lowchol=lowchol, highchol=highchol, overw=overw, underw=underw, nuts=nuts,
                  gluten=gluten, fish=fish, sesame=sesame, vegetarian=vegetarian, vegan=vegan)
 

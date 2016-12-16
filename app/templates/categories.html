@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <div class="columns is-multiline top_margin_20px" xmlns="http://www.w3.org/1999/html">
+    <div class="columns is-multiline">
 
         <div class="column has-text-centered">
             <a href="" onclick="get_recipes_by_tag('/tag/side')">
@@ -109,8 +109,8 @@
                     <img src="{{ url_for('static', filename='images/meal-course-types/seafood.png') }}" alt="">
                 </figure>
                 <label class="label">Seafood</label>
+            </a>
         </div>
-        </a>
     </div>
 
 {% endblock %}

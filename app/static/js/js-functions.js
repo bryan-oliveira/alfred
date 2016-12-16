@@ -20,3 +20,6 @@ function get_recipes_by_tag(url) {
     xhr.send();
 }
 
+function confirm_del_account() {
+    
+}

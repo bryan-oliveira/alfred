@@ -6,15 +6,8 @@
 
         <!-- 1/2 of Screen (Centered) -->
         <div class="column is-half is-offset-one-quarter">
+
             <div class="spacer"></div>
-            <h3 class="title is-2">Sign Up</h3>
-
-
-            {% if error_msg %}
-                <article class="message is-danger">
-                    <div class="message-body"> {{ error_msg }}</div>
-                </article>
-            {% endif %}
 
             {% if form.errors %}
                 <article class="message is-danger">
@@ -30,135 +23,165 @@
                 </article>
             {% endif %}
 
-            <form action="{{ url }}" method="post">
+            <div class="box">
+                <form action="{{ url }}" method="post">
+                    {{ form.hidden_tag() }}
 
-                {{ form.hidden_tag() }}
+                    <h1 class="title has-text-centered">{{ title }}</h1>
 
-                <p class="control">
-                    {{ form.fullname.label(class_="label") }}
-                    {{ form.fullname(class_="input") }}
-                </p>
-                <p class="control">
-                    {{ form.username.label(class_="label") }}
-                    {{ form.username(class_="input") }}
-                </p>
+                    <p class="control">
+                        {{ form.fullname.label(class_="label") }}
+                        {{ form.fullname(class_="input") }}
+                    </p>
+                    <p class="control">
+                        {{ form.username.label(class_="label") }}
+                        {{ form.username(class_="input") }}
+                    </p>
 
-                <!-- Gender and Age fields on same row-->
-                <div class="columns">
-                    <div class="column is-half">
-                        {{ form.gender.label(class_="label") }}
-                        <p class="control is-horizontal">
+                    <p class="control">
+                        {{ form.email.label(class_="label") }}
+                        {{ form.email(class_="input") }}
+                    </p>
+
+                    <!-- Password and Password confirmation on same row-->
+                    <div class="columns">
+                        <div class="column is-half">
+                            <p>
+                                {{ form.password.label(class_="label") }}
+                                {{ form.password(class_="input") }}
+                            </p>
+                        </div>
+
+                        <div class="column is-half">
+                            <p class="control">
+                                {{ form.password_conf.label(class_="label") }}
+                                {{ form.password_conf(class_="input") }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Gender and Age fields on same row-->
+                    <div class="columns">
+                        <div class="column is-half">
+                            {{ form.gender.label(class_="label") }}
+                            <p class="control is-horizontal">
                             <span class="select">
                                 {{ form.gender(class_="select") }}
                             </span>
-                        </p>
+                            </p>
+                        </div>
+
+                        <div class="column is-half">
+                            <p class="control">
+                                {{ form.age.label(class_="label") }}
+                                {{ form.age(class_="input") }}
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="column is-half">
-                        <p class="control">
-                            {{ form.age.label(class_="label") }}
-                            {{ form.age(class_="input") }}
-                        </p>
+                    <hr>
+                    <!-- Allergy Section -->
+                    <div class="columns">
+                        <!-- First column of allergy items -->
+                        <div class="column is-one-third">
+                            <label class="label">Restrictions</label>
+                            <div class="spacer"></div>
+
+                            <p class="control">
+                                <label class="checkbox">
+                                    {{ form.lowchol(class_="checkbox") }}
+                                    {{ form.lowchol.label }}
+                                </label>
+                            </p>
+
+                            <p class="control">
+                                <label class="checkbox">
+                                    {{ form.highchol(class_="checkbox") }}
+                                    {{ form.highchol.label }}
+                                </label>
+                            </p>
+
+                            <p class="control">
+                                <label class="checkbox">
+                                    {{ form.underw(class_="checkbox") }}
+                                    {{ form.underw.label }}
+                                </label>
+                            </p>
+
+                            <p class="control">
+                                <label class="checkbox">
+                                    {{ form.overw(class_="checkbox") }}
+                                    {{ form.overw.label }}
+                                </label>
+                            </p>
+
+
+                        </div>
+
+                        <!-- Second column of allergy items -->
+                        <div class="column is-one-third">
+                            <label class="label">Allergies</label>
+                            <div class="spacer"></div>
+
+                            <p class="control">
+                                <label class="checkbox">
+                                    {{ form.gluten(class_="checkbox") }}
+                                    {{ form.gluten.label }}
+                                </label>
+                            </p>
+                            <p class="control">
+                                <label class="checkbox">
+                                    {{ form.nuts(class_="checkbox") }}
+                                    {{ form.nuts.label }}
+                                </label>
+                            </p>
+                            <p class="control">
+                                <label class="checkbox">
+                                    {{ form.sesame(class_="checkbox") }}
+                                    {{ form.sesame.label }}
+                                </label>
+                            </p>
+
+                        </div>
+
+                        <!-- Third column of allergy items -->
+                        <div class="column is-one-third">
+                            <label class="label">Preferences</label>
+                            <div class="spacer"></div>
+                            <p class="control">
+                                <label class="checkbox">
+                                    {{ form.vegetarian(class_="checkbox") }}
+                                    {{ form.vegetarian.label }}
+                                </label>
+                            </p>
+                            <p class="control">
+                                <label class="checkbox">
+                                    {{ form.vegan(class_="checkbox") }}
+                                    {{ form.vegan.label }}
+                                </label>
+                            </p>
+                            <p class="control">
+                                <label class="checkbox">
+                                    {{ form.fish(class_="checkbox") }}
+                                    {{ form.fish.label }}
+                                </label>
+                            </p>
+
+                        </div>
                     </div>
-                </div>
 
-
-                <!-- Allergy Section -->
-                <div class="columns">
-                    <!-- First column of allergy items -->
-                    <div class="column is-one-third">
-                        <label class="label">Restrictions</label>
-                        <div class="spacer"></div>
-
-                        <p class="control">
-                            <label class="checkbox">
-                                {{ form.lowchol(class_="checkbox") }}
-                                {{ form.lowchol.label }}
-                            </label>
-                        </p>
-
-                        <p class="control">
-                            <label class="checkbox">
-                                {{ form.highchol(class_="checkbox") }}
-                                {{ form.highchol.label }}
-                            </label>
-                        </p>
-
-                        <p class="control">
-                            <label class="checkbox">
-                                {{ form.underw(class_="checkbox") }}
-                                {{ form.underw.label }}
-                            </label>
-                        </p>
-
-                        <p class="control">
-                            <label class="checkbox">
-                                {{ form.overw(class_="checkbox") }}
-                                {{ form.overw.label }}
-                            </label>
-                        </p>
-
-
+                    <div class="columns">
+                        <div class="column">
+                            <!-- Buttons -->
+                            <p class="control is-pulled-right">
+                                {{ form.submit(class_="button is-dark") }}
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- Second column of allergy items -->
-                    <div class="column is-one-third">
-                        <label class="label">Allergies</label>
-                        <div class="spacer"></div>
+                </form>
+            </div>
 
-                        <p class="control">
-                            <label class="checkbox">
-                                {{ form.gluten(class_="checkbox") }}
-                                {{ form.gluten.label }}
-                            </label>
-                        </p>
-                        <p class="control">
-                            <label class="checkbox">
-                                {{ form.nuts(class_="checkbox") }}
-                                {{ form.nuts.label }}
-                            </label>
-                        </p>
-                        <p class="control">
-                            <label class="checkbox">
-                                {{ form.sesame(class_="checkbox") }}
-                                {{ form.sesame.label }}
-                            </label>
-                        </p>
-
-                    </div>
-
-                    <!-- Third column of allergy items -->
-                    <div class="column is-one-third">
-                        <label class="label">Preferences</label>
-                        <div class="spacer"></div>
-                        <p class="control">
-                            <label class="checkbox">
-                                {{ form.vegetarian(class_="checkbox") }}
-                                {{ form.vegetarian.label }}
-                            </label>
-                        </p>
-                        <p class="control">
-                            <label class="checkbox">
-                                {{ form.vegan(class_="checkbox") }}
-                                {{ form.vegan.label }}
-                            </label>
-                        </p>
-                        <p class="control">
-                            <label class="checkbox">
-                                {{ form.fish(class_="checkbox") }}
-                                {{ form.fish.label }}
-                            </label>
-                        </p>
-
-                    </div>
-                </div>
-
-                <!-- Buttons -->
-                <p class="control">
-                    {{ form.submit(class_="button is-dark") }}
-                </p>
-
-            </form>
         </div>
 
     </div>

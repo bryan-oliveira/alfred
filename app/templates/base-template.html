@@ -22,9 +22,17 @@
 <body>
 <div class="container is-fluid">
 
+    <!-- Login modal -->
+    {% include "login.html" %}
+
+    <!-- Delete account modal -->
+    {% include "delete_account.html" %}
+
+
     <!-- Invisible audio player -->
     {% if wavfile %}
-        <audio autoplay src="data:audio/wav;base64,{{ wavfile }}">Your browser does not support this audio format.
+        <audio autoplay src="data:audio/wav;base64,{{ wavfile }}">
+            Your browser does not support this audio format.
         </audio>
     {% endif %}
 
@@ -32,71 +40,54 @@
     <!-- Header -->
     {% include 'header.html' %}
 
-    <div class="container">
 
-        <!-- Success messages -->
-        {% with messages = get_flashed_messages(category_filter=['success']) %}
-            {% if messages %}
-                <div class="columns">
-                    <div class="column has-text-centered">
-                        {% for message in messages %}
-                            <article class="message is-success">
-                                <div class="message-body"> {{ message }}</div>
-                            </article>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-        {% endwith %}
-
-        <!-- Error messages -->
-        {% with messages = get_flashed_messages(category_filter=['error']) %}
-            {% if messages %}
-                <div class="columns">
-                    <div class="column has-text-centered">
-                        {% for message in messages %}
-                            <article class="message is-danger">
-                                <div class="message-body"> {{ message }}</div>
-                            </article>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-        {% endwith %}
-
-
-
-        <!-- Fullscreen Content -->
-        {% block fullscreen %}
-
-            <!-- Column Section-->
+    <!-- Flashed messages by category -->
+    <!-- is-danger = error, is-success = green, is-info = blue -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
             <div class="columns">
-
-                <!-- Left 1/4 of screen -->
-                <div class="column is-one-quarter">
-
-                    <h3 class="title is-3">Recipes</h3>
-                    {% for recipe in recipe_suggestions %}
-                        <p><a href="/search?recipe_name={{ recipe.title|urlencode }}">{{ recipe.title }}</a></p>
-                    {% endfor %}
-
+                <div class="column has-text-centered">
+                    <article class="message {{ category }}">
+                        <div class="message-body"> {{ message }}</div>
+                    </article>
                 </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
-                <!-- Right 3/4 of screen -->
-                <div class="column is-three-quarters">
 
-                    <div class="recipe_list">
-                        {% block content %}
-                        {% endblock %}
-                    </div>
+    <!-- Fullscreen Content -->
+    {% block fullscreen %}
 
-                </div>
+        <!-- Column Section-->
+        <div class="columns">
+
+            <!-- Left 1/4 of screen -->
+            <div class="column is-one-quarter">
+
+                <h3 class="title is-3">Recipes</h3>
+                {% for recipe in recipe_suggestions %}
+                    <p><a href="/search?recipe_name={{ recipe.title|urlencode }}">
+                        {{ recipe.title }}
+                    </a></p>
+                {% endfor %}
 
             </div>
 
-        {% endblock %}
+            <!-- Right 3/4 of screen -->
+            <div class="column is-three-quarters">
 
-    </div>
+                <div class="recipe_list">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+
+        </div>
+
+    {% endblock %}
 
 </div>
 
@@ -113,8 +104,6 @@
 <!-- Javascript functions -->
 <script src="{{ url_for('static', filename='js/js-functions.js') }}"></script>
 
-<!-- Login modal -->
-{% include "login.html" %}
 
 </body>
 </html>

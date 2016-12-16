@@ -1,7 +1,6 @@
 import config as cfg
 import json as jsn
 import datetime as dt
-from app.models import Users
 
 
 def save_recipe_search_log_entry(user, text, ingredients):

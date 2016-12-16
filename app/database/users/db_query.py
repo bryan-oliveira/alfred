@@ -1,18 +1,17 @@
-# from alfred_db import Users
-# from sqlalchemy_init import get_session
-# from sqlalchemy import and_
 from app import models
+from app import db
+from datetime import datetime
 
 
 def get_user_by_id(id_):
-    user = models.Users.query.get(id_)
+    user = models.User.query.get(id_)
     allergy = models.Allergy.query.get(user.id)
     return user, allergy
 
 
 def is_username_free(username):
 
-    users = models.Users.query.all()
+    users = models.User.query.all()
 
     for person in users:
         if person.username == username:
@@ -30,7 +29,7 @@ def get_user_restriciton_tags(id_, usage=0):
     tags_0 = []
     tags_1 = []
     if id_ != 0:
-        user = models.Users.query.get(id_)
+        user = models.User.query.get(id_)
 
         if user.allergy.lowchol:
             tags_0.append('lowchol')
@@ -87,8 +86,16 @@ def get_user_restriciton_tags(id_, usage=0):
     return tags_1
 
 
+def confirm_user(user):
+    user.confirmed = True
+    user.confirmed_on = datetime.datetime.now()
+    db.session.add(user)
+    db.session.commit()
+    return True
+
+
 def list_all_users():
-    users = models.Users.query.all()
+    users = models.User.query.all()
     for user in users:
         print user, user.password
 

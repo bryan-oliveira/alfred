@@ -1,11 +1,31 @@
-from app.models import Allergy, Users
+from app.models import Allergy, User
 from app import db
+from datetime import datetime
+from app import bcrypt
+
+
+def create_admin():
+    u = User(
+        fullname="Bryan Oliveira",
+        username="bryan",
+        email="vicdaruf@yahoo.com",
+        password="123123",
+        age=100,
+        gender="M",
+        confirmed=True,
+        confirmed_on=datetime.now(),
+        admin=True)
+
+    a = Allergy()
+    u.allergy = a
+
+    db.session.add(u)
+    db.session.commit()
 
 
 def insert_user(user, allergies):
-    # [#] print sys.stderr, user, allergies
 
-    if not isinstance(user, Users) and not isinstance(allergies, Allergy):
+    if not isinstance(user, User) and not isinstance(allergies, Allergy):
         return False, 'Error inserting user. Invalid user info.'
 
     # Insert a Person in the users table
@@ -17,35 +37,79 @@ def insert_user(user, allergies):
     return True, ''
 
 
-def edit_user(user, allergy):
-    u = Users.query.get(user.id)
-    u.fullname = user.fullname
-    u.age = user.age
-    u.gender = user.gender
-    u.allergy.lowchol = allergy.lowchol
-    u.allergy.highchol = allergy.highchol
-    u.allergy.underw = allergy.underw
-    u.allergy.overw = allergy.overw
-    u.allergy.gluten = allergy.gluten
-    u.allergy.nuts = allergy.nuts
-    u.allergy.fish = allergy.fish
-    u.allergy.sesame = allergy.sesame
-    u.allergy.vegetarian = allergy.vegetarian
-    u.allergy.vegan = allergy.vegan
-    print db.session.commit()
+def edit_user(user, form, update_pwd):
+    edit = False
+
+    if user.fullname != form.fullname.data:
+        user.fullname = form.fullname.data
+        edit = True
+
+    if user.username != form.username.data:
+        user.username = form.username.data
+        edit = True
+
+    if user.email != form.email.data:
+        user.email = form.email.data
+        edit = True
+
+    if user.age != form.age.data:
+        user.age = form.age.data
+        edit = True
+
+    if user.gender != form.gender.data:
+        user.gender = form.gender.data
+        edit = True
+
+    # TODO_ Password
+
+    if user.allergy.lowchol != form.lowchol.data:
+        user.allergy.lowchol = form.lowchol.data
+        edit = True
+
+    if user.allergy.highchol != form.highchol.data:
+        user.allergy.highchol = form.highchol.data
+        edit = True
+
+    if user.allergy.underw != form.underw.data:
+        user.allergy.underw = form.underw.data
+        edit = True
+
+    if user.allergy.overw != form.overw.data:
+        user.allergy.overw = form.overw.data
+        edit = True
+
+    if user.allergy.gluten != form.gluten.data:
+        user.allergy.gluten = form.gluten.data
+        edit = True
+
+    if user.allergy.nuts != form.nuts.data:
+        user.allergy.nuts = form.nuts.data
+        edit = True
+
+    if user.allergy.sesame != form.sesame.data:
+        user.allergy.sesame = form.sesame.data
+        edit = True
+
+    if user.allergy.vegetarian != form.vegetarian.data:
+        user.allergy.vegetarian = form.vegetarian.data
+        edit = True
+
+    if user.allergy.vegan != form.vegan.data:
+        user.allergy.vegan = form.vegan.data
+        edit = True
+
+    # If password field is not empty, update user password hash
+    if update_pwd:
+        user.password = bcrypt.generate_password_hash(form.new_password.data)
+        edit = True
+
+    if edit == True:
+        db.session.commit()
+        return True
+
+    return False
 
 
 if __name__ == '__main__':
-    u1 = Users(fullname='Bryan Oliveira', username='bryan', age=30, gender='M', password='123123')
-    a1 = Allergy(soy=True, milk=False, eggs=False, nuts=False, gluten=False, fish=False, sesame=False, )
-
-    u2 = Users(fullname='Zyanya Garrido', username='bebito', age=26, gender='F', password='123123')
-    a2 = Allergy(soy=False, milk=False, eggs=False, nuts=False, gluten=False, fish=False, sesame=True)
-
-    u3 = Users(fullname='Francisco Mendes', username='balao', age=29, gender='M', password='123123')
-    a3 = Allergy(soy=False, milk=False, eggs=True, nuts=False, gluten=True, fish=False, sesame=False)
-
-    insert_user(u1, a1)
-    insert_user(u2, a2)
-    insert_user(u3, a3)
+    create_admin()
 
