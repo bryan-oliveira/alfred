@@ -1,0 +1,3 @@
+To send an email from the server:
+
+echo "Message body" | mail -a "From: Alfred <alfred@chef-alfred.com>" -s "Subject"

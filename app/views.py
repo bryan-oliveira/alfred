@@ -16,6 +16,8 @@ from .forms import LoginForm, RegisterForm, ProfileForm, DeleteForm
 from app import bcrypt
 from email_token import generate_confirmation_token, confirm_token
 from app.database.users import db_query
+from flask.ext.mail import Message
+from app import mail
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
 
@@ -353,6 +355,16 @@ def next_is_valid(url):
     """This function receives an url, and must check whether it is valid/safe"""
     # [#] print>> sys.stderr, "######", url
     return True
+
+
+@app.route('/send_mail')
+def send_mail():
+    print "Sending mail."
+    msg = Message()
+    msg.recipients = ['vicdaruf@yahoo.com']
+    msg.sender = ('Alfred', 'alfred@alfred.com')
+    msg.body = "Hello. This is the body."
+    mail.send(msg)
 
 
 @lm.user_loader
