@@ -156,7 +156,7 @@ def register():
 
     if form.validate_on_submit():
 
-        print form.data
+        # print form.data
 
         # Register user account
         result = register_account(request.form)
@@ -166,7 +166,7 @@ def register():
             # Get user
             user = User.query.filter_by(username=form.username.data).first()
 
-            print user
+            # print user
 
             login_user(user, remember=True)
             flash('Registration successful!', 'is-success')
@@ -251,10 +251,10 @@ def profile_page():
 
         # Check for password changes
         if form.password.data != '' or form.new_password.data != '' or form.new_password_conf.data != '':
-            print "Changing password."
+            # print "Changing password."
 
             if not pwd_status[0]:
-                print "Passwords dont match"
+                # print "Passwords dont match"
                 flash( pwd_status[1], 'is-danger')
                 return render_template("profile.html",
                                        form=form,
@@ -359,7 +359,7 @@ def next_is_valid(url):
 
 @app.route('/send_mail')
 def send_mail():
-    print "Sending mail."
+    # print "Sending mail."
     msg = Message()
     msg.recipients = ['vicdaruf@yahoo.com']
     msg.sender = ('Alfred', 'alfred@alfred.com')
