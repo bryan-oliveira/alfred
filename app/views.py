@@ -365,7 +365,8 @@ def send_mail():
     msg.sender = ('Alfred', 'alfred@alfred.com')
     msg.body = "Hello. This is the body."
     mail.send(msg)
-
+    flash('Email sent!', 'is-success')
+    return redirect(url_for('index'))
 
 @lm.user_loader
 def load_user(id_):
