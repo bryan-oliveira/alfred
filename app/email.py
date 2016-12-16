@@ -1,5 +1,6 @@
 from itsdangerous import URLSafeTimedSerializer
-from app import app
+from app import app, mail
+from flask.ext.mail import Message
 
 
 def generate_confirmation_token(email):
@@ -18,3 +19,13 @@ def confirm_token(token, expiration=3600):
     except:
         return False
     return email
+
+
+def send_email(to, subject, template):
+    # print "Sending mail."
+    msg = Message()
+    msg.recipients = [to]
+    msg.subject = subject
+    msg.sender = ('Alfred', 'alfred@alfred.com')
+    msg.html = template
+    mail.send(msg)

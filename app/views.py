@@ -14,10 +14,10 @@ from app.database.users.db_delete import delete_user
 from app.speech.alfred_tts import get_raw_wav
 from .forms import LoginForm, RegisterForm, ProfileForm, DeleteForm
 from app import bcrypt
-from email_token import generate_confirmation_token, confirm_token
+from email import generate_confirmation_token, confirm_token
 from app.database.users import db_query
-from flask.ext.mail import Message
-from app import mail
+from email import send_email
+
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
 
@@ -167,9 +167,14 @@ def register():
             user = User.query.filter_by(username=form.username.data).first()
 
             # print user
+            token = generate_confirmation_token(user.email)
+            confirm_url = url_for('user.confirm_email', token=token, _external=True)
+            html = render_template('user/activate.html', confirm_url=confirm_url)
+            subject = "Please confirm your email"
+            send_email(user.email, subject, html)
 
             login_user(user, remember=True)
-            flash('Registration successful!', 'is-success')
+            flash('Registration successful. A confirmation email has been sent via email.', 'is-success')
             return redirect(url_for('index'))
         else:
             error_msg = result[1]
@@ -356,17 +361,6 @@ def next_is_valid(url):
     # [#] print>> sys.stderr, "######", url
     return True
 
-
-@app.route('/send_mail')
-def send_mail():
-    # print "Sending mail."
-    msg = Message()
-    msg.recipients = ['vicdaruf@yahoo.com']
-    msg.sender = ('Alfred', 'alfred@alfred.com')
-    msg.body = "Hello. This is the body."
-    mail.send(msg)
-    flash('Email sent!', 'is-success')
-    return redirect(url_for('index'))
 
 @lm.user_loader
 def load_user(id_):
