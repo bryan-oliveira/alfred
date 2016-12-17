@@ -156,7 +156,7 @@ def test_send():
 @app.route('/test_users', methods=['GET'])
 def test_users():
     users = User.query.all()
-    return str(users)
+    return str([users])
 
 
 # Register view
