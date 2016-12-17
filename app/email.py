@@ -26,6 +26,6 @@ def send_email(to, subject, template):
     msg = Message()
     msg.recipients = [to]
     msg.subject = subject
-    msg.sender = ('Alfred', 'alfred@alfred.com')
+    msg.sender = ('Alfred', 'alfred@chef-alfred.com')
     msg.html = template
     mail.send(msg)
