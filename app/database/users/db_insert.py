@@ -13,7 +13,6 @@ def create_admin():
         age=100,
         gender="M",
         confirmed=True,
-        confirmed_on=datetime.now(),
         admin=True)
 
     a = Allergy()

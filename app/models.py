@@ -15,7 +15,7 @@ class User(db.Model):
     age = db.Column(db.Integer, nullable=True)
     gender = db.Column(db.String(1), nullable=True)
 
-    registered_on = db.Column(db.DateTime, nullable=True)
+    registered_on = db.Column(db.DateTime, nullable=False)
     admin = db.Column(db.SmallInteger, nullable=True, default=False)
     confirmed = db.Column(db.SmallInteger, nullable=True, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
@@ -43,22 +43,21 @@ class User(db.Model):
     def get_hash(self):
         return self.password
 
-    def __init__(self, fullname, username, email, password, age, gender,
-                 confirmed, confirmed_on=None, admin=False):
+    def __init__(self, fullname='', username='', email='', password='.', age=0, gender='M',
+                 confirmed=False, admin=False):
         self.fullname = fullname
         self.username = username
         self.email = email
         self.password = bcrypt.generate_password_hash(password)
         self.age = age
         self.gender = gender
-        self.registered_on = datetime.now()
+        self.registered_on = datetime.utcnow()
         self.admin = admin
         self.confirmed = confirmed
-        self.confirmed_on = confirmed_on
 
     def __repr__(self):
-        return '<id:%r fullname:%r username:%r email:%r ' \
-               'hash:%r gender:%r age:%r registered on:%r' \
+        return '<id:%r fullname:%r username:%r email:%r\n' \
+               'hash:%r gender:%r age:%r registered on:%r\n' \
                'admin:%r confirmed:%r confirmed on:%r allergy:%r>' \
                % (self.id, self.fullname, self.username, self.email,
                   self.password, self.gender, self.age, self.registered_on,

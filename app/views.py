@@ -159,7 +159,7 @@ def register():
         # print form.data
 
         # Register user account
-        result = register_account(request.form)
+        result = register_account(form)
 
         # User registered successfully, perform login and redirect to index
         if result[0]:
@@ -168,12 +168,18 @@ def register():
 
             # print user
             token = generate_confirmation_token(user.email)
-            confirm_url = url_for('user.confirm_email', token=token, _external=True)
+            print token
+
+            confirm_url = url_for('confirm_email', token=token, _external=True)
+            print confirm_url
+
             html = render_template('emails/activate_account_email.html', confirm_url=confirm_url)
+            print html
+
             subject = "Please confirm your email"
             send_email(user.email, subject, html)
 
-            login_user(user, remember=True)
+            # login_user(user, remember=True)
             flash('Registration successful. A confirmation email has been sent via email.', 'is-success')
             return redirect(url_for('index'))
         else:

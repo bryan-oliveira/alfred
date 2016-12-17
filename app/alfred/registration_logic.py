@@ -4,17 +4,17 @@ from app.models import User, Allergy
 import sys
 
 
-debug_mode = False
+debug_mode = True
 
 
 def register_account(form):
     # User information
-    fullname = form['fullname']
-    username = form['username']
-    email = form['email']
-    password = form['password']
-    age = form['age']
-    gender = form['gender']
+    fullname = form['fullname'].data
+    username = form['username'].data
+    email = form['email'].data
+    password = form['password'].data
+    age = form['age'].data
+    gender = form['gender'].data
 
     # Allergies/Restrictions
     lowchol = is_field_checked(form, 'lowchol')
@@ -28,8 +28,10 @@ def register_account(form):
     vegetarian = is_field_checked(form, 'vegetarian')
     vegan = is_field_checked(form, 'vegan')
 
-    if password != form.password_conf:
-        return False, 'Passwords don\'t match. Please verify.'
+    print password
+    print form.password_conf.data
+    if password != form.password_conf.data:
+        return False, 'Passwords dont match. Please verify.'
 
     u1 = User(
         fullname=fullname,
@@ -39,11 +41,12 @@ def register_account(form):
         age=age,
         gender=gender,
         confirmed=False,
-        confirmed_on=False,
         admin=False)
 
     a1 = Allergy(lowchol=lowchol, highchol=highchol, overw=overw, underw=underw, nuts=nuts,
                  gluten=gluten, fish=fish, sesame=sesame, vegetarian=vegetarian, vegan=vegan)
+
+    print u1
 
     # If False, return with corresponding error message
     data_is_valid = validate_data(u1)
