@@ -153,6 +153,11 @@ def test_send():
     return redirect('index')
 
 
+@app.route('/test_users', methods=['GET'])
+def test_send():
+    return User.query.all
+
+
 # Register view
 @app.route('/register', methods=['GET', 'POST'])
 def register():
