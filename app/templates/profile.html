@@ -49,10 +49,26 @@
                     </p>
 
                     <!-- Email field -->
-                    <p class="control">
-                        {{ form.email.label(class_="label") }}
-                        {{ form.email(class_="input") }}
-                    </p>
+                    {% if form.confirmed.data == False %}
+                        {{ form.email.label(class_="label",
+                        text="Email address (unconfirmed, check your email/spam folder for link):") }}
+
+                        <p class="control">
+                            {{ form.email(class_="input is-danger") }}
+                        </p>
+                        <p class="control">
+                            <a class="button is-info is-pulled-right" href="/resend">
+                                Resend Confirmation Link
+                            </a>
+                        </p>
+
+                    {% else %}
+                        <p class="control">
+                            {{ form.email.label(class_="label") }}
+                            {{ form.email(class_="input") }}
+                        </p>
+                    {% endif %}
+
 
                     <!-- Gender and Age fields on same row -->
                     <div class="columns">
@@ -229,9 +245,6 @@
                                    onclick="$('#delete_modal').toggleClass('is-active')">Delete Account</a>
                             </p>
                         </div>
-
-
-
                     </div>
                 </form>
 

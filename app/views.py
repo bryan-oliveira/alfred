@@ -124,7 +124,7 @@ def get_recipes_by_tag(tag_name):
                            login_form=login_form)
 
 
-# Upload audio clip to flask | Clicking on Microphone icon triggers this
+# Upload audio clip to flask
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     login_form = LoginForm()
@@ -176,7 +176,6 @@ def register():
     login_form = LoginForm()
 
     if form.validate_on_submit():
-
         # print form.data
 
         # Register user account
@@ -189,13 +188,13 @@ def register():
 
             # print user
             token = generate_confirmation_token(user.email)
-            print token
+            # print token
 
             confirm_url = url_for('confirm_email', token=token, _external=True)
             print confirm_url
 
             html = render_template('emails/activate_account_email.html', confirm_url=confirm_url)
-            print html
+            # print html
 
             subject = "Please confirm your email"
             send_email(user.email, subject, html)
@@ -225,45 +224,42 @@ def login():
 
     if form.validate_on_submit():
         # Get login credentials
-        username = form.username.data
+        username = form.username.data.lower()
         password = form.password.data
 
         # Find user
         user = User.query.filter_by(username=username).first()
 
         # print user
-
-        # If exists and already confirmed email
+        # If user exists
         if user:
-            if user.confirmed:
-                # Check whether password matches hash
-                password = bcrypt.check_password_hash(user.get_hash(), password)
+            # Check whether password matches hash
+            password = bcrypt.check_password_hash(user.get_hash(), password)
 
-                if password:
-                    login_user(user, remember=True)
-                    flash('Logged in successfully!', 'is-success')
+            if password:
+                login_user(user, remember=True)
+                flash('Logged in successfully!', 'is-success')
 
-                    # next_ = request.args.get('next')
-                    # if not next_is_valid(next_):
-                    #    return abort(400)
+                # next_ = request.args.get('next')
+                # if not next_is_valid(next_):
+                #    return abort(400)
 
-                    return redirect(url_for('index'))
-
-            flash('Please confirm email to login with this account. Click here to resend email.', 'is-info')
-            return redirect(url_for('index'))
+                return redirect(url_for('index'))
 
     flash('Invalid username/password.', 'is-danger')
     return redirect(url_for('index'))
 
 
 @app.route('/resend', methods=['GET'])
+@login_required
 def resend_confirmation():
     token = generate_confirmation_token(current_user.email)
-    confirm_url = url_for('user.confirm_email', token=token, _external=True)
+    confirm_url = url_for('confirm_email', token=token, _external=True)
     html = render_template('emails/activate_account_email.html', confirm_url=confirm_url)
     subject = "Please confirm your email"
     send_email(current_user.email, subject, html)
-    flash('A new confirmation email has been sent.', 'success')
+    msg = Markup('A new confirmation email has been sent to <strong>%s</strong>.' % current_user.email)
+    flash(msg, 'is-info')
     return redirect(url_for('index'))
 
 
@@ -368,18 +364,27 @@ def delete_account():
 @app.route('/confirm/<token>')
 def confirm_email(token):
     # Check if user is logged in - if not ask to do so first before confirm. Security measure
+    if not current_user.is_authenticated:
+        flash('Please login in order to verify your account.', 'is-info')
+        return redirect(url_for('index'))
+
     if current_user.confirmed:
         flash('Account already confirmed. Please login.', 'is-success')
         return redirect(url_for('index'))
+
     email = confirm_token(token)
-    user = User.query.filter_by(email=current_user.email).first_or_404()
+    user = User.query.filter_by(email=current_user.email).first()
+    # print "Find user:", user.fullname
+
     if user.email == email:
         db_query.confirm_user(user)
         flash('You have confirmed your account. Thanks!', 'is-success')
     else:
-        msg = Markup('The confirmation link is invalid or has expired.'
-                     '<a class="is-warning" href="/resend">Click here</a> to resend. ')
+        msg = Markup('The confirmation link is invalid or has expired. '
+                     '<a href="/resend" style="color:grey; text-decoration: underline;">'
+                     '<strong>Click here</strong></a> to resend. ')
         flash(msg, 'is-danger')
+
     return redirect(url_for('index'))
 
 
@@ -407,6 +412,7 @@ def load_user(id_):
     return User.query.get(int(id_))
 
 
+# TODO: Not a view
 def populate_form_with_allergy_data(form, allergy):
     form.lowchol.data = allergy.lowchol
     form.highchol.data = allergy.highchol

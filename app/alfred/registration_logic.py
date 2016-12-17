@@ -1,17 +1,13 @@
-from app.database.users.db_query import is_username_free
+from app.database.users.db_query import is_username_free, email_is_free
 from app.database.users.db_insert import insert_user
 from app.models import User, Allergy
-import sys
-
-
-debug_mode = True
 
 
 def register_account(form):
     # User information
     fullname = form['fullname'].data
-    username = form['username'].data
-    email = form['email'].data
+    username = form['username'].data.lower()
+    email = form['email'].data.lower()
     password = form['password'].data
     age = form['age'].data
     gender = form['gender'].data
@@ -28,8 +24,9 @@ def register_account(form):
     vegetarian = is_field_checked(form, 'vegetarian')
     vegan = is_field_checked(form, 'vegan')
 
-    print password
-    print form.password_conf.data
+    if not email_is_free(email):
+        return False, 'Email is already registered with another account.'
+
     if password != form.password_conf.data:
         return False, 'Passwords dont match. Please verify.'
 
@@ -46,23 +43,14 @@ def register_account(form):
     a1 = Allergy(lowchol=lowchol, highchol=highchol, overw=overw, underw=underw, nuts=nuts,
                  gluten=gluten, fish=fish, sesame=sesame, vegetarian=vegetarian, vegan=vegan)
 
-    print u1
-
     # If False, return with corresponding error message
     data_is_valid = validate_data(u1)
-    if debug_mode:
-        print "register_account<data_is_valid: ", data_is_valid
 
     if not data_is_valid[0]:
-        if debug_mode:
-            print "register_account<data_is_valid<inside IF>: ", data_is_valid
         return data_is_valid
 
     # Return True if user added to database, or return False and error message
     result = insert_user(u1, a1)
-
-    if debug_mode:
-        print sys.stderr, "register_account>result:", result
 
     return result
 

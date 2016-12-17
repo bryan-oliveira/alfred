@@ -45,15 +45,21 @@
     <!-- is-danger = error, is-success = green, is-info = blue -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            {% for category, message in messages %}
+            {# % for category, message in messages %#}
+            {#  Getting duplicate GET requests on some attempts to confirm email.
+                this also triggers duplicate flash messages. Because so far the application
+                has no need to send more than one message this is ok. Investigate in the future
+                though.
+                Update: When I hover over/select a confirmation link in chrome browser,
+                the browser sends some sort of request before I actually click it. #}
             <div class="columns">
                 <div class="column has-text-centered">
-                    <article class="message {{ category }}">
-                        <div class="message-body"> {{ message }}</div>
+                    <article class="message {{ messages[0][0] }}">
+                        <div class="message-body"> {{ messages[0][1] }}</div>
                     </article>
                 </div>
             </div>
-            {% endfor %}
+            {#% endfor %#}
         {% endif %}
     {% endwith %}
 

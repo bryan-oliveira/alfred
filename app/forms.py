@@ -4,6 +4,7 @@ from wtforms import StringField, BooleanField, PasswordField, \
     IntegerField, SubmitField, SelectField
 from wtforms.validators import DataRequired, NumberRange, Length, Email, Optional
 from wtforms.fields.html5 import EmailField
+from app.models import User
 
 
 class LoginForm(Form):
@@ -66,6 +67,8 @@ class RegisterForm(Form):
 
 
 class ProfileForm(Form):
+    # If email has not been confirmed, show so
+    # email_label
 
     # User's full name
     fullname = StringField('Name:',
@@ -106,6 +109,9 @@ class ProfileForm(Form):
                        validators=[DataRequired(message="Please enter a valid age."),
                                    NumberRange(0, 130, message=" not in valid range.")],
                        render_kw={"placeholder": "63"})
+
+    # Email is confirmed
+    confirmed = BooleanField(default=False)
 
     # User's allergies/preferences/restrictions
     lowchol = BooleanField('Low Cholesterol', default=False)

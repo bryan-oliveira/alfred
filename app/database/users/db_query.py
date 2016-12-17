@@ -19,6 +19,12 @@ def is_username_free(username):
     return True
 
 
+def email_is_free(email):
+    if models.User.query.filter_by(email=email).first():
+        return False
+    return True
+
+
 def get_user_restriciton_tags(id_, usage=0):
     """ Return a list of tags_0 according to user's allergies/preferences.
     usage: select what tag format to return. 0 = for recipe search
@@ -88,7 +94,7 @@ def get_user_restriciton_tags(id_, usage=0):
 
 def confirm_user(user):
     user.confirmed = True
-    user.confirmed_on = datetime.datetime.now()
+    user.confirmed_on = datetime.now()
     db.session.add(user)
     db.session.commit()
     return True
@@ -98,6 +104,7 @@ def list_all_users():
     users = models.User.query.all()
     for user in users:
         print user, user.password
+
 
 if __name__ == '__main__':
     list_all_users()
