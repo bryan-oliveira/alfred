@@ -17,6 +17,7 @@ from app import bcrypt
 from email import generate_confirmation_token, confirm_token
 from app.database.users import db_query
 from email import send_email
+from flask import Markup
 
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
@@ -167,9 +168,6 @@ def test_users():
     return send
 
 
-
-
-
 # Register view
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -251,9 +249,21 @@ def login():
 
                     return redirect(url_for('index'))
 
-            flash('Please confirm email to login with this account.', 'is-info')
+            flash('Please confirm email to login with this account. Click here to resend email.', 'is-info')
+            return redirect(url_for('index'))
 
     flash('Invalid username/password.', 'is-danger')
+    return redirect(url_for('index'))
+
+
+@app.route('/resend', methods=['GET'])
+def resend_confirmation():
+    token = generate_confirmation_token(current_user.email)
+    confirm_url = url_for('user.confirm_email', token=token, _external=True)
+    html = render_template('emails/activate_account_email.html', confirm_url=confirm_url)
+    subject = "Please confirm your email"
+    send_email(current_user.email, subject, html)
+    flash('A new confirmation email has been sent.', 'success')
     return redirect(url_for('index'))
 
 
@@ -313,6 +323,7 @@ def profile_page():
                            title=page_title)
 
 
+# TODO: This is not a view. Move elsewhere
 def check_password(form):
     # Check if old password field in profile page matches saved hash
     old_pwd = bcrypt.check_password_hash(current_user.password, form.password.data)
@@ -355,20 +366,20 @@ def delete_account():
 
 
 @app.route('/confirm/<token>')
-# @login_required
 def confirm_email(token):
-    try:
-        email = confirm_token(token)
-    except:
-        flash('The confirmation link is invalid or has expired.', 'is-danger')
-
-    user = User.query.filter_by(email=email).first_or_404()
-
-    if user.confirmed:
-        flash('Account already confirmed. Please login.', 'is-info')
-    else:
+    # Check if user is logged in - if not ask to do so first before confirm. Security measure
+    if current_user.confirmed:
+        flash('Account already confirmed. Please login.', 'is-success')
+        return redirect(url_for('index'))
+    email = confirm_token(token)
+    user = User.query.filter_by(email=current_user.email).first_or_404()
+    if user.email == email:
         db_query.confirm_user(user)
         flash('You have confirmed your account. Thanks!', 'is-success')
+    else:
+        msg = Markup('The confirmation link is invalid or has expired.'
+                     '<a class="is-warning" href="/resend">Click here</a> to resend. ')
+        flash(msg, 'is-danger')
     return redirect(url_for('index'))
 
 
