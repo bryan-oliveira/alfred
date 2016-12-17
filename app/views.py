@@ -147,6 +147,12 @@ def upload():
                            login_form=login_form)
 
 
+@app.route('/test_send', methods=['GET'])
+def test_send():
+    send_email('vicdaruf@yahoo.com', 'Please activate your account!', 'Email body.')
+    return redirect('index')
+
+
 # Register view
 @app.route('/register', methods=['GET', 'POST'])
 def register():
