@@ -156,7 +156,18 @@ def test_send():
 @app.route('/test_users', methods=['GET'])
 def test_users():
     users = User.query.all()
-    return str([users])
+    send = ''
+    for user in users:
+        send += 'id:%d fullname:%s username:%s email:%s<br>hash:%s<br>gender:%s age:%d registered on:%s<br>' \
+                'admin:%s confirmed:%s confirmed on:%s<br><br>' \
+                % (user.id, user.fullname, user.username, user.email,
+                   user.password, user.gender, user.age, user.registered_on,
+                   user.admin, user.confirmed, user.confirmed_on)
+
+    return send
+
+
+
 
 
 # Register view
