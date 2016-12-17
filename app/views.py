@@ -154,7 +154,7 @@ def test_send():
 
 
 @app.route('/test_users', methods=['GET'])
-def test_send():
+def test_users():
     return User.query.all
 
 
