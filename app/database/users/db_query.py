@@ -3,6 +3,28 @@ from app import db
 from datetime import datetime
 
 
+def toggle_recipe_is_favorite(user_id, title):
+    """
+    Check if recipe is in user's favorite list. If it isn't add it, otherwise remove
+    """
+    user = models.User.query.filter_by(id=user_id).first()
+    check = False
+
+    # Look for recipe in user's list and remove it
+    for fav in user.favorite:
+        if fav.title.strip().lower() == title.strip().lower():
+            db.session.delete(fav)
+            check = True
+
+    # If recipe not found in user's list. Add it
+    if not check:
+        fav = models.Favorite()
+        fav.title = title
+        user.favorite.append(fav)
+
+    db.session.commit()
+
+
 def get_user_by_id(id_):
     user = models.User.query.get(id_)
     allergy = models.Allergy.query.get(user.id)

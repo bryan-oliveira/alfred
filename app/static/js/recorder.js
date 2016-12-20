@@ -29,16 +29,19 @@ if (navigator.getUserMedia) {
                 record.classList.remove("active");
                 console.log(mediaRecorder.state);
                 console.log("recorder stopped");
+                stop_siriwave();
+                $('#thinking-alfred').addClass('is-active');
             }
             // Start recording
             else {
                 mediaRecorder.start();
+                start_siriwave();
                 record.style.background = "gray";
                 record.classList.add("active");
                 console.log(mediaRecorder.state);
                 console.log("recorder started");
             }
-        }
+        };
 
         mediaRecorder.onstop = function (e) {
 
@@ -59,29 +62,30 @@ if (navigator.getUserMedia) {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function (response) {
                 if (xhr.readyState == 4) {
+                    $('#thinking-alfred').removeClass('is-active');
                     document.getElementsByClassName("recipe_list")[0].innerHTML = xhr.responseText;
                 }
-            }
+            };
 
             xhr.open('POST', '/upload', true);
 
             xhr.onload = function (e) {
                 console.log('NEW MESSAGE');
                 console.log(e);
-            }
+            };
 
             xhr.send(formData);
 
-        }
+        };
 
         mediaRecorder.ondataavailable = function (e) {
             chunks.push(e.data);
         }
-    }
+    };
 
     var onError = function (err) {
         console.log('The following error occured: ' + err);
-    }
+    };
 
     navigator.getUserMedia(constraints, onSuccess, onError);
 

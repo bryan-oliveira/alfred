@@ -1,5 +1,5 @@
 /**
- * Created by boliveira on 11/22/16.
+ * Created by boliveira on 09/22/16.
  */
 
 function get_recipes_by_tag(url) {
@@ -20,6 +20,14 @@ function get_recipes_by_tag(url) {
     xhr.send();
 }
 
-function confirm_del_account() {
-    
+function start_siriwave() {
+    document.getElementById('siri-container').style.visibility = 'visible';
+    SW.start();
+}
+
+function stop_siriwave() {
+    SW.setSpeed(0.1);
+    SW.setAmplitude(0.1);
+    SW.stop();
+    document.getElementById('siri-container').style.visibility = 'hidden';
 }

@@ -21,6 +21,7 @@ class User(db.Model):
     confirmed_on = db.Column(db.DateTime, nullable=True)
 
     allergy = db.relationship('Allergy', uselist=False, back_populates='user')
+    favorite = db.relationship("Favorite", backref="user")
 
     @property
     def is_authenticated(self):
@@ -58,10 +59,22 @@ class User(db.Model):
     def __repr__(self):
         return '<id:%r fullname:%r username:%r email:%r\n' \
                'hash:%r gender:%r age:%r registered on:%r\n' \
-               'admin:%r confirmed:%r confirmed on:%r allergy:%r>' \
+               'admin:%r confirmed:%r confirmed on:%r allergy:%r fav:%r>' \
                % (self.id, self.fullname, self.username, self.email,
                   self.password, self.gender, self.age, self.registered_on,
-                  self.admin, self.confirmed, self.confirmed_on, self.allergy)
+                  self.admin, self.confirmed, self.confirmed_on, self.allergy,
+                  self.favorite)
+
+
+class Favorite(db.Model):
+    __tablename__ = 'favorites'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    title = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return 'id: %r, user id: %r, title: %r' % (self.id, self.user_id, self.title)
 
 
 class Allergy(db.Model):

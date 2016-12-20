@@ -17,6 +17,9 @@
     <!-- Custom CSS -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 
+    <!-- Balloon.css library for css tooltips -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.2.4/balloon.min.css">
+
 </head>
 
 <body>
@@ -28,6 +31,8 @@
     <!-- Delete account modal -->
     {% include "delete_account.html" %}
 
+    <!-- Modal to display when Alfred is "thinking" (retrieving recipes) -->
+    {% include "thinking_alfred.html" %}
 
     <!-- Invisible audio player -->
     {% if wavfile %}
@@ -39,7 +44,6 @@
 
     <!-- Header -->
     {% include 'header.html' %}
-
 
     <!-- Flashed messages by category -->
     <!-- is-danger = error, is-success = green, is-info = blue -->
@@ -62,7 +66,6 @@
             {#% endfor %#}
         {% endif %}
     {% endwith %}
-
 
     <!-- Fullscreen Content -->
     {% block fullscreen %}
@@ -99,17 +102,59 @@
 
 <!-- Microphone recorder functions -->
 <div class="tooltip">
-    <a>
-        <img src="{{ url_for('static', filename='images/alfred2.png') }}" class="microphone" onclick="startRecording()">
-    </a>
+
     <span class="tooltiptext">Click Alfred to start speaking<br>Click again to when finished speaking</span>
 </div>
+
+
+<!-- Footer -->
+<div class="custom_footer">
+    <a>
+        <img src="{{ url_for('static', filename='images/alfred2.png') }}" class="microphone">
+    </a>
+
+    <div id="siri-container" class="has-text-centered" style="margin: auto;"></div>
+</div>
+
+
 
 <script src="{{ url_for('static', filename='js/recorder.js') }}"></script>
 
 <!-- Javascript functions -->
 <script src="{{ url_for('static', filename='js/js-functions.js') }}"></script>
 
+<!-- Siri wave generator library -->
+<script src="{{ url_for('static', filename='js/siriwave.js') }}"></script>
+
+
+<!-- Set event to generate random values for Siri wave -->
+<script>
+    var x = setInterval(
+            function () {
+                //SW.setNoise(  );
+                var amplitude = Math.random() * 2;
+                SW.setAmplitude(amplitude);
+                var speed = ( (Math.random() ) / 10) + 0.1;
+                SW.setSpeed(speed);
+                //console.log(speed);
+                //SW.frequency = (Math.random() * 10 ) + 5;
+            }, 500
+    );
+</script>
+
+<!-- Init siri wave container -->
+<script>
+    var $siri_classic = document.getElementById('siri-container');
+    var SW = new SiriWave({
+        color: '#000',
+        //width: 259,
+        //height: 90,
+        speed: 0.12,
+        amplitude: 0.5,
+        container: $siri_classic,
+        autostart: false
+    });
+</script>
 
 </body>
 </html>

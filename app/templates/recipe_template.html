@@ -2,7 +2,37 @@
 
 {% block fullscreen %}
     <div class="recipe_list">
-        <h2 class="title is-2 recipe_title has-text-centered green">{{ recipe.title|upper }}</h2>
+
+        <nav class="level">
+            <div class="level-item">
+                <h2 class="title is-2 recipe_title has-text-centered green">{{ recipe.title|upper }}</h2>
+            </div>
+
+            <div class="level-right" onmouseenter="$('#heart').css('color', '#C93E3C');
+                                                   $('#heart-text').css('color', '#C93E3C');"
+                                     onmouseleave="$('#heart').css('color', 'grey');
+                                                   $('#heart-text').css('color', 'grey');">
+
+                <a class="button  is-outlined" style="color: gray;"
+                   href="/toggle-is-favorite?recipe_name={{ recipe.title|urlencode }}&next=search"
+                   onmouseenter="$(this).css('border-color', '#C93E3C')";
+                   onmouseleave="$(this).css('border-color', 'grey')">
+
+                    <span class="icon" id="heart" >
+                        {% if fav == True %}
+                            <i class="fa fa-heart" style="color: #C93E3C"></i>
+                        {% else %}
+                            <i class="fa fa-heart"></i>
+                        {% endif %}
+                    </span>
+
+                    <span id="heart-text">Add to favorites</span>
+                </a>
+
+            </div>
+
+        </nav>
+
 
         <div class="columns">
             <div class="column is-one-quarter">
@@ -15,14 +45,14 @@
                     {% if ingTitle == "None" %}
                         <table class="table is-narrow no-border bottom_margin_10px">
                             <tbody>
-                                {% for ing in ingList %}
-                                    <tr>
-                                        <td class="is-icon">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td>{{ ing }}</td>
-                                    </tr>
-                                {% endfor %}
+                            {% for ing in ingList %}
+                                <tr>
+                                    <td class="is-icon">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td>{{ ing }}</td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     {% endif %}
@@ -34,14 +64,14 @@
                         <hr class="is-marginless">
                         <table class="table is-narrow no-border bottom_margin_10px">
                             <tbody>
-                                {% for ing in ingList %}
-                                    <tr>
-                                        <td class="is-icon">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td>{{ ing }}</td>
-                                    </tr>
-                                {% endfor %}
+                            {% for ing in ingList %}
+                                <tr>
+                                    <td class="is-icon">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td>{{ ing }}</td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     {% endif %}
@@ -53,7 +83,7 @@
             <div class="column">
                 <div class="columns">
                     <div class="column is-two-thirds">
-                        <hr class="no-top-margin" >
+                        <hr class="no-top-margin">
                         <!-- Recipe image -->
                         {% if recipe.imgURL is defined %}
                             <img src="{{ "http://" ~ recipe.imgURL }}">

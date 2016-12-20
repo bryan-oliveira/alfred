@@ -1,4 +1,5 @@
 import random
+from compiler.pycodegen import is_constant_false
 from datetime import datetime, timedelta
 from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_user, logout_user, login_required, current_user
@@ -9,7 +10,7 @@ from alfred.registration_logic import register_account
 from app import app, lm
 from app.database.users.db_insert import edit_user
 from app.database.users.db_query import get_user_by_id
-from app.models import User, Allergy
+from app.models import User, Allergy, Favorite
 from app.database.users.db_delete import delete_user
 from app.speech.alfred_tts import get_raw_wav
 from .forms import LoginForm, RegisterForm, ProfileForm, DeleteForm
@@ -18,7 +19,6 @@ from email import generate_confirmation_token, confirm_token
 from app.database.users import db_query
 from email import send_email
 from flask import Markup
-
 
 RECOMMENDED_RECIPE_LIST_SIZE = 8
 
@@ -32,14 +32,13 @@ def getUserName():
 
 @app.route('/test')
 def test():
-    pass
+    return render_template('thinking_alfred.html')
 
 
 # Alfred main page
 @app.route('/')
 @app.route('/index')
 def index():
-
     login_form = LoginForm()
 
     # Loads recipes from fie JSON format, returns random X at random
@@ -90,10 +89,15 @@ def index():
 
 # Get recipe by name
 @app.route('/search')
-def search_recipe():
+def search_recipe(recipe_name=''):
     login_form = LoginForm()
+
     # Get any args passed through GET|POST
     recipe_search = request.args.get('recipe_name')
+
+    # If there is a GET request user what comes in form, otherwise use recipe_name argument
+    if recipe_search is None:
+        recipe_search = recipe_name
 
     # Loads recipes from fie JSON format, returns random 20 at random
     recipes = rs.get_recipes_from_file()
@@ -101,15 +105,32 @@ def search_recipe():
 
     recipe = rs.get_recipe_by_name(recipe_search)
 
-    if recipe is None:
-        return render_template('error_page.html')
+    is_favorite = False
 
-    return render_template('show_recipe.html',
+    if current_user.is_authenticated:
+        for fav in current_user.favorite:
+            # Normalize string comparison, strip whitespace and make lowercase
+            if recipe['title'].strip().lower() == fav.title.strip().lower():
+                is_favorite = True
+
+    return render_template('recipe_template.html',
                            title=recipe['title'],
                            recipe_suggestions=return_recipes,
                            recipe=recipe,
                            user=getUserName(),
-                           login_form=login_form)
+                           login_form=login_form,
+                           fav=is_favorite)
+
+
+@app.route('/toggle-is-favorite')
+def toggle_is_favorite():
+    """ Add/remove recipe from user's favorite recipes list """
+    title = request.args.get('recipe_name')
+    next = request.args.get('next')
+    print title
+    print next
+    db_query.toggle_recipe_is_favorite(current_user.id, title)
+    return redirect_url(next, title)
 
 
 @app.route('/tag/<tag_name>', methods=['GET', 'POST'])
@@ -136,6 +157,7 @@ def upload():
 
     # Send to alfred brain, receive recipes ready to show
     recipes = alfred_brain(current_user, audio)
+    recipes = random.sample(recipes, 12)
 
     # Loads recipes from fie JSON format, returns random 20 at random
     recipe_list = rs.get_recipes_from_file()
@@ -148,10 +170,12 @@ def upload():
                            login_form=login_form)
 
 
-@app.route('/test_send', methods=['GET'])
-def test_send():
-    send_email('vicdaruf@yahoo.com', 'Please activate your account!', 'Email body.')
-    return redirect('index')
+def redirect_url(next, recipe_name=''):
+    """ Redirection rules """
+    if next == 'search':
+        return search_recipe(recipe_name)
+    if next == 'favorites':
+        return favorites()
 
 
 @app.route('/test_users', methods=['GET'])
@@ -219,7 +243,6 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -266,7 +289,6 @@ def resend_confirmation():
 @login_required
 @app.route("/profile", methods=['GET', 'POST'])
 def profile_page():
-
     # Get user name to print in profile page
     user_name = getUserName()
 
@@ -295,7 +317,7 @@ def profile_page():
 
             if not pwd_status[0]:
                 # print "Passwords dont match"
-                flash( pwd_status[1], 'is-danger')
+                flash(pwd_status[1], 'is-danger')
                 return render_template("profile.html",
                                        form=form,
                                        delete_form=delete_form,
@@ -339,7 +361,6 @@ def check_password(form):
 
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
-
     form = DeleteForm()
     password = form.password.data
     user = User.query.get(current_user.id)
@@ -393,6 +414,21 @@ def admin_page():
     return render_template("admin.html")
 
 
+@app.route('/favorites')
+@login_required
+def favorites():
+    user = getUserName()
+    recipes = []
+    for recipe_name in current_user.favorite:
+        recipes.append(rs.get_recipe_by_name(recipe_name.title))
+
+    return render_template('favorites.html',
+                           title='Home',
+                           user=user,
+                           recipes=recipes,
+                           favorite_icon=True)
+
+
 @app.route("/logout")
 @login_required
 def logout():
@@ -424,4 +460,3 @@ def populate_form_with_allergy_data(form, allergy):
     form.sesame.data = allergy.sesame
     form.vegetarian.data = allergy.vegetarian
     form.vegan.data = allergy.vegan
-

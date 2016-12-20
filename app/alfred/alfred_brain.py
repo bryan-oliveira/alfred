@@ -27,7 +27,8 @@ def alfred_brain(current_user, audio_phrase):
         print "Step 2 - Voice Recognition"
 
     # Perform voice recognition
-    text = speech_recognition_from_file()
+    # text = speech_recognition_from_file()
+    text = "mushrooms chicken"
 
     if DEBUG:
         print "\tText:", text

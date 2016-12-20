@@ -1,0 +1,16 @@
+
+{% block content %}
+
+    <div class="modal" id="thinking-alfred">
+        <div class="modal-background" onclick="$('#thinking-alfred').toggleClass('is-active');"></div>
+        <div class="modal-container" style="width: 200px;">
+            <div class="modal-content">
+                <p class="image">
+                    <img src="{{ url_for('static', filename='images/gears2.gif') }}">
+                </p>
+            </div>
+        </div>
+        <button class="modal-close" onclick="$('#thinking-alfred').toggleClass('is-active');"></button>
+    </div>
+
+{% endblock %}

@@ -20,6 +20,7 @@ a { color: #7eb66b}
 .add-entry dl       { font-weight: bold; }
 .metanav            { text-align: right; font-size: 0.8em; padding: 0.3em; margin-bottom: 1em; background: #fafafa; }
 .flash              { background: #cee5F5; padding: 0.5em; border: 1px solid #aacbe2; }
+.loader             { width: 200px; height: 200px; }
 .error              { background: #f0d6d6; padding: 0.5em; }
 .ingredient_column  { padding: 0px 0px 5px 0px}
 .recipe_title       { padding: 20px 20px 20px 20px; }
@@ -34,6 +35,8 @@ a { color: #7eb66b}
 .bottom_margin_10px { margin-bottom: 10px; }
 .tag-buttons        { margin: 5px; }
 .spacer             { margin: 10px; }
+.make-red           { color: #C93E3C; }
+.custom_footer      { position: fixed; bottom: 20px; width: 100%; padding: 3%; }
 .image-cropper      {
                         border-radius: 50%;
                         overflow: hidden;

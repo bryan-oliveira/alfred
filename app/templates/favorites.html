@@ -1,0 +1,63 @@
+{% extends 'base-template.html' %}
+
+{% block fullscreen %}
+
+    <div class="spacer"></div>
+
+    <h2 class="subtitle is-2">Your Favorite Recipes</h2>
+
+    <div class="spacer"></div>
+
+    <div class="columns is-multiline">
+        {% for recipe in recipes %}
+
+            <div class="column is-3">
+                <div class="card">
+
+                    <header class="card-header">
+                        <a class="card-header-title"
+                           data-balloon="{{ recipe.title }}"
+                           data-balloon-pos="up">
+                            {{ recipe.title|truncate(30, True) }}
+                        </a>
+                    </header>
+
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <a href="/search?recipe_name={{ recipe.title|urlencode }}">
+                                <img src="{{ 'http://' + recipe.imgURL }}" alt="">
+                            </a>
+                        </figure>
+                    </div>
+
+                    <div class="card-content">
+                        <div class="content">
+                            {# Make sure no error is thrown because of tag inexistence #}
+                            {% if recipe.tags|length > 1 %}
+                                {% set x = 2 %}
+                            {% else %}
+                                {% set x = recipe.tags|length %}
+                            {% endif %}
+
+                            {% for t in range(x) %}
+                                <span class="tag is-dark">{{ '#' + recipe.tags[t] }}</span>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+                    <footer class="card-footer">
+                        <a class="card-footer-item"
+                           href="/search?recipe_name={{ recipe.title|urlencode }}">View Recipe</a>
+
+                        <a class="card-footer-item"
+                           href="/toggle-is-favorite?recipe_name={{ recipe.title|urlencode }}&next=favorites">Delete</a>
+                    </footer>
+
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

@@ -71,7 +71,7 @@ def get_recipe_by_name(recipe_name):
             data = json.load(data_file)
             for recipe in data:
                 # print 'Recipe list:',recipe['name'],' ; Recipe search:', recipe_name
-                if recipe['title'] == recipe_name:
+                if recipe['title'].strip() == recipe_name.strip():
                     return recipe
             return None
 
