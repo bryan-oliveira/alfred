@@ -156,8 +156,10 @@ def upload():
     user = getUserName()
 
     # Send to alfred brain, receive recipes ready to show
-    recipes = alfred_brain(current_user, audio)
-    recipes = random.sample(recipes, 12)
+    ingredient_list, recipes = alfred_brain(current_user, audio)
+
+    if len(recipes) > 11:
+        recipes = random.sample(recipes, 12)
 
     # Loads recipes from fie JSON format, returns random 20 at random
     recipe_list = rs.get_recipes_from_file()
@@ -167,7 +169,35 @@ def upload():
                            recipes=recipes,
                            recipe_suggestions=return_recipes,
                            user=user,
-                           login_form=login_form)
+                           login_form=login_form,
+                           ingredient_list=ingredient_list)
+
+
+@app.route('/search_keywords', methods=['POST'])
+def search_keywords():
+    login_form = LoginForm()
+
+    keywords = request.form['keywords']
+
+    ingredient_list, recipes = alfred_brain(current_user, None, keywords)
+
+    if len(recipes) > 11:
+        recipes = random.sample(recipes, 12)
+
+    # Send first name to show in header
+    user = getUserName()
+
+    # Loads recipes from fie JSON format, returns random 20 at random
+    recipe_list = rs.get_recipes_from_file()
+    return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
+
+    return render_template('show_recipe_results.html',
+                           recipes=recipes,
+                           recipe_suggestions=return_recipes,
+                           user=user,
+                           login_form=login_form,
+                           ingredient_list=ingredient_list,
+                           force_include=True)
 
 
 def redirect_url(next, recipe_name=''):

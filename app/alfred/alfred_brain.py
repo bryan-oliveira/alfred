@@ -8,7 +8,7 @@ from app.database.users.db_query import get_user_restriciton_tags
 from app.speech.speech_module import speech_recognition_from_file
 
 
-def alfred_brain(current_user, audio_phrase):
+def alfred_brain(current_user, audio_phrase=None, keywords=''):
 
     # Get list of user restrictions
     restrictions = get_user_restriciton_tags(current_user.id, 0)
@@ -21,14 +21,17 @@ def alfred_brain(current_user, audio_phrase):
     recipe_titles = []
 
     # Save audio file to disk
-    audio_phrase.save(os_path.join(app.config['UPLOAD_FOLDER'], 'test.ogg'))
+    # audio_phrase.save(os_path.join(app.config['UPLOAD_FOLDER'], 'test.ogg'))
 
     if DEBUG:
         print "Step 2 - Voice Recognition"
 
     # Perform voice recognition
-    # text = speech_recognition_from_file()
-    text = "mushrooms chicken"
+    if audio_phrase is not None:
+        # text = speech_recognition_from_file()
+        text = "mushrooms chicken"
+    else:
+        text = keywords
 
     if DEBUG:
         print "\tText:", text
@@ -94,8 +97,13 @@ def alfred_brain(current_user, audio_phrase):
     # Save a copy of this order in log file
     lf.save_recipe_search_log_entry(current_user, text, ingredients)
 
+    # Put each ingredient found in a list to send to frontend
+    ingredient_list = ""
+    for it in ingredients:
+        ingredient_list += it[0] + ' '
+
     # Return recipes
-    return recipe_list
+    return ingredient_list, recipe_list
 
 
 if __name__ == '__main__':

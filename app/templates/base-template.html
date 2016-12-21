@@ -20,6 +20,9 @@
     <!-- Balloon.css library for css tooltips -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.2.4/balloon.min.css">
 
+    <!-- Javascript functions -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/js-functions.js') }}"></script>
+
 </head>
 
 <body>
@@ -51,11 +54,11 @@
         {% if messages %}
             {# % for category, message in messages %#}
             {#  Getting duplicate GET requests on some attempts to confirm email.
-                this also triggers duplicate flash messages. Because so far the application
-                has no need to send more than one message this is ok. Investigate in the future
-                though.
-                Update: When I hover over/select a confirmation link in chrome browser,
-                the browser sends some sort of request before I actually click it. #}
+                    this also triggers duplicate flash messages. Because so far the application
+                    has no need to send more than one message this is ok. Investigate in the future
+                    though.
+                    Update: When I hover over/select a confirmation link in chrome browser,
+                    the browser sends some sort of request before I actually click it. #}
             <div class="columns">
                 <div class="column has-text-centered">
                     <article class="message {{ messages[0][0] }}">
@@ -70,88 +73,124 @@
     <!-- Fullscreen Content -->
     {% block fullscreen %}
 
-        <!-- Column Section-->
-        <div class="columns">
+        <div class="container is-fluid">
 
-            <!-- Left 1/4 of screen -->
-            <div class="column is-one-quarter">
+            <!-- Column Section-->
+            <div class="columns">
 
-                <h3 class="title is-3">Recipes</h3>
-                {% for recipe in recipe_suggestions %}
-                    <p><a href="/search?recipe_name={{ recipe.title|urlencode }}">
-                        {{ recipe.title }}
-                    </a></p>
-                {% endfor %}
+                <!-- Left 1/4 of screen -->
+                <div class="column is-one-quarter">
 
-            </div>
+                    <h3 class="title is-3">Recipes</h3>
+                    {% for recipe in recipe_suggestions %}
+                        <p><a href="/search?recipe_name={{ recipe.title|urlencode }}">
+                            {{ recipe.title }}
+                        </a></p>
+                    {% endfor %}
 
-            <!-- Right 3/4 of screen -->
-            <div class="column is-three-quarters">
-
-                <div class="recipe_list">
-                    {% block content %}
-                    {% endblock %}
                 </div>
+
+                <!-- Right 3/4 of screen -->
+                <div class="column is-three-quarters">
+
+                    <div class="recipe_list">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+
             </div>
 
         </div>
-
     {% endblock %}
 
 </div>
 
-<!-- Microphone recorder functions -->
-<div class="tooltip">
-
-    <span class="tooltiptext">Click Alfred to start speaking<br>Click again to when finished speaking</span>
-</div>
-
+<!-- Leave enough space to compensate for footer (show all recipes) -->
+<div class="" style="margin-bottom: 120px;"></div>
 
 <!-- Footer -->
 <div class="custom_footer">
-    <a>
-        <img src="{{ url_for('static', filename='images/alfred2.png') }}" class="microphone">
-    </a>
 
-    <div id="siri-container" class="has-text-centered" style="margin: auto;"></div>
+    <!-- Alfred image -->
+    <img class="is-pulled-left alfred_image"
+         src="{{ url_for('static', filename='images/alfred2.png') }}"
+         onmouseenter='show_alfred_tooltip();'
+         onmouseout='hide_alfred_tooltip();'>
+
+
+    <div class="alfred_input">
+        <p class="control">
+            <label class="label is-marginless is-pulled-left"
+                   style="font-size: 18px; font-weight: normal;">Ingredients/Keywords:</label><br>
+        </p>
+
+        <!-- Alfred input box -->
+        <form action="/search_keywords" method="POST">
+            <div class="control is-grouped is-dark">
+                <p class="control is-expanded">
+                    {% if ingredient_list %}
+                        <input class="input alfred_input_text is-success"
+                               name="keywords"
+                               value="{{ ingredient_list }}">
+                    {% else %}
+                        <input class="input alfred_input_text is-success" name="keywords">
+                    {% endif %}
+                </p>
+
+                <p class="control">
+                    <button class="button is-success is-outlined alfred_search_button">Search</button>
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Siri wave div -->
+    <div id="siri-container" class="has-text-centered siri_wave grad">
+    </div>
+
+    <!-- Alfred tex div -->
+    <div class="alfred_text_div" id="text_div">
+        <p class="subtitle">
+        </p>
+    </div>
+
 </div>
 
 
-
-<script src="{{ url_for('static', filename='js/recorder.js') }}"></script>
-
-<!-- Javascript functions -->
-<script src="{{ url_for('static', filename='js/js-functions.js') }}"></script>
-
 <!-- Siri wave generator library -->
-<script src="{{ url_for('static', filename='js/siriwave.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/siriwave.js') }}"></script>
 
+<!-- Microphone recorder functions -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/recorder.js') }}"></script>
 
 <!-- Set event to generate random values for Siri wave -->
-<script>
+<script type="text/javascript">
     var x = setInterval(
             function () {
-                //SW.setNoise(  );
-                var amplitude = Math.random() * 2;
+                var noise = Math.random() * 1;
+                //SW.setNoise( noise );
+                var amplitude = Math.random();
                 SW.setAmplitude(amplitude);
                 var speed = ( (Math.random() ) / 10) + 0.1;
-                SW.setSpeed(speed);
+                //SW.setSpeed(speed);
                 //console.log(speed);
                 //SW.frequency = (Math.random() * 10 ) + 5;
-            }, 500
+            }, 250
     );
 </script>
 
 <!-- Init siri wave container -->
-<script>
+<script type="text/javascript">
     var $siri_classic = document.getElementById('siri-container');
     var SW = new SiriWave({
+        style: 'ios9',
         color: '#000',
-        //width: 259,
-        //height: 90,
+        width: 370,
+        height: 80,
         speed: 0.12,
-        amplitude: 0.5,
-        container: $siri_classic,
+        amplitude: 1,
+        container: document.getElementById('siri-container'),
         autostart: false
     });
 </script>

@@ -7,7 +7,7 @@ navigator.getUserMedia = (  navigator.getUserMedia ||
                             navigator.msGetUserMedia );
 
 // set up basic variables for app
-var record = document.querySelector('.microphone');
+var record = document.querySelector('.alfred_image');
 
 //main block for doing the audio recording
 if (navigator.getUserMedia) {
@@ -36,7 +36,7 @@ if (navigator.getUserMedia) {
             else {
                 mediaRecorder.start();
                 start_siriwave();
-                record.style.background = "gray";
+                record.style.background = "white";
                 record.classList.add("active");
                 console.log(mediaRecorder.state);
                 console.log("recorder started");
@@ -60,17 +60,24 @@ if (navigator.getUserMedia) {
             formData.append('audio', blob);
 
             var xhr = new XMLHttpRequest();
+
             xhr.onreadystatechange = function (response) {
+
                 if (xhr.readyState == 4) {
+
                     $('#thinking-alfred').removeClass('is-active');
                     document.getElementsByClassName("recipe_list")[0].innerHTML = xhr.responseText;
+
+                    console.log($('#hidden-info').text());
+                    // Get information from hidden field about ingredients (if any)
+                    $('.alfred_input_text').val($('#hidden-info').text());
                 }
+
             };
 
             xhr.open('POST', '/upload', true);
 
             xhr.onload = function (e) {
-                console.log('NEW MESSAGE');
                 console.log(e);
             };
 
