@@ -28,8 +28,8 @@ def alfred_brain(current_user, audio_phrase=None, keywords=''):
 
     # Perform voice recognition
     if audio_phrase is not None:
-        # text = speech_recognition_from_file()
-        text = "mushrooms chicken"
+        text = speech_recognition_from_file()
+        # text = "mushrooms chicken"
     else:
         text = keywords
 
