@@ -1,21 +1,20 @@
-import nltk
+import json
+from os import path
+from nltk import data
 from nltk import word_tokenize
 from nltk import pos_tag
 from app.database.recipes.recipe_search import checkIngredient
 from config import basedir
-import os
-import sys
+from config import MEAT_POULTRY_DB, FISH_DB, FRUIT_DB, VEGETABLE_DB
 
-
-path = os.path.join(basedir, 'nltk_data')
-nltk.data.path.append(path)
+# For production server
+path = path.join(basedir, 'nltk_data')
+data.path.append(path)
 
 
 def ingredient_not_in():
-    """
-    Find recipe without a certain ingredient
-    :return:
-    """
+    """ Find recipe without a certain ingredient """
+    # TODO: Implement
     pass
 
 
@@ -66,15 +65,13 @@ def ingredient_search(usr_input):
 
     # Tokenize word
     words = word_tokenize(usr_input)
-    # [#] print>> sys.stderr, words
 
+    # Check for ingredients
     result = checkIngredient(words)
 
     if result[0] is True:
         ing_list = result[1]
 
-    # [#] print>> sys.stderr, "Ingredients found> Vegetables:", ing_list['vegetables'],
-    # " >> Fruits:", ing_list['fruits']
     return ing_list
 
 
@@ -105,7 +102,6 @@ def detect_command_type(usr_input):
 
 
 def detect_affirmation(usr_input):
-
     affirmations = ['search', 'find', 'show']
 
     tokens = word_tokenize(usr_input)
@@ -190,11 +186,68 @@ def add_ingredients_in_singular_plural(ingredient_list):
     # [#] print>> sys.stderr, "After:", ingredient_list
     return ingredient_list
 
+
+def detect_general_expressions(keywords):
+    """ Find general words and exchange them for their ingredient counterparts """
+    synonyms = []
+
+    # Search for meat
+    if 'meat' in keywords:
+        with open(MEAT_POULTRY_DB, 'r') as f:
+            data = json.load(f)
+            for kw in data:
+                synonyms.append([kw])
+
+    # Search for fish
+    if 'fish' in keywords:
+        with open(FISH_DB, 'r') as f:
+            data = json.load(f)
+            for kw in data:
+                synonyms.append([kw])
+
+    # Search for Fruit
+    if 'fruit' in keywords or 'fruits' in keywords:
+        with open(FRUIT_DB, 'r') as f:
+            data += json.load(f)
+            for kw in data:
+                synonyms.append([kw])
+
+    # Search for Vegetables
+    if 'vegetable' in keywords or 'vegetables' in keywords:
+        with open(VEGETABLE_DB, 'r') as f:
+            data += json.load(f)
+            for kw in data:
+                synonyms.append([kw])
+
+    return synonyms
+
+
+def remove_extraneous_from_search_terms(keywords):
+    """ Remove adjectives, adpositions, adverbs, conjunctions, articles,
+    particles, pronouns and punctuation marks """
+    # Tokenize input
+    tokens = word_tokenize(keywords)
+
+    # Parts of Speech tagger
+    kw = pos_tag(tokens)
+
+    final = ''
+    for word, pos in kw:
+        if pos == 'ADJ' or pos == 'ADP' or pos == 'ADV' or pos == 'CONJ' or pos == 'DET' or \
+           pos == 'PRT' or pos == 'PRON' or pos == ',' or pos == 'CC' or pos == 'PRP' or \
+           pos == 'DT' or pos == 'IN' or pos == '.':
+            continue
+        final += word + ' '
+
+    return final
+
+
 if __name__ == '__main__':
     pass
     # pos_noun_search("i would like some tomato soup")
     # pos_noun_search("show me some tomato soup recipes")
     # pos_noun_search("i would like a salad with beans and avocado")
+
     # recipe_type_search("show me some tomato soups")
     # recipe_type_search("alfred, I would like some cheesecake")
     # recipe_type_search("I feel like having some dessert")
@@ -206,8 +259,9 @@ if __name__ == '__main__':
     # detect_question("what is the weather like tomorrow?")
     # detect_question("what is the weather like tomorrow in Algarve?")
     # detect_question("what can I make with eggs and mushrooms?")
-    ingredient_search("with onion pepper and broccoli")
 
+    # ingredient_search("with onion pepper and broccoli")
 
-
-
+    remove_extraneous_from_search_terms("I would like some meat and peppers please")
+    remove_extraneous_from_search_terms("Set a timer please")
+    remove_extraneous_from_search_terms("Alfred, time 10 minutes!")

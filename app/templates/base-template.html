@@ -2,6 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
+    <!-- You can use Open Graph tags to customize link previews.
+    Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
+    <meta property="og:url" content="http://www.chef-alfred.com"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Alfred"/>
+    <meta property="og:description" content="Your personal intelligent chef."/>
+    <meta property="og:image" content="http://www.chef-alfred.com/static/images/alfred2.png"/>
+
     <title>Alfred</title>
 
     <!-- Bulma.io CSS Framework -->
@@ -27,6 +36,16 @@
 
 <body>
 <div class="container is-fluid">
+
+    <div id="fb-root"></div>
+    <script>(function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 
     <!-- Login modal -->
     {% include "login.html" %}
@@ -107,10 +126,10 @@
 </div>
 
 <!-- Leave enough space to compensate for footer (show all recipes) -->
-<div class="" style="margin-bottom: 120px;"></div>
+<div class="" style="margin-bottom: 100px;"></div>
 
 <!-- Footer -->
-<div class="custom_footer">
+<div class="custom_footer container is-fluid">
 
     <!-- Alfred image -->
     <img class="is-pulled-left alfred_image"
@@ -118,15 +137,17 @@
          onmouseenter='show_alfred_tooltip();'
          onmouseout='hide_alfred_tooltip();'>
 
-
+    <!-- Input label/field -->
     <div class="alfred_input">
+        <!-- Label -->
         <p class="control">
             <label class="label is-marginless is-pulled-left"
                    style="font-size: 18px; font-weight: normal;">Ingredients/Keywords:</label><br>
         </p>
 
         <!-- Alfred input box -->
-        <form action="/search_keywords" method="POST">
+        <form action="/search_keywords" method="POST"
+              onsubmit="$('#thinking-alfred').addClass('is-active');">
             <div class="control is-grouped is-dark">
                 <p class="control is-expanded">
                     {% if ingredient_list %}
@@ -153,6 +174,22 @@
     <div class="alfred_text_div" id="text_div">
         <p class="subtitle">
         </p>
+    </div>
+
+    <!-- Facebook share button -->
+    <div class="" style="right: 50px; bottom: 20px; position: fixed; border: 1px;">
+        <div class="fb-share-button"
+             data-href="https://www.chef-alfred.com"
+             data-layout="button"
+             data-size="large"
+             data-mobile-iframe="true">
+            <a class="fb-xfbml-parse-ignore"
+               target="_blank"
+               href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.chef-alfred.com%2F&amp;src=sdkpreparse">
+                Share
+            </a>
+        </div>
+
     </div>
 
 </div>

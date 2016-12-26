@@ -29,6 +29,7 @@ FRUIT_DB = os.path.join(DATA_FOLDER, 'fruit_db.dat')
 MEAT_POULTRY_DB = os.path.join(DATA_FOLDER, 'meat_poultry_db.dat')
 FISH_DB = os.path.join(DATA_FOLDER, 'fish_db.dat')
 SEAFOOD_DB = os.path.join(DATA_FOLDER, 'seafood_db.dat')
+ADDITIONAL_INGS_DB = os.path.join(DATA_FOLDER, 'additional_ingredients_db.dat')
 
 
 # Audio file upload folder

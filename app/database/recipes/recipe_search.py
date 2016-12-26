@@ -1,8 +1,10 @@
 import copy
 import json
 import sys
-from config import VEGETABLE_DB, FRUIT_DB, MEAT_POULTRY_DB, FISH_DB, SEAFOOD_DB, RECIPE_FILE
 from file_operations import is_empty_file, overwrite_recipe_file
+from config import VEGETABLE_DB, FRUIT_DB, MEAT_POULTRY_DB, \
+    FISH_DB, SEAFOOD_DB, RECIPE_FILE, ADDITIONAL_INGS_DB
+
 
 N_RECIPES = 14
 
@@ -20,20 +22,23 @@ def checkIngredient(ingredient_list):
                   "fruits": FRUIT_DB,
                   "meat_poultry": MEAT_POULTRY_DB,
                   "fish": FISH_DB,
-                  "seafood": SEAFOOD_DB}
+                  "seafood": SEAFOOD_DB,
+                  "additional_ings": ADDITIONAL_INGS_DB}
 
     ing_dict = {"vegetables": [],
                 "fruits": [],
                 "meat_poultry": [],
                 "fish": [],
-                "seafood": []}
+                "seafood": [],
+                "additional_ings": []}
 
     for name in food_types:
         if not is_empty_file(food_types[name]):
             with open(food_types[name], 'r') as f:
                 data = json.load(f)
 
-                # Check for ingredients
+                # Check for ingredients using set intersection. Quicker than pythonic
+                # keyword 'in' list method
                 a = set(ingredient_list)
                 b = set(data)
                 c = a.intersection(b)
@@ -48,11 +53,6 @@ def checkIngredient(ingredient_list):
 
     # print ing_dict
     return True, ing_dict
-
-
-if __name__ == '__main__':
-    checkIngredient(["orange", "onion", "pepper", "avocado", "apple"])
-    checkIngredient(["crab", "chicken", "steak"])
 
 
 def get_recipes_from_file():
@@ -76,10 +76,11 @@ def get_recipe_by_name(recipe_name):
             return None
 
 
-def get_recipes_by_tag(tag, recipes=[]):
+def get_recipes_by_tag(tag):
     """Return all recipes that contain <tag>"""
     data = get_recipes_from_file()
-    recipes = recipes
+    recipes = []
+    tag = tag.lower()
     for recipe in data:
         for tag_ in recipe['tags']:
             if tag == tag_.lower() and recipe not in recipes:
@@ -278,7 +279,7 @@ def remove_recipes_with_missing_fields():
     print "Total:", len(recipes)
 
     # Update recipe file
-    overwrite_recipe_file(recipes)
+    # overwrite_recipe_file(recipes)
 
     return True
 
@@ -303,3 +304,40 @@ def remove_recipe_by_name(name):
         index += 1
     print "Recipe title not found"
     return False
+
+
+def print_all_unique_tags():
+    """ Prints every unique tag available """
+    data = get_recipes_from_file()
+    tags = []
+    for recipe in data:
+        for tag_ in recipe['tags']:
+            if tag_ not in tags:
+                tags.append(tag_)
+    tags.sort()
+    for t in tags:
+        print t
+
+    return True
+
+
+def check_recipes_with_no_ings():
+    data = get_recipes_from_file()
+    counter = 0
+    limit = 0
+    for recipe in data:
+        limit += 1
+        # print recipe['ingredientList']
+        if len(recipe['ingredientList']) == 0:
+            counter += 1
+
+    print counter
+
+
+if __name__ == '__main__':
+    # checkIngredient(["orange", "onion", "pepper", "avocado", "apple"])
+    # checkIngredient(["crab", "chicken", "steak"])
+    # remove_recipes_with_missing_fields()
+    print_all_unique_tags()
+    pass
+

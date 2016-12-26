@@ -135,14 +135,19 @@ def toggle_is_favorite():
 
 @app.route('/tag/<tag_name>', methods=['GET', 'POST'])
 def get_recipes_by_tag(tag_name):
+
     login_form = LoginForm()
     recipes = rs.get_recipes_by_tag(tag_name)
+
     if len(recipes) > 23:
-        recipes = random.sample(recipes, 24)
+        recipes = random.sample(recipes, 12)
+
+    # include_base_template = True, is a switch to include the base-template
     return render_template('show_recipe_results.html',
                            recipes=recipes,
                            user=getUserName(),
-                           login_form=login_form)
+                           login_form=login_form,
+                           include_base_template=True)
 
 
 # Upload audio clip to flask
@@ -175,6 +180,9 @@ def upload():
 
 @app.route('/search_keywords', methods=['POST'])
 def search_keywords():
+    # Recipe search error message
+    err_msg = ''
+
     login_form = LoginForm()
 
     keywords = request.form['keywords']
@@ -191,13 +199,20 @@ def search_keywords():
     recipe_list = rs.get_recipes_from_file()
     return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
 
+    print "#recipes:", len(recipes)
+    print ingredient_list
+
+    if len(recipes) == 0:
+        err_msg = 'Sorry, no recipes were found for your search term: %s' % keywords
+
     return render_template('show_recipe_results.html',
                            recipes=recipes,
+                           recipe_search_error_msg=err_msg,
                            recipe_suggestions=return_recipes,
                            user=user,
                            login_form=login_form,
                            ingredient_list=ingredient_list,
-                           force_include=True)
+                           include_base_template=True)
 
 
 def redirect_url(next, recipe_name=''):

@@ -10,7 +10,7 @@ h2                  { font-size: 1.2em; }
     font-family: allura;
     src: url('allura.ttf');
 }
-body                { }
+body                {  }
 a                   { color: #7eb66b}
 .green              { color: #7eb66b; }
 .page               { margin: 2em auto; width: 35em; border: 5px solid #ccc; padding: 0.8em; background: white; }
@@ -31,6 +31,9 @@ a                   { color: #7eb66b}
 .no-border td       { border-width: 0 0 0px; }
 .no-top-margin      { margin-top: 0px;}
 
+.margin-right10px {
+    margin-right: 10px;
+}
 /* Radial color circle around siri */
 .grad {
   background: black; /* For browsers that do not support gradients */
@@ -40,6 +43,14 @@ a                   { color: #7eb66b}
   background: radial-gradient(black, #656d78, #656d78); /* Standard syntax */
 }
 
+.recipe_links:hover {
+
+}
+
+.card_shadow:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-decoration: underline;
+}
 .siri_wave {
     margin: auto;
     background-color: #000000;
@@ -80,7 +91,7 @@ a                   { color: #7eb66b}
 }
 
 .alfred_input_text {
-    min-width: 400px;
+    min-width: 500px;
     font-size: 20px;
     min-height: 34px;
     max-height: 34px;

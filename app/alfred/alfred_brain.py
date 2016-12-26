@@ -1,18 +1,20 @@
-from os import path as os_path
 import app.database.recipes.recipe_search as rs
 import logging_functions as lf
-from app import app
 from app.intent import intent_decipher as idr
 from config import DEBUG
 from app.database.users.db_query import get_user_restriciton_tags
 from app.speech.speech_module import speech_recognition_from_file
+from app import app
+from os import path
+
+DEBUG = True
 
 
 def alfred_brain(current_user, audio_phrase=None, keywords=''):
 
     # Get list of user restrictions
     restrictions = get_user_restriciton_tags(current_user.id, 0)
-    # print "User restrictions:", restrictions
+    print "User restrictions:", restrictions
 
     # Save all recipes to this list
     recipes_with_all_ings = []
@@ -20,52 +22,64 @@ def alfred_brain(current_user, audio_phrase=None, keywords=''):
     recipes_with_tag = None
     recipe_titles = []
 
-    # Save audio file to disk
-    # audio_phrase.save(os_path.join(app.config['UPLOAD_FOLDER'], 'test.ogg'))
-
     if DEBUG:
         print "Step 2 - Voice Recognition"
 
-    # Perform voice recognition
+    # Use text keyword search if voice sample is absent
     if audio_phrase is not None:
+        # Save audio file to disk and perform speech recognition
+        audio_phrase.save(path.join(app.config['UPLOAD_FOLDER'], 'test.ogg'))
         text = speech_recognition_from_file()
-        # text = "mushrooms chicken"
     else:
         text = keywords
 
     if DEBUG:
         print "\tText:", text
 
+    # TODO: Use intent framework to further refine results
     # Extract intent from text
     # command_type, ingredients, meal_course = idr.intent_brain(text)
 
-    if DEBUG:
-        print "Step 3 - Search for ingredients in text"
+    # TODO:
+    # Remove adjectives, adpositions, adverbs, conjunctions, articles,
+    # particles, pronouns and punctuation marks
+    text = idr.remove_extraneous_from_search_terms(text)
 
-    # Searches for ingredients within text
+    if DEBUG:
+        print "\nStep 3 - Search for ingredients in text"
+
+    # Searches for individual ingredients in text variable
     ingredient_dict = idr.ingredient_search(text)
 
-    # Ingredient_search returns dict; Join all ingredients regardless of type
+    # Since ingredient_search returns a dictionary, convert dictionary into a list
     ingredients = (ingredient_dict['vegetables'] +
                    ingredient_dict['fruits'] +
                    ingredient_dict['meat_poultry'] +
                    ingredient_dict['fish'] +
-                   ingredient_dict['seafood'])
+                   ingredient_dict['seafood'] +
+                   ingredient_dict['additional_ings'])
 
     # Add both singular and plural version of ingredients
     ingredients = idr.add_ingredients_in_singular_plural(ingredients)
 
+    # Use a word pre-processor to find if user submitted general words (meat, fish, ... )
+    ingredients += idr.detect_general_expressions(text)
+
+    # If still no ingredients found, return an empty array for ingredients and one for recipes
+    if len(ingredients) == 0:
+        return [], []
+
     if DEBUG:
         print "\t Ingredients found:", ingredients
-        print "Step 5 - Searching for recipes with restriction in tag"
+        print "\nStep 4 - Searching for recipes with restriction in tag"
 
     # If user has restrictions, use them to narrow recipe results
     for tag in restrictions:
         recipes_with_tag = rs.get_recipes_by_tag(tag)
-    # print "Recipes containing restriction in tag:", len(recipes_with_all_ings)
+    print "\tRecipes containing restriction in tag:", len(recipes_with_all_ings)
 
     if DEBUG:
-        print "Step 4 - Searching for recipes with all ingredients", ingredients
+        print "\nStep 5 - Searching for recipes with all ingredients", ingredients
 
     # If user has restrictions, use list of recipes built instead of the whole
     # recipe base. Recipes are sent as the last parameter of get_recipes_with_all_ingredients
@@ -75,17 +89,16 @@ def alfred_brain(current_user, audio_phrase=None, keywords=''):
                                         recipe_titles,
                                         recipes_with_tag)
 
-    # print "Recipes containing all ingredients:", len(recipes_with_all_ings)
-
     if DEBUG:
-        print "Step 6 - Searching for recipes with any of the ingredients", ingredients
+        print "\tRecipes containing all ingredients:", len(recipes_with_all_ings)
+        print "\nStep 6 - Searching for recipes with any of the ingredients", ingredients
 
     # Search recipes that contain any of the ingredients
-    # rs.getRecipesByIngredients(recipes_with_partial_ings, ingredients, recipe_titles)
-    # print "Recipes containing some ings:", len(recipes_with_partial_ings)
+    rs.getRecipesByIngredients(recipes_with_partial_ings, ingredients, recipe_titles)
 
     if DEBUG:
-        print "Step 7 - Searching for recipes with ingredients in title"
+        print "\tRecipes containing some ings:", len(recipes_with_partial_ings)
+        print "\nStep 7 - Searching for recipes with ingredients in title"
 
     # Search recipes based on ingredients in recipe title
     # recipe_names += getRecipesByKeywordInName(recipe_names, ingredients)
@@ -97,10 +110,13 @@ def alfred_brain(current_user, audio_phrase=None, keywords=''):
     # Save a copy of this order in log file
     lf.save_recipe_search_log_entry(current_user, text, ingredients)
 
+    print ingredients
+
     # Put each ingredient found in a list to send to frontend
     ingredient_list = ""
     for it in ingredients:
         ingredient_list += it[0] + ' '
+
 
     # Return recipes
     return ingredient_list, recipe_list
