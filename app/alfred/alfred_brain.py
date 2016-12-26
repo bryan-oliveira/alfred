@@ -57,6 +57,7 @@ def alfred_brain(current_user, audio_phrase=None, keywords=''):
                    ingredient_dict['meat_poultry'] +
                    ingredient_dict['fish'] +
                    ingredient_dict['seafood'] +
+                   ingredient_dict['spices'] +
                    ingredient_dict['additional_ings'])
 
     # Add both singular and plural version of ingredients

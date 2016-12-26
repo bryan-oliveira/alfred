@@ -3,7 +3,7 @@ import json
 import sys
 from file_operations import is_empty_file, overwrite_recipe_file
 from config import VEGETABLE_DB, FRUIT_DB, MEAT_POULTRY_DB, \
-    FISH_DB, SEAFOOD_DB, RECIPE_FILE, ADDITIONAL_INGS_DB
+    FISH_DB, SEAFOOD_DB, RECIPE_FILE, ADDITIONAL_INGS_DB, SPICES_DB
 
 
 N_RECIPES = 14
@@ -23,6 +23,7 @@ def checkIngredient(ingredient_list):
                   "meat_poultry": MEAT_POULTRY_DB,
                   "fish": FISH_DB,
                   "seafood": SEAFOOD_DB,
+                  "spices": SPICES_DB,
                   "additional_ings": ADDITIONAL_INGS_DB}
 
     ing_dict = {"vegetables": [],
@@ -30,6 +31,7 @@ def checkIngredient(ingredient_list):
                 "meat_poultry": [],
                 "fish": [],
                 "seafood": [],
+                "spices": [],
                 "additional_ings": []}
 
     for name in food_types:
