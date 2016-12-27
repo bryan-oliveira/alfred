@@ -1,5 +1,4 @@
 import random
-from compiler.pycodegen import is_constant_false
 from datetime import datetime, timedelta
 from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_user, logout_user, login_required, current_user
@@ -199,9 +198,6 @@ def search_keywords():
     recipe_list = rs.get_recipes_from_file()
     return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
 
-    print "#recipes:", len(recipes)
-    print ingredient_list
-
     if len(recipes) == 0:
         err_msg = 'Sorry, no recipes were found for your search term: %s' % keywords
 
@@ -252,21 +248,27 @@ def register():
 
         # User registered successfully, perform login and redirect to index
         if result[0]:
+
             # Get user
-            user = User.query.filter_by(username=form.username.data).first()
+            """
+            # Getting error on register sometimes
+            # user = User.query.filter_by(username=form.username.data).first()
+            """
+            # Using form data instead
+            email = form.email.data
 
             # print user
-            token = generate_confirmation_token(user.email)
+            token = generate_confirmation_token(email)
             # print token
 
             confirm_url = url_for('confirm_email', token=token, _external=True)
-            print confirm_url
+            # print confirm_url
 
             html = render_template('emails/activate_account_email.html', confirm_url=confirm_url)
             # print html
 
             subject = "Please confirm your email"
-            send_email(user.email, subject, html)
+            send_email(email, subject, html)
 
             # login_user(user, remember=True)
             flash('Registration successful. A confirmation email has been sent via email.', 'is-success')
@@ -386,8 +388,9 @@ def profile_page():
                            title=page_title)
 
 
-# TODO: This is not a view. Move elsewhere
+# TODO: Not a view. Move to application helpers section
 def check_password(form):
+    """ Check if user's password is correct before changing to a new one. (profile page) """
     # Check if old password field in profile page matches saved hash
     old_pwd = bcrypt.check_password_hash(current_user.password, form.password.data)
     if old_pwd:
@@ -493,7 +496,7 @@ def load_user(id_):
     return User.query.get(int(id_))
 
 
-# TODO: Not a view
+# TODO: Not a view. Move to application helpers section
 def populate_form_with_allergy_data(form, allergy):
     form.lowchol.data = allergy.lowchol
     form.highchol.data = allergy.highchol

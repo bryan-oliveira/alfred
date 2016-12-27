@@ -20,8 +20,8 @@ class User(db.Model):
     confirmed = db.Column(db.SmallInteger, nullable=True, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
 
-    allergy = db.relationship('Allergy', uselist=False, back_populates='user')
-    favorite = db.relationship("Favorite", backref="user")
+    allergy = db.relationship('Allergy', uselist=False, back_populates='user', cascade="all, delete-orphan")
+    favorite = db.relationship("Favorite", backref="user", cascade="all, delete-orphan")
 
     @property
     def is_authenticated(self):
@@ -57,9 +57,9 @@ class User(db.Model):
         self.confirmed = confirmed
 
     def __repr__(self):
-        return '<id:%r fullname:%r username:%r email:%r\n' \
-               'hash:%r gender:%r age:%r registered on:%r\n' \
-               'admin:%r confirmed:%r confirmed on:%r allergy:%r fav:%r>' \
+        return '<id:%r\tfullname:%r\tusername:%r\temail:%r\n' \
+               'hash:%r\ngender:%r\tage:%r\tregistered on:%r\n' \
+               'admin:%r\tconfirmed:%r\tconfirmed on:%r\nallergy:%r\nfav:%r>' \
                % (self.id, self.fullname, self.username, self.email,
                   self.password, self.gender, self.age, self.registered_on,
                   self.admin, self.confirmed, self.confirmed_on, self.allergy,

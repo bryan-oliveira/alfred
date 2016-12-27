@@ -59,3 +59,21 @@ def eliminateIrregularRecipes():
 
     with codecs.open(RECIPE_FILE, encoding='utf-8', mode='w') as f:
         json.dump(new_list, f, encoding='utf-8')
+
+
+def make_pescatarian_index():
+    with open(RECIPE_FILE, 'r') as data_file:
+        data = json.load(data_file)
+        counter = 0
+        recipes = []
+        for recipe in data:
+            for tag in recipe['tags']:
+                if 'pescatarian' == tag.lower() and recipe not in recipes:
+                    recipes.append(recipe)
+                    counter += 1
+        print counter
+
+
+if __name__ == '__main__':
+    make_pescatarian_index()
+    pass

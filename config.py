@@ -38,7 +38,7 @@ UPLOAD_FOLDER = os.path.join(basedir, "data/audio/")
 
 # Flask securty settings
 WTF_CSRF_ENABLED = True
-SECRET_KEY = 'you-will-never-guess'
+SECRET_KEY = 'hb3WQ34rmDs232'
 
 # SQLAlchemy data
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir + '/data', 'database.db')
@@ -55,5 +55,8 @@ RECIPE_REQUESTS_LOG = os.path.join(LOG_FOLDER, 'recipe_requests.log')
 # Dev mode
 DEBUG = False
 
-# email token generator
+# Email token generator
 SECURITY_PASSWORD_SALT = 'dsDds3fFDd23'
+
+# Recipe file indexes
+PESCATARIAN_RECIPES = os.path.join(DATA_FOLDER, 'pescatarian_recipes.dat')

@@ -223,19 +223,49 @@ def detect_general_expressions(keywords):
 
 
 def remove_extraneous_from_search_terms(keywords):
-    """ Remove adjectives, adpositions, adverbs, conjunctions, articles,
-    particles, pronouns and punctuation marks """
+    """ *** Deprecated. Isn't classifying words correctly. ***
+
+    Remove adjectives, adpositions, adverbs, conjunctions, articles,
+    particles, pronouns and punctuation marks.
+    :return string of words separated by a whitespace
+    :rtype string
+    """
     # Tokenize input
     tokens = word_tokenize(keywords)
 
     # Parts of Speech tagger
     kw = pos_tag(tokens)
 
+    print "\t", kw
+
     final = ''
     for word, pos in kw:
         if pos == 'ADJ' or pos == 'ADP' or pos == 'ADV' or pos == 'CONJ' or pos == 'DET' or \
            pos == 'PRT' or pos == 'PRON' or pos == ',' or pos == 'CC' or pos == 'PRP' or \
            pos == 'DT' or pos == 'IN' or pos == '.':
+            continue
+        final += word + ' '
+
+    print "\t", final
+    return final
+
+
+def remove_extraneous_from_search_terms2(keywords):
+    """ Remove adjectives, adpositions, adverbs, conjunctions, articles,
+    particles, pronouns and punctuation marks.
+    :return string of words separated by a whitespace
+    :rtype string
+    """
+
+    # Tokenize input
+    tokens = word_tokenize(keywords)
+
+    stopwords = ['i', 'with', 'get', 'me', 'like', 'some']
+
+    final = ''
+
+    for word in tokens:
+        if word in stopwords:
             continue
         final += word + ' '
 

@@ -47,7 +47,7 @@ def email_is_free(email):
     return True
 
 
-def get_user_restriciton_tags(id_, usage=0):
+def get_user_restriction_tags(id_, usage=0):
     """ Return a list of tags_0 according to user's allergies/preferences.
     usage: select what tag format to return. 0 = for recipe search
                                              1 = for displaying     
@@ -81,20 +81,12 @@ def get_user_restriciton_tags(id_, usage=0):
             tags_1.append('Gluten Free')
 
         if user.allergy.nuts:
-            tags_0.append('nuts')
             tags_0.append('peanut free')
             tags_0.append('tree nut free')
             tags_1.append('Tree Nut Free')
 
         if user.allergy.fish:
-            tags_0.append('fish')
-            tags_0.append('swordfish')
-            tags_0.append('shellfish')
-            tags_0.append('snapper')
-            tags_0.append('sardine')
-            tags_0.append('salmon')
-            tags_0.append('tuna')
-            tags_0.append('bass')
+            tags_0.append('pescatarian')
             tags_1.append('Pescatarian')
 
         if user.allergy.sesame:
@@ -123,10 +115,30 @@ def confirm_user(user):
 
 
 def list_all_users():
+    print "Users"
+
+    # Query model for users and print them
     users = models.User.query.all()
     for user in users:
         print user, user.password
+    print len(users), "users."
+    print "===================="
 
+    # Query model for allergies and print them
+    print "Allergy"
+    allergies = models.Allergy.query.all()
+    for allergy in allergies:
+        print allergy
+    print len(allergies), "allergies."
+    print "===================="
+
+    # Query model for favorites and print them
+    print "Favorites"
+    favs = models.Favorite.query.all()
+    for fav in favs:
+        print fav
+    print len(favs), "favorites."
+    print "===================="
 
 if __name__ == '__main__':
     list_all_users()

@@ -13,16 +13,16 @@ def register_account(form):
     gender = form['gender'].data
 
     # Allergies/Restrictions
-    lowchol = is_field_checked(form, 'lowchol')
-    highchol = is_field_checked(form, 'highchol')
-    overw = is_field_checked(form, 'overw')
-    underw = is_field_checked(form, 'underw')
-    nuts = is_field_checked(form, 'nuts')
-    fish = is_field_checked(form, 'fish')
-    sesame = is_field_checked(form, 'sesame')
-    gluten = is_field_checked(form, 'gluten')
-    vegetarian = is_field_checked(form, 'vegetarian')
-    vegan = is_field_checked(form, 'vegan')
+    lowchol = form.lowchol.data
+    highchol = form.highchol.data
+    overw = form.overw.data
+    underw = form.underw.data
+    nuts = form.nuts.data
+    fish = form.fish.data
+    sesame = form.sesame.data
+    gluten = form.gluten.data
+    vegetarian = form.vegetarian.data
+    vegan = form.vegan.data
 
     if not email_is_free(email):
         return False, 'Email is already registered with another account.'
@@ -86,6 +86,7 @@ def is_valid_gender(gender):
 
 
 def is_field_checked(form, field):
+    """ Deprecated. Direct True/False verification used instead. """
     # Checkbox fields come in True/False form
     if field in form:
         if form[field]:

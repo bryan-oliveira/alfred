@@ -4,6 +4,7 @@ import sys
 from file_operations import is_empty_file, overwrite_recipe_file
 from config import VEGETABLE_DB, FRUIT_DB, MEAT_POULTRY_DB, \
     FISH_DB, SEAFOOD_DB, RECIPE_FILE, ADDITIONAL_INGS_DB, SPICES_DB
+from timeit import default_timer as timer
 
 
 N_RECIPES = 14
@@ -45,7 +46,9 @@ def checkIngredient(ingredient_list):
                 b = set(data)
                 c = a.intersection(b)
 
-                # print a, b, c
+                # print a
+                # print b
+                # print c
 
                 # Add found ingredient to matching food type
                 [ing_dict[name].append(ing) for ing in c]
@@ -78,24 +81,44 @@ def get_recipe_by_name(recipe_name):
             return None
 
 
+def get_recipes_by_multiple_tags(tag_list):
+    """ Return all recipes that contain tags contained in tag_list """
+    data = get_recipes_from_file()
+    recipes = []
+
+    # List comprehension of lowercase tag set
+    tag_list_set = set(t.lower() for t in tag_list)
+
+    for recipe in data:
+        recipe_tag_set = set(rt.lower() for rt in recipe['tags'])
+
+        if len(tag_list_set.intersection(recipe_tag_set)) > 0:
+            recipes += [recipe]
+
+    return recipes
+
+
 def get_recipes_by_tag(tag):
-    """Return all recipes that contain <tag>"""
+    """ Return all recipes that contain <tag> """
     data = get_recipes_from_file()
     recipes = []
     tag = tag.lower()
     for recipe in data:
         for tag_ in recipe['tags']:
-            if tag == tag_.lower() and recipe not in recipes:
+            if tag == tag_.lower():
                 recipes += [recipe]
 
-    # print tag, "found", len(recipes)
+    print tag, "found", len(recipes)
     return recipes
 
 
 def get_recipes_with_all_ingredients(recipe_names, ingredients, recipe_titles, restricted_recipes=None):
-    """ Input: Ingredients to search in recipes.
-        Output: Return N_RECIPES amount of recipes.
-        TODO: Change from i to N_RECIPES. """
+    """
+    :param restricted_recipes if present, use only recipes from this list
+    :param recipe_names empty list, populate with recipes found
+    :param ingredients ingredients to search for
+    :param recipe_titles save titles of recipes
+    """
 
     recipes_with_all_ingredients = recipe_names
     DEBUG = False
@@ -340,6 +363,7 @@ if __name__ == '__main__':
     # checkIngredient(["orange", "onion", "pepper", "avocado", "apple"])
     # checkIngredient(["crab", "chicken", "steak"])
     # remove_recipes_with_missing_fields()
-    print_all_unique_tags()
+    # print_all_unique_tags()
+    get_recipes_by_tag('pescatarian')
     pass
 
