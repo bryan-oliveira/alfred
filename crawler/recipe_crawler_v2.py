@@ -1,12 +1,10 @@
-"""
-This module crawls the epicurious website, parses its recipes, and finally caches them locally.
-"""
-
 import urllib
-
 from bs4 import BeautifulSoup
-
 from app.database.recipes.recipe_to_file import save_recipe
+
+"""
+This module crawls the epicurious website, parses its recipes, and saves them locally.
+"""
 
 # Base URL
 base = "http://www.epicurious.com"
