@@ -4,7 +4,6 @@ from wtforms import StringField, BooleanField, PasswordField, \
     IntegerField, SubmitField, SelectField
 from wtforms.validators import DataRequired, NumberRange, Length, Email, Optional
 from wtforms.fields.html5 import EmailField
-from app.models import User
 
 
 class LoginForm(Form):

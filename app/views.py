@@ -121,13 +121,14 @@ def search_recipe(recipe_name=''):
                            fav=is_favorite)
 
 
+@login_required
 @app.route('/toggle-is-favorite')
 def toggle_is_favorite():
     """ Add/remove recipe from user's favorite recipes list """
     title = request.args.get('recipe_name')
     next = request.args.get('next')
-    print title
-    print next
+    # print title
+    # print next
     db_query.toggle_recipe_is_favorite(current_user.id, title)
     return redirect_url(next, title)
 
@@ -339,6 +340,11 @@ def profile_page():
     # Get user name to print in profile page
     user_name = getUserName()
 
+    # Anonymous user is logged, redirect with error message
+    if user_name == 'Anonymous':
+        flash('Please log in to view profile.')
+        return redirect('index')
+
     # Create profile page title with user name
     page_title = user_name + '\'s Account Settings'
 
@@ -407,6 +413,7 @@ def check_password(form):
     return False, 'Current password is wrong. Please try again.'
 
 
+@login_required
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
     form = DeleteForm()
@@ -457,22 +464,29 @@ def confirm_email(token):
     return redirect(url_for('index'))
 
 
+@login_required
 @app.route("/admin", methods=['GET'])
 def admin_page():
     return render_template("admin.html")
 
 
-@app.route('/favorites')
 @login_required
+@app.route('/favorites')
 def favorites():
-    user = getUserName()
+    user_name = getUserName()
+
+    # Anonymous user is logged, redirect with error message
+    if user_name == 'Anonymous':
+        flash('Please log in to view favorites.')
+        return redirect('index')
+
     recipes = []
     for recipe_name in current_user.favorite:
         recipes.append(rs.get_recipe_by_name(recipe_name.title))
 
     return render_template('favorites.html',
                            title='Home',
-                           user=user,
+                           user=user_name,
                            recipes=recipes,
                            favorite_icon=True)
 

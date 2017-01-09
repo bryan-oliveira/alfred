@@ -59,8 +59,6 @@ def edit_user(user, form, update_pwd):
         user.gender = form.gender.data
         edit = True
 
-    # TODO_ Password
-
     if user.allergy.lowchol != form.lowchol.data:
         user.allergy.lowchol = form.lowchol.data
         edit = True
