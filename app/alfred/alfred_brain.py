@@ -2,6 +2,7 @@ import app.database.recipes.recipe_search as rs
 import logging_functions as lf
 from app.intent import intent_decipher as idr
 from config import DEBUG
+from config import UPLOAD_FOLDER
 from app.database.users.db_query import get_user_restriction_tags
 from app.speech.speech_module import speech_recognition_from_file
 from app import app
@@ -28,7 +29,7 @@ def alfred_brain(current_user, audio_phrase=None, keywords=''):
     # Use text keyword search if voice sample is absent
     if audio_phrase is not None:
         # Save audio file to disk and perform speech recognition
-        audio_phrase.save(path.join(app.config['UPLOAD_FOLDER'], 'test.ogg'))
+        audio_phrase.save(path.join(UPLOAD_FOLDER, 'test.ogg'))
         text = speech_recognition_from_file()
     else:
         text = keywords
@@ -41,14 +42,20 @@ def alfred_brain(current_user, audio_phrase=None, keywords=''):
         print "\nStep 2 - Remove ands, ifs and buts"
         start = timer()
 
-    # TODO: Use intent framework to further refine results
+    # Search for timer first
+    if 'timer' in text or 'clock' in text or 'set' in text or 'time' in text or 'minutes' in text:
+        # print 'Found timer:', text
+        timer_duration = idr.find_time_in_search_term(text)
+        return [], [], timer_duration
+
+
+    # TODO: Use new intent framework to further refine results
     # Extract intent from text
     # command_type, ingredients, meal_course = idr.intent_brain(text)
 
     # TODO:
     # Remove adjectives, adpositions, adverbs, conjunctions, articles,
     # particles, pronouns and punctuation marks
-
     text = idr.remove_extraneous_from_search_terms2(text)
 
     if DEBUG:
@@ -78,7 +85,7 @@ def alfred_brain(current_user, audio_phrase=None, keywords=''):
 
     # If still no ingredients found, return an empty array for ingredients and one for recipes
     if len(ingredients) == 0:
-        return [], []
+        return [], [], None
 
     if DEBUG:
         print "\t Ingredients found:", ingredients
@@ -142,7 +149,7 @@ def alfred_brain(current_user, audio_phrase=None, keywords=''):
         ingredient_list += it[0] + ' '
 
     # Return recipes
-    return ingredient_list, recipe_list
+    return ingredient_list, recipe_list, None
 
 
 if __name__ == '__main__':

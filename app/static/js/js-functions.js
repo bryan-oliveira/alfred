@@ -42,7 +42,7 @@ function stop_siriwave() {
 }
 
 function show_alfred_tooltip() {
-    timeoutID = window.setTimeout(run_tooltip_code, 2000);
+    timeoutID = window.setTimeout(run_tooltip_code, 1000);
 }
 
 function run_tooltip_code() {
@@ -56,7 +56,7 @@ function run_tooltip_code() {
     var t1 = $('<p class="small_text"></p>').text("Click Alfred. Ask for recipes based on ingredients or meal types.");
     var t2 = $('<p class="small_text"></p>').text("Click Alfred again when finished speaking.");
 
-    $('#text_div').append(t1,t2);
+    $('#text_div').append(t1, t2);
 }
 
 function hide_alfred_tooltip() {
@@ -74,3 +74,46 @@ function hide_alfred_tooltip() {
     $('.alfred_input').fadeIn();
 }
 
+/* Timer function to start/stop timer */
+function initializeClock(id, duration, alarmeSound) {
+    /* Set end time */
+    var end_time = new Date().getTime();
+    end_time = end_time + (duration * 60000);
+
+    var timer = setInterval(function () {
+        var clock = document.getElementById(id);
+        var now = new Date().getTime();
+
+        /* Calculate remaining time */
+        var dist = parseInt(end_time - now, 10);
+        //console.log(dist);
+
+        /* Calculate time remaining */
+        var hours = parseInt(Math.floor(dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var min = parseInt(Math.floor(dist % (1000 * 60 * 60 * 60)) / (1000 * 60));
+        var secs = parseInt(Math.floor(dist % (1000 * 60)) / 1000);
+
+        /* Pad time with zeros */
+        if (hours < 10) {
+            hours = '0' + hours;
+        }
+        if (min < 10) {
+            min = '0' + min;
+        }
+        if (secs < 10) {
+            secs = '0' + secs;
+        }
+
+        clock.innerHTML = hours + ':' + min + ':' + secs;
+
+        if (hours == 0 && min == 0 && secs == 0) {
+            clearInterval(timer);
+            soundAlarme(alarmeSound);
+        }
+    }, 1000);
+}
+
+/* Sound alarm */
+function soundAlarme(audio) {
+    audio.play();
+}

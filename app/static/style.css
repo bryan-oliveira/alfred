@@ -30,10 +30,10 @@ a                   { color: #7eb66b}
 .no_underline       { text-decoration: none; }
 .no-border td       { border-width: 0 0 0px; }
 .no-top-margin      { margin-top: 0px;}
-
 .margin-right10px {
     margin-right: 10px;
 }
+
 /* Radial color circle around siri */
 .grad {
   background: black; /* For browsers that do not support gradients */
@@ -114,6 +114,10 @@ a                   { color: #7eb66b}
   animation-direction: alternate;
 }
 
+.name_tag:hover {
+    text-decoration: underline;
+}
+
 @keyframes blink {
   from {
     opacity: 1;
@@ -156,3 +160,5 @@ a                   { color: #7eb66b}
                         opacity: 0.7;
                     }
 .image-cropper:hover { opacity: 1;}
+
+.clock-style        { padding-left: 20px; }

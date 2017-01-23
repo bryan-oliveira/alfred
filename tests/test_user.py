@@ -2,7 +2,7 @@ from app.forms import RegisterForm, LoginForm, DeleteForm, ProfileForm
 
 from util import BaseTestCase
 from flask_login import current_user
-from app.models import User
+# from app.models import User
 
 
 class TestUserForms(BaseTestCase):
@@ -50,7 +50,7 @@ class TestUserForms(BaseTestCase):
         self.assertFalse(form.validate())
 
     def test_validate_success_email_format(self):
-        # Ensure invalid email format throws error
+        # Ensure valid email format throws error
         form = RegisterForm(
             fullname="Test User",
             username="testuser",
@@ -83,7 +83,7 @@ class TestUserForms(BaseTestCase):
         self.assertTrue(form.validate())
 
     def test_invalid_profile_form(self):
-        # Ensure correct profile info validates
+        # Ensure incorrect profile info throws error
         form = ProfileForm(
             fullname='',
             username='testuser',
@@ -152,7 +152,7 @@ class TestUserViews(BaseTestCase):
             self.assertTemplateUsed('favorites.html')
 
     def test_require_login_to_view_favorites(self):
-        # Ensure correct login data validates
+        # Ensure new users don't have favorite history
         with self.client:
             response = self.client.get('/favorites', follow_redirects=True)
             assert 'Please log in to view favorites.' in response.data

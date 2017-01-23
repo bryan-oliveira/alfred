@@ -1,5 +1,5 @@
 import speech_recognition as sr
-import app
+from config import UPLOAD_FOLDER
 import os
 
 BING_KEY = "2f3bcd576a404153a32724a54e7d6e6b"
@@ -23,7 +23,7 @@ def speech_recognition_from_microphone():
 
 def speech_recognition_from_file():
 
-    folder_path = app.app.config['UPLOAD_FOLDER']
+    folder_path = UPLOAD_FOLDER
 
     file_to_convert = folder_path + "test.ogg"
     new_file = os.path.join(folder_path, 'test.wav')

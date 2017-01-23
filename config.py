@@ -83,9 +83,9 @@ ADDITIONAL_INGS_DB = os.path.join(DATA_FOLDER, 'additional_ingredients_db.dat')
 # Audio file upload folder
 UPLOAD_FOLDER = os.path.join(basedir, "data/audio/")
 
-UPLOAD_FOLDER = UPLOAD_FOLDER
-RECIPE_FILE = RECIPE_FILE
-DATA_FOLDER = DATA_FOLDER
+# UPLOAD_FOLDER = UPLOAD_FOLDER
+# RECIPE_FILE = RECIPE_FILE
+# DATA_FOLDER = DATA_FOLDER
 
 # Logging
 RECIPE_REQUESTS_LOG = os.path.join(LOG_FOLDER, 'recipe_requests.log')

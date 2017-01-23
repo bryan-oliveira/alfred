@@ -4,6 +4,7 @@ from flask.ext.login import LoginManager
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.mail import Mail
 import os
+
 # Set up flask environment
 app = Flask(__name__)
 
@@ -16,6 +17,10 @@ else:
 # Load configuration file
 if config_mode == 'TESTING':
     app.config.from_object('config.TestingConfig')
+
+elif config_mode == 'DEVELOPMENT':
+    app.config.from_object('config.DevelopmentConfig')
+
 else:
     app.config.from_object('config.Config')
 
@@ -43,6 +48,8 @@ app.config['MAIL_PASSWORD'] = None
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = False
 
+
+# Prevent circular imports
 from app import views
 from app import models
 

@@ -8,6 +8,7 @@
                 <h2 class="title is-2 recipe_title has-text-centered green">{{ recipe.title|upper }}</h2>
             </div>
 
+            {% if current_user.is_authenticated %}
             <!-- Make heart red on mouse enter for responsiveness -->
             <div class="level-right" onmouseenter="$('#heart').css('color', '#C93E3C');
                                                    $('#heart-text').css('color', '#C93E3C');"
@@ -31,6 +32,7 @@
                 </a>
 
             </div>
+            {% endif %}
 
         </nav>
 

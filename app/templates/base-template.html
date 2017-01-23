@@ -13,6 +13,10 @@
 
     <title>Alfred</title>
 
+    <!-- Tourtip CSS file -->
+    <link rel=" stylesheet" type="text/css"
+          href="{{ url_for('static', filename='tooltip/css/tinytools.tourtip.min.css') }}">
+
     <!-- Bulma.io CSS Framework -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.0.26/css/bulma.min.css">
 
@@ -23,14 +27,17 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"
             integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 
-    <!-- Custom CSS -->
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-
     <!-- Balloon.css library for css tooltips -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.2.4/balloon.min.css">
 
     <!-- Javascript functions -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/js-functions.js') }}"></script>
+
+    <!-- TourTip plugin -->
+    <script src="{{ url_for('static', filename='tooltip/tinytools.tourtip.min.js') }}"></script>
+
+    <!-- Custom CSS -->
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
@@ -99,19 +106,16 @@
 
                 <!-- Left 1/4 of screen -->
                 <div class="column is-one-quarter">
-
                     <h3 class="title is-3">Recipes</h3>
                     {% for recipe in recipe_suggestions %}
                         <p><a href="/search?recipe_name={{ recipe.title|urlencode }}">
                             {{ recipe.title }}
                         </a></p>
                     {% endfor %}
-
                 </div>
 
                 <!-- Right 3/4 of screen -->
                 <div class="column is-three-quarters">
-
                     <div class="recipe_list">
                         {% block content %}
                         {% endblock %}
@@ -205,7 +209,7 @@
 <script type="text/javascript">
     var x = setInterval(
             function () {
-                var noise = Math.random() * 1;
+                var noise = Math.random();
                 //SW.setNoise( noise );
                 var amplitude = Math.random();
                 SW.setAmplitude(amplitude);
@@ -231,6 +235,76 @@
         autostart: false
     });
 </script>
+
+{% if not current_user.is_authenticated %}
+
+    <!-- Tour tip -->
+    <script>
+        $(document).ready(function () {
+            $.tourTip.create({
+                title: "Welcome!",
+                description: "Welcome to Chef Alfred. To find out how to ask Alfred for recipes, please click next.",
+                previous: true,
+                position: 'top'
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $(".alfred_image").tourTip({
+                title: "Alfred",
+                description: "Hello, I'm Alfred! I can find recipes for you." +
+                " \nJust click on me, say some ingredients you'd like the recipe to have, and finally click me again to finish.",
+                previous: true,
+                position: 'top'
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $.tourTip.create({
+                title: "Alfred",
+                description: "You can ask for recipes with as many ingredients as you'd like.",
+                previous: true,
+                position: 'top'
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $(".alfred_input").tourTip({
+                title: "Alfred",
+                description: "You can also use the search bar to find recipes.",
+                previous: true,
+                position: 'top',
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $(".login_button").tourTip({
+                title: "Alfred",
+                description: "Once you log in, you can access your profile by clicking the link with your name. Enjoy!",
+                previous: true,
+                position: 'left',
+                close: true
+            });
+        });
+    </script>
+
+    {% if tooltip %}
+        <script>
+            $(document).ready(function () {
+                $.tourTip.start();
+            });
+        </script>
+    {% endif %}
+
+{% endif %}
 
 </body>
 </html>

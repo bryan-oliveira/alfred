@@ -9,10 +9,10 @@ from alfred.registration_logic import register_account
 from app import app, lm
 from app.database.users.db_insert import edit_user
 from app.database.users.db_query import get_user_by_id
-from app.models import User, Allergy, Favorite
+from app.models import User
 from app.database.users.db_delete import delete_user
 from app.speech.alfred_tts import get_raw_wav
-from .forms import LoginForm, RegisterForm, ProfileForm, DeleteForm
+from forms import LoginForm, RegisterForm, ProfileForm, DeleteForm
 from app import bcrypt
 from email import generate_confirmation_token, confirm_token
 from app.database.users import db_query
@@ -47,43 +47,50 @@ def index():
     return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
 
     # If user is authenticated
-    if current_user.is_authenticated:
+    # if current_user.is_authenticated:
 
-        alfred_voice = None
-        alfred_greeting = False
+    alfred_voice = None
+    alfred_greeting = False
+    tooltip = False  # Show help tooltip
 
-        # Send first name to template
-        user = getUserName()
+    user = getUserName()  # Send first name to template
 
-        # If time var available, check inactivity duration. >10m = Alfred greets you
-        if 'time' in session:
-            now = datetime.utcnow()
-            duration = now - session['time']
-            # [#] print>> sys.stderr, "Now:", now, "Stamp:", session['time'], "Duration:", duration
+    # If time var available, check inactivity duration. >10m = Alfred greets you
+    if 'time' in session:
+        now = datetime.utcnow()
+        duration = now - session['time']
+        # [#] print>> sys.stderr, "Now:", now, "Stamp:", session['time'], "Duration:", duration
 
-            if duration > timedelta(minutes=10):
-                alfred_greeting = True
-        else:
+        if duration > timedelta(minutes=10):
             alfred_greeting = True
+    else:
+        alfred_greeting = True
+        tooltip = True
 
-        session['time'] = datetime.utcnow()
+    session['time'] = datetime.utcnow()
 
-        if alfred_greeting:
-            phrase = 'Hello ' + user + ', how may I help you?'
-            alfred_voice = get_raw_wav(phrase)
+    if alfred_greeting:
+        phrase = 'Hello ' + user + ', how may I help you?'
+        alfred_voice = get_raw_wav(phrase)
 
-        return render_template('categories.html',
-                               title='Home',
-                               recipe_suggestions=return_recipes,
-                               user=user,
-                               wavfile=alfred_voice)
+    return render_template('categories.html',
+                           title='Home',
+                           recipe_suggestions=return_recipes,
+                           user=user,
+                           wavfile=alfred_voice,
+                           tooltip=tooltip,
+                           login_form=login_form)
 
+    """
     else:
         # [#] print>> sys.stderr, "Current User not auth:", current_user
+        tooltip = True
         return render_template('categories.html',
                                title='Home',
                                recipe_suggestions=return_recipes,
-                               login_form=login_form)
+                               login_form=login_form,
+                               tooltip=tooltip)
+    """
 
 
 # Get recipe by name
@@ -161,7 +168,7 @@ def upload():
     user = getUserName()
 
     # Send to alfred brain, receive recipes ready to show
-    ingredient_list, recipes = alfred_brain(current_user, audio)
+    ingredient_list, recipes, timer_duration = alfred_brain(current_user, audio)
 
     if len(recipes) > 11:
         recipes = random.sample(recipes, 12)
@@ -170,24 +177,30 @@ def upload():
     recipe_list = rs.get_recipes_from_file()
     return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
 
+    # Recipe search error message
+    err_msg = ''
+    print 'Len', len(recipes)
+    if len(recipes) == 0:
+        err_msg = 'Sorry, no recipes were found for your search terms.'
+        ingredient_list = ''
+
     return render_template('show_recipe_results.html',
                            recipes=recipes,
                            recipe_suggestions=return_recipes,
+                           recipe_search_error_msg=err_msg,
                            user=user,
                            login_form=login_form,
-                           ingredient_list=ingredient_list)
+                           ingredient_list=ingredient_list,
+                           include_base_template=False)
 
 
 @app.route('/search_keywords', methods=['POST'])
 def search_keywords():
-    # Recipe search error message
-    err_msg = ''
-
     login_form = LoginForm()
 
     keywords = request.form['keywords']
 
-    ingredient_list, recipes = alfred_brain(current_user, None, keywords)
+    ingredient_list, recipes, timer_duration = alfred_brain(current_user, None, keywords)
 
     if len(recipes) > 11:
         recipes = random.sample(recipes, 12)
@@ -199,8 +212,10 @@ def search_keywords():
     recipe_list = rs.get_recipes_from_file()
     return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
 
+    # Recipe search error message
+    err_msg = ''
     if len(recipes) == 0:
-        err_msg = 'Sorry, no recipes were found for your search term: %s' % keywords
+        err_msg = 'Sorry, no recipes were found for your search term %s' % keywords
 
     return render_template('show_recipe_results.html',
                            recipes=recipes,
