@@ -93,6 +93,9 @@ def index():
     # Add timestamp to session
     session['time'] = datetime.utcnow()
 
+    if 'timer' not in session:
+        session['timer'] = None
+
     return render_template('categories.html',
                            title='Home',
                            recipe_suggestions=return_recipes,
