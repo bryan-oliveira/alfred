@@ -70,9 +70,15 @@ def checkTagInText(tag_list):
                 if tag.lower() == tag_.lower():
                     tags.append(tag)
 
+    print "tag_list:", tag_list
+    search_nonalcoholic = False
     for tag in tag_list:
         if tag.lower() == 'soup':
             tags.append('soup/stew')
+        if tag.lower() == 'non':
+            search_nonalcoholic = True
+        if tag.lower() == 'alcoholic' and search_nonalcoholic:
+            tags.append('non-alcoholic')
 
     return tags
 
