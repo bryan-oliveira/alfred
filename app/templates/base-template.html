@@ -105,18 +105,38 @@
             <div class="columns">
 
                 <!-- Left 1/4 of screen -->
+
                 <div class="column is-one-quarter">
-                    <h3 class="title is-3">Recipes</h3>
-                    {% for recipe in recipe_suggestions %}
-                        <p><a href="/search?recipe_name={{ recipe.title|urlencode }}">
-                            {{ recipe.title }}
-                        </a></p>
-                    {% endfor %}
+                    <h3 class="title is-3 tenpx-margin" style="margin-bottom: 3px;">
+                        {% if suggestion_type %}
+                            {{ suggestion_type|capitalize ~ ' Suggestions' }}
+                        {% else %}
+                            Recipe Suggestions
+                        {% endif %}
+                    </h3>
+
+                    <hr style="margin: 5px 0px 5px 0px;">
+
+                    <div class="columns is-multiline is-marginless">
+                        {% for recipe in recipe_suggestions %}
+                            <div class="column is-4 is-paddingless is-marginless">
+                                <a href="/search?recipe_name={{ recipe.title|urlencode }}">
+                                    <figure class="image is-square" style="margin: 2px;">
+                                        <img src="{{ "http://" ~ recipe.imgURL }}"
+                                             class="opacity center"
+                                             onmouseover="$( this ).fadeTo('fast', 1 );"
+                                             onmouseleave="$(this).fadeTo('fast', 0.7 );">
+                                    </figure>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
                 </div>
 
                 <!-- Right 3/4 of screen -->
                 <div class="column is-three-quarters">
-                    <div class="recipe_list">
+                    <div class="recipe_list is-paddingless">
                         {% block content %}
                         {% endblock %}
                     </div>
@@ -236,75 +256,74 @@
     });
 </script>
 
-{% if not current_user.is_authenticated %}
 
-    <!-- Tour tip -->
+<!-- Tour tip -->
+<script>
+    $(document).ready(function () {
+        $.tourTip.create({
+            title: "Welcome!",
+            description: "Welcome to Chef Alfred. To find out how to ask Alfred for recipes, please click next.",
+            previous: true,
+            position: 'top'
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(".alfred_image").tourTip({
+            title: "Alfred",
+            description: "Hello, I'm Alfred! I can find recipes for you." +
+            " \nJust click on me, say some ingredients you'd like the recipe to have, and finally click me again to finish.",
+            previous: true,
+            position: 'top'
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $.tourTip.create({
+            title: "Alfred",
+            description: "You can ask for recipes with as many ingredients as you'd like.",
+            previous: true,
+            position: 'top'
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(".alfred_input").tourTip({
+            title: "Alfred",
+            description: "You can also use the search bar to find recipes.",
+            previous: true,
+            position: 'top',
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(".login_button").tourTip({
+            title: "Alfred",
+            description: "Once you log in, you can access your profile by clicking the link with your name. Enjoy!",
+            previous: true,
+            position: 'left',
+            close: true
+        });
+    });
+</script>
+
+<!-- Auto start tooltip -->
+{% if tooltip %}
     <script>
         $(document).ready(function () {
-            $.tourTip.create({
-                title: "Welcome!",
-                description: "Welcome to Chef Alfred. To find out how to ask Alfred for recipes, please click next.",
-                previous: true,
-                position: 'top'
-            });
+            $.tourTip.start();
         });
     </script>
-
-    <script>
-        $(document).ready(function () {
-            $(".alfred_image").tourTip({
-                title: "Alfred",
-                description: "Hello, I'm Alfred! I can find recipes for you." +
-                " \nJust click on me, say some ingredients you'd like the recipe to have, and finally click me again to finish.",
-                previous: true,
-                position: 'top'
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $.tourTip.create({
-                title: "Alfred",
-                description: "You can ask for recipes with as many ingredients as you'd like.",
-                previous: true,
-                position: 'top'
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $(".alfred_input").tourTip({
-                title: "Alfred",
-                description: "You can also use the search bar to find recipes.",
-                previous: true,
-                position: 'top',
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $(".login_button").tourTip({
-                title: "Alfred",
-                description: "Once you log in, you can access your profile by clicking the link with your name. Enjoy!",
-                previous: true,
-                position: 'left',
-                close: true
-            });
-        });
-    </script>
-
-    {% if tooltip %}
-        <script>
-            $(document).ready(function () {
-                $.tourTip.start();
-            });
-        </script>
-    {% endif %}
-
 {% endif %}
+
 
 </body>
 </html>

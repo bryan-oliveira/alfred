@@ -95,6 +95,10 @@ def edit_user(user, form, update_pwd):
         user.allergy.vegan = form.vegan.data
         edit = True
 
+    if user.allergy.fish != form.fish.data:
+        user.allergy.fish = form.fish.data
+        edit = True
+
     # If password field is not empty, update user password hash
     if update_pwd:
         user.password = bcrypt.generate_password_hash(form.new_password.data)

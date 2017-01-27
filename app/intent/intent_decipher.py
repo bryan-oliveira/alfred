@@ -273,7 +273,8 @@ def remove_extraneous_from_search_terms2(keywords):
 
 
 def find_time_in_search_term(text):
-    """Searches the text for word representations of numbers and converts them to integers"""
+    """Searches the text for word representations of numbers and converts them to integers.
+    Return total sum in seconds. """
     tokens = word_tokenize(text)
     numbers = {
         'zero'     : 0,
@@ -312,7 +313,10 @@ def find_time_in_search_term(text):
         if token in numbers:
             # print "#", token
             total_time += int(numbers[token])
-    # print "Total time:", total_time
+
+    # Time is always in seconds
+    total_time = total_time
+    print "Total time:", total_time, "minutes."
     return total_time
 
 if __name__ == '__main__':

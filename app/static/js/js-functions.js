@@ -4,6 +4,7 @@
 
 var timeoutID = 0;
 var siri_is_on = false;
+var alfred_timer = null;
 
 function get_recipes_by_tag(url) {
 
@@ -12,13 +13,13 @@ function get_recipes_by_tag(url) {
         if (this.readyState == 4 && this.status == 200) {
             document.getElementsByClassName("recipe_list")[0].innerHTML = xhr.responseText;
         }
-    }
+    };
 
     xhr.open('POST', url, true);
 
     xhr.onload = function (e) {
         console.log(e);
-    }
+    };
 
     xhr.send();
 }
@@ -42,7 +43,7 @@ function stop_siriwave() {
 }
 
 function show_alfred_tooltip() {
-    timeoutID = window.setTimeout(run_tooltip_code, 1000);
+    //timeoutID = window.setTimeout(run_tooltip_code, 1000);
 }
 
 function run_tooltip_code() {
@@ -76,21 +77,21 @@ function hide_alfred_tooltip() {
 
 /* Timer function to start/stop timer */
 function initializeClock(id, duration, alarmeSound) {
-    /* Set end time */
-    var end_time = new Date().getTime();
-    end_time = end_time + (duration * 60000);
+    console.log(String(duration));
 
-    var timer = setInterval(function () {
+    /* Set end time */
+    var end_time = new Date(duration).getTime();
+
+    alfred_timer = setInterval(function () {
         var clock = document.getElementById(id);
         var now = new Date().getTime();
 
         /* Calculate remaining time */
         var dist = parseInt(end_time - now, 10);
-        //console.log(dist);
 
         /* Calculate time remaining */
         var hours = parseInt(Math.floor(dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var min = parseInt(Math.floor(dist % (1000 * 60 * 60 * 60)) / (1000 * 60));
+        var min = parseInt(Math.floor(dist % (1000 * 60 * 60)) / (1000 * 60));
         var secs = parseInt(Math.floor(dist % (1000 * 60)) / 1000);
 
         /* Pad time with zeros */
@@ -103,14 +104,18 @@ function initializeClock(id, duration, alarmeSound) {
         if (secs < 10) {
             secs = '0' + secs;
         }
+        if (dist < 0) {
+            clearInterval(alfred_timer);
+        } else {
+            clock.innerHTML = hours + ':' + min + ':' + secs;
+        }
 
-        clock.innerHTML = hours + ':' + min + ':' + secs;
-
-        if (hours == 0 && min == 0 && secs == 0) {
-            clearInterval(timer);
+        if (hours <= 0 && min <= 0 && secs <= 0) {
+            clearInterval(alfred_timer);
             soundAlarme(alarmeSound);
         }
     }, 1000);
+
 }
 
 /* Sound alarm */

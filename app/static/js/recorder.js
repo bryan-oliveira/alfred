@@ -66,7 +66,12 @@ if (navigator.getUserMedia) {
                 if (xhr.readyState == 4) {
 
                     $('#thinking-alfred').removeClass('is-active');
-                    document.getElementsByClassName("recipe_list")[0].innerHTML = xhr.responseText;
+                    //document.getElementsByClassName("recipe_list")[0].innerHTML = xhr.responseText;
+                    // Stop previous timers if any
+                    clearInterval(window.alfred_timer);
+                    document.body.innerHTML = "";
+                    //window.location = 'about:blank';
+                    document.write(xhr.responseText);
 
                     console.log($('#hidden-info').text());
                     // Get information from hidden field about ingredients (if any)

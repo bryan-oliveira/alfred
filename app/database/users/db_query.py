@@ -56,11 +56,12 @@ def get_user_restriction_tags(id_, usage=0):
     1 - return [Nuts] to print to header """
     tags_0 = []
     tags_1 = []
+
     if id_ != 0:
         user = models.User.query.get(id_)
 
         if user.allergy.lowchol:
-            tags_0.append('lowchol')
+            tags_0.append('low cholesterol')
             tags_1.append('Low Cholesterol')
 
         if user.allergy.highchol:
@@ -68,7 +69,9 @@ def get_user_restriction_tags(id_, usage=0):
             tags_1.append('High Cholesterol')
 
         if user.allergy.overw:
-            tags_0.append('overw')
+            tags_0.append('fat free')
+            tags_0.append('low fat')
+            tags_0.append('low cal')
             tags_1.append('Weight Loss')
 
         if user.allergy.underw:

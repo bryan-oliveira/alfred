@@ -13,7 +13,7 @@
                 {% if timer %}
                     <script>
                         var audio = new Audio('{{ url_for('static', filename='audio/alarme2.mp3') }}');
-                        initializeClock('clock', {{ timer }},  audio);  /* Start timer */
+                        initializeClock('clock', '{{ timer }}',  audio);  /* Start timer */
                     </script>
                 {% endif %}
 

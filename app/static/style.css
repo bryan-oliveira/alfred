@@ -162,3 +162,11 @@ a                   { color: #7eb66b}
 .image-cropper:hover { opacity: 1;}
 
 .clock-style        { padding-left: 20px; }
+
+.is-marginless { margin: 0 auto; }
+.is-paddingless {padding: 0px; }
+.opacity { opacity: 0.7;
+    border: 1px solid #000000;
+}
+.center { object-fit: cover;}
+.tenpx-margin { margin: 7px; }

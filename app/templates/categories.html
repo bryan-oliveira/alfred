@@ -1,8 +1,17 @@
-{% extends "base-template.html" %}
+{% if include_base_template %}
+    {% if include_base_template == True %}
+        {% extends "base-template.html" %}
+    {% endif %}
+{% endif %}
 
 {% block content %}
 
-    <div class="columns is-multiline">
+    <h3 class="title is-3 tenpx-margin" style="margin-bottom: 3px;">
+        Main Recipe Categories
+    </h3>
+    <hr style="margin: 5px 0px 5px 0px;">
+
+    <div class="columns">
 
         <div class="column has-text-centered">
             <a href="/tag/side">
@@ -49,15 +58,9 @@
             </a>
         </div>
 
-        <div class="column has-text-centered">
-            <a href='/tag/christmas'>
-                <figure class="image is-128x128 image-cropper">
-                    <img src="{{ url_for('static', filename='images/meal-course-types/holidays-events.png') }}" alt="">
-                </figure>
-                <label class="label">Holidays &amp; Events</label>
-            </a>
-        </div>
+    </div>
 
+    <div class="columns">
         <div class="column has-text-centered">
             <a href='/tag/dinner'>
                 <figure class="image is-128x128 image-cropper">
@@ -73,15 +76,6 @@
                     <img src="{{ url_for('static', filename='images/meal-course-types/quick-easy.png') }}" alt="">
                 </figure>
                 <label class="label">Quick &amp; Easy</label>
-            </a>
-        </div>
-
-        <div class="column has-text-centered">
-            <a href='/tag/slow%20cooker'>
-                <figure class="image is-128x128 image-cropper">
-                    <img src="{{ url_for('static', filename='images/meal-course-types/slow-cooker.png') }}" alt="">
-                </figure>
-                <label class="label">Slow Cooker</label>
             </a>
         </div>
 

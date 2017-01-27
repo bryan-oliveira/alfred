@@ -3,12 +3,11 @@ import json
 import sys
 from file_operations import is_empty_file, overwrite_recipe_file
 from config import VEGETABLE_DB, FRUIT_DB, MEAT_POULTRY_DB, \
-    FISH_DB, SEAFOOD_DB, RECIPE_FILE, ADDITIONAL_INGS_DB, SPICES_DB
+    FISH_DB, SEAFOOD_DB, RECIPE_FILE, ADDITIONAL_INGS_DB, SPICES_DB, TAG_DB
 from timeit import default_timer as timer
-
+from nltk import word_tokenize
 
 N_RECIPES = 14
-
 
 def checkIngredient(ingredient_list):
     """
@@ -60,6 +59,24 @@ def checkIngredient(ingredient_list):
     return True, ing_dict
 
 
+def checkTagInText(tag_list):
+    tags = []
+    tag_list = tag_list.split()
+
+    with open(TAG_DB, 'r') as f:
+        data = json.load(f)
+        for tag in tag_list:
+            for tag_ in data:
+                if tag.lower() == tag_.lower():
+                    tags.append(tag)
+
+    for tag in tag_list:
+        if tag.lower() == 'soup':
+            tags.append('soup/stew')
+
+    return tags
+
+
 def get_recipes_from_file():
 
     if not is_empty_file(RECIPE_FILE):
@@ -108,22 +125,30 @@ def get_recipes_by_tag(tag):
             if tag == tag_.lower():
                 recipes += [recipe]
 
-    print tag, "found", len(recipes)
+    # print tag, "found", len(recipes)
     return recipes
 
 
-def get_recipes_with_all_ingredients(recipe_names, ingredients, recipe_titles, restricted_recipes=None):
+def get_recipes_with_all_ingredients(recipe_names,
+                                     ingredients,
+                                     recipe_titles,
+                                     recipes_with_partial_ings,
+                                     restricted_recipes=None):
     """
-    :param restricted_recipes if present, use only recipes from this list
+    :param recipes_with_partial_ings:
+    :param restricted_recipes: if present, use only recipes from this list
     :param recipe_names empty list, populate with recipes found
     :param ingredients ingredients to search for
-    :param recipe_titles save titles of recipes
+    :param recipe_titles: save titles of recipes
     """
 
+    data = []
     recipes_with_all_ingredients = recipe_names
-    DEBUG = False
+    DEBUG = True
 
-    if restricted_recipes is not None:
+    # print "Len:", len(restricted_recipes)
+
+    if len(restricted_recipes) > 0:
         data = restricted_recipes
     else:
         if not is_empty_file(RECIPE_FILE):
@@ -158,6 +183,9 @@ def get_recipes_with_all_ingredients(recipe_names, ingredients, recipe_titles, r
                                 # [#] print>> sys.stderr, 'found ->', ing, 'left:', ing_copy, len(ing_copy)
 
                             ing_copy.remove(sub_list)
+
+                            # Add recipe to partial ingredients list
+                            recipes_with_partial_ings += [recipe]
                             break
 
                 # TODO: Check whether duplicate recipes are being inserted
@@ -179,7 +207,6 @@ def get_recipes_with_all_ingredients(recipe_names, ingredients, recipe_titles, r
             # print "Ingr: i > 20 - getRecipesByAllIngredient"
             break
 
-    # print recipes_with_all_ingredients
     return recipes_with_all_ingredients
 
 
@@ -232,6 +259,7 @@ def get_recipes_by_keyword_in_name(recipe_names, keywords):
     # [#] print>> sys.stderr, "Keywords:", keywords
 
     recipes_with_keywords = recipe_names
+
     if not is_empty_file(RECIPE_FILE):
         with open(RECIPE_FILE, 'r') as data_file:
             data = json.load(data_file)
@@ -263,7 +291,7 @@ def get_recipes_by_keyword_in_name(recipe_names, keywords):
                             i += 1
                             break
 
-                if i > N_RECIPES:
+                if i > 23:
                     # [#] print>> sys.stderr, "Title: i>10 getRecipesByIngredient"
                     break
 
@@ -363,7 +391,9 @@ if __name__ == '__main__':
     # checkIngredient(["orange", "onion", "pepper", "avocado", "apple"])
     # checkIngredient(["crab", "chicken", "steak"])
     # remove_recipes_with_missing_fields()
-    # print_all_unique_tags()
-    get_recipes_by_tag('pescatarian')
+    #print_all_unique_tags()
+    # get_recipes_by_tag('cheesecake')
+    get_recipes_by_keyword_in_name([], ['cheesecake'])
+    # checkTagInText(['lunch'])
     pass
 

@@ -18,8 +18,21 @@ from email import generate_confirmation_token, confirm_token
 from app.database.users import db_query
 from email import send_email
 from flask import Markup
+import urlparse
+import urllib
 
-RECOMMENDED_RECIPE_LIST_SIZE = 8
+RECOMMENDED_RECIPE_LIST_SIZE = 12
+
+
+def getUserRecommendations():
+    user_restrictions = db_query.get_user_restriction_tags(current_user.id)
+
+    if not user_restrictions:
+        recipes = rs.get_recipes_from_file()
+    else:
+        recipes = rs.get_recipes_by_multiple_tags(user_restrictions)
+
+    return recipes
 
 
 def getUserName():
@@ -38,40 +51,47 @@ def test():
 @app.route('/')
 @app.route('/index')
 def index():
+    getUserRecommendations()
     login_form = LoginForm()
 
-    # Loads recipes from fie JSON format, returns random X at random
-    recipes = rs.get_recipes_from_file()
-
-    # Randomize suggested recipes
+    # User's recommendations based on restrictions
+    recipes = getUserRecommendations()
     return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
-
-    # If user is authenticated
-    # if current_user.is_authenticated:
 
     alfred_voice = None
     alfred_greeting = False
     tooltip = False  # Show help tooltip
 
     user = getUserName()  # Send first name to template
+    duration = None
 
-    # If time var available, check inactivity duration. >10m = Alfred greets you
+    # Anonymous user. Not authenticated
     if 'time' in session:
-        now = datetime.utcnow()
-        duration = now - session['time']
-        # [#] print>> sys.stderr, "Now:", now, "Stamp:", session['time'], "Duration:", duration
+        duration = datetime.utcnow() - session['time']
 
-        if duration > timedelta(minutes=10):
-            alfred_greeting = True
-    else:
-        alfred_greeting = True
+        if not current_user.is_authenticated:
+            if duration > timedelta(minutes=10):
+                tooltip = True
+        else:
+            if duration > timedelta(minutes=10):
+                alfred_greeting = True
+
+    # First time
+    if 'time' not in session:
         tooltip = True
 
-    session['time'] = datetime.utcnow()
+    # Fresh log in
+    if 'login' in session:
+        if session['login']:
+            alfred_greeting = True
+            session['login'] = False
 
     if alfred_greeting:
         phrase = 'Hello ' + user + ', how may I help you?'
         alfred_voice = get_raw_wav(phrase)
+
+    # Add timestamp to session
+    session['time'] = datetime.utcnow()
 
     return render_template('categories.html',
                            title='Home',
@@ -79,18 +99,9 @@ def index():
                            user=user,
                            wavfile=alfred_voice,
                            tooltip=tooltip,
-                           login_form=login_form)
-
-    """
-    else:
-        # [#] print>> sys.stderr, "Current User not auth:", current_user
-        tooltip = True
-        return render_template('categories.html',
-                               title='Home',
-                               recipe_suggestions=return_recipes,
-                               login_form=login_form,
-                               tooltip=tooltip)
-    """
+                           login_form=login_form,
+                           timer=session['timer'],
+                           include_base_template=True)
 
 
 # Get recipe by name
@@ -105,8 +116,8 @@ def search_recipe(recipe_name=''):
     if recipe_search is None:
         recipe_search = recipe_name
 
-    # Loads recipes from fie JSON format, returns random 20 at random
-    recipes = rs.get_recipes_from_file()
+    # User's recommendations based on restrictions
+    recipes = getUserRecommendations()
     return_recipes = random.sample(recipes, RECOMMENDED_RECIPE_LIST_SIZE)
 
     recipe = rs.get_recipe_by_name(recipe_search)
@@ -125,7 +136,8 @@ def search_recipe(recipe_name=''):
                            recipe=recipe,
                            user=getUserName(),
                            login_form=login_form,
-                           fav=is_favorite)
+                           fav=is_favorite,
+                           timer=session['timer'])
 
 
 @login_required
@@ -142,25 +154,37 @@ def toggle_is_favorite():
 
 @app.route('/tag/<tag_name>', methods=['GET', 'POST'])
 def get_recipes_by_tag(tag_name):
+    recipes = []
+    suggestions = []
 
     login_form = LoginForm()
     recipes = rs.get_recipes_by_tag(tag_name)
 
     if len(recipes) > 23:
-        recipes = random.sample(recipes, 12)
+        sample = random.sample(recipes, 24)
+        recipes = sample[:12]
+        suggestions = sample[12:]
+    else:
+        # Loads recipes from fie JSON format, returns random 20 at random
+        sample = rs.get_recipes_from_file()
+        suggestions = random.sample(sample, RECOMMENDED_RECIPE_LIST_SIZE)
 
     # include_base_template = True, is a switch to include the base-template
     return render_template('show_recipe_results.html',
                            recipes=recipes,
+                           recipe_suggestions=suggestions,
+                           suggestion_type=tag_name,
                            user=getUserName(),
                            login_form=login_form,
-                           include_base_template=True)
+                           include_base_template=True,
+                           timer=session['timer'])
 
 
 # Upload audio clip to flask
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     login_form = LoginForm()
+
     # Get spoken audio clip
     audio = request.files['audio']
 
@@ -168,10 +192,17 @@ def upload():
     user = getUserName()
 
     # Send to alfred brain, receive recipes ready to show
-    ingredient_list, recipes, timer_duration = alfred_brain(current_user, audio)
+    ingredient_list, recipes_with_all_ings, recipes_with_partial, timer_object = alfred_brain(current_user, audio)
 
-    if len(recipes) > 11:
-        recipes = random.sample(recipes, 12)
+    # timer_object(absolute value of duration, timestamp)  // Value of duration None, 0 or > 0
+    timer_duration = timer_object[0]
+    timer_end_timestamp = timer_object[1]
+
+    if len(recipes_with_partial) > 11:
+        recipes_with_partial = random.sample(recipes_with_partial, 12)
+
+    if len(recipes_with_all_ings) > 11:
+        recipes_with_all_ings = random.sample(recipes_with_all_ings, 12)
 
     # Loads recipes from fie JSON format, returns random 20 at random
     recipe_list = rs.get_recipes_from_file()
@@ -179,19 +210,67 @@ def upload():
 
     # Recipe search error message
     err_msg = ''
-    print 'Len', len(recipes)
-    if len(recipes) == 0:
-        err_msg = 'Sorry, no recipes were found for your search terms.'
-        ingredient_list = ''
 
+    # Where request came from
+    # Direct user to previous page (referrer)
+    # print request.referrer
+    parse = urlparse.urlparse(request.referrer)
+    url_path = parse.path
+    # print url_path
+    include_base_template = True
+
+    # User was viewing specific recipe
+    if url_path == '/search':
+        include_base_template = True
+
+    # No timer and no recipes
+    if len(recipes_with_all_ings) == 0 and len(recipes_with_partial) == 0 and timer_duration is None:
+        print "No recipes no timer ----"
+        ingredient_list = ''
+        err_msg = 'Sorry, no recipes were found for your search term %s' % ingredient_list
+        flash(err_msg, 'is-danger')
+        return render_template('categories.html',
+                               recipe_search_error_msg=err_msg,
+                               recipe_suggestions=return_recipes,
+                               user=user,
+                               login_form=login_form,
+                               ingredient_list=ingredient_list,
+                               include_base_template=True)
+
+    # Timer was detected
+    if timer_duration is not None:
+
+        # Invalid time
+        if timer_duration == 0:
+            err_msg = 'Sorry, no valid time values found to set the timer.'
+            session['timer'] = None
+            flash(err_msg, 'is-danger')
+
+        # Set session var with timer info
+        if timer_duration > 0:
+            session['timer'] = timer_end_timestamp
+
+        # Direct to referrer page
+        return render_template('categories.html',
+                               recipe_search_error_msg=err_msg,
+                               recipe_suggestions=return_recipes,
+                               user=user,
+                               login_form=login_form,
+                               ingredient_list=ingredient_list,
+                               include_base_template=True,
+                               timer=session['timer'])
+
+    # No timer and recipes
     return render_template('show_recipe_results.html',
-                           recipes=recipes,
+                           recipes_all=recipes_with_all_ings,
+                           recipes_partial=recipes_with_partial,
                            recipe_suggestions=return_recipes,
                            recipe_search_error_msg=err_msg,
                            user=user,
                            login_form=login_form,
                            ingredient_list=ingredient_list,
-                           include_base_template=False)
+                           include_base_template=include_base_template,
+                           timer=session['timer'])
 
 
 @app.route('/search_keywords', methods=['POST'])
@@ -200,31 +279,80 @@ def search_keywords():
 
     keywords = request.form['keywords']
 
-    ingredient_list, recipes, timer_duration = alfred_brain(current_user, None, keywords)
+    # Send to alfred brain, receive recipes ready to show
+    ingredient_list, recipes_with_all_ings, recipes_with_partial, timer_object = alfred_brain(current_user, keywords=keywords)
 
-    if len(recipes) > 11:
-        recipes = random.sample(recipes, 12)
+    # timer_object(absolute value of duration, timestamp)  // Value of duration None, 0 or > 0
+    timer_duration = timer_object[0]
+    timer_end_timestamp = timer_object[1]
+
+    # Return 12 random recipes if available
+    if len(recipes_with_partial) > 11:
+        recipes_with_partial = random.sample(recipes_with_partial, 18)
+
+    if len(recipes_with_all_ings) > 11:
+        recipes_with_all_ings = random.sample(recipes_with_all_ings, 18)
 
     # Send first name to show in header
     user = getUserName()
 
-    # Loads recipes from fie JSON format, returns random 20 at random
-    recipe_list = rs.get_recipes_from_file()
-    return_recipes = random.sample(recipe_list, RECOMMENDED_RECIPE_LIST_SIZE)
+    # User's recommendations based on restrictions
+    recipes_ = getUserRecommendations()
+    return_recipes = random.sample(recipes_, RECOMMENDED_RECIPE_LIST_SIZE)
 
     # Recipe search error message
     err_msg = ''
-    if len(recipes) == 0:
+
+    # No timer and no recipes
+    if len(recipes_with_all_ings) == 0 and len(recipes_with_partial) == 0 and timer_duration is None:
         err_msg = 'Sorry, no recipes were found for your search term %s' % keywords
+        # flash(err_msg, 'is-danger')
+
+    # Timer was detected
+    if timer_duration is not None:
+        # Invalid time
+        if timer_duration == 0:
+            err_msg = 'Sorry, no valid time values found to set the timer.'
+            session['timer'] = None
+            flash(err_msg, 'is-danger')
+
+        # Set session var with timer info
+        if timer_duration > 0:
+            session['timer'] = timer_end_timestamp
+
+        # Direct user to previous page (referrer)
+        # print request.referrer
+        parse = urlparse.urlparse(request.referrer)
+        url_path = parse.path
+        # print url_path
+
+        # User was viewing specific recipe
+        if url_path == '/search':
+            url_q = parse.query
+            recipe_name = url_q.split('=')
+            # Decode escaped characters
+            recipe_name = urllib.unquote(recipe_name[1])
+            return search_recipe(recipe_name)
+
+        return render_template('categories.html',
+                               recipe_search_error_msg=err_msg,
+                               recipe_suggestions=return_recipes,
+                               user=user,
+                               login_form=login_form,
+                               ingredient_list=ingredient_list,
+                               include_base_template=True,
+                               timer=session['timer'])
 
     return render_template('show_recipe_results.html',
-                           recipes=recipes,
+                           recipes_all=recipes_with_all_ings,
+                           recipes_partial=recipes_with_partial,
                            recipe_search_error_msg=err_msg,
                            recipe_suggestions=return_recipes,
                            user=user,
                            login_form=login_form,
                            ingredient_list=ingredient_list,
-                           include_base_template=True)
+                           include_base_template=True,
+                           timer=session['timer'])
 
 
 def redirect_url(next, recipe_name=''):
@@ -330,6 +458,8 @@ def login():
                 # if not next_is_valid(next_):
                 #    return abort(400)
 
+                session['login'] = True
+
                 return redirect(url_for('index'))
 
     flash('Invalid username/password.', 'is-danger')
@@ -391,7 +521,8 @@ def profile_page():
                                        delete_form=delete_form,
                                        user=user_name,
                                        url=url_for('profile_page'),
-                                       title=page_title)
+                                       title=page_title,
+                                       timer=session['timer'])
 
         # Commit changes to object if updates were made. Compare object with form
         # pwd_status is a tuple (boolean, error message). If boolean is True, edit_user
@@ -401,12 +532,16 @@ def profile_page():
         if updates_made == True:
             flash('Profile updated successfully!', 'is-success')
 
+    if user.confirmed:
+        form.confirmed = True
+
     return render_template("profile.html",
                            form=form,
                            delete_form=delete_form,
                            user=user_name,
                            url=url_for('profile_page'),
-                           title=page_title)
+                           title=page_title,
+                           timer=session['timer'])
 
 
 # TODO: Not a view. Move to application helpers section
@@ -503,12 +638,14 @@ def favorites():
                            title='Home',
                            user=user_name,
                            recipes=recipes,
-                           favorite_icon=True)
+                           favorite_icon=True,
+                           timer=session['timer'])
 
 
 @app.route("/logout")
 @login_required
 def logout():
+    session['timer'] = None
     logout_user()
     flash('You have been logged out successfully!', 'is-success')
     return redirect('index')
@@ -533,7 +670,7 @@ def populate_form_with_allergy_data(form, allergy):
     form.overw.data = allergy.overw
     form.gluten.data = allergy.gluten
     form.nuts.data = allergy.nuts
-    form.fish.data = allergy.fish
     form.sesame.data = allergy.sesame
     form.vegetarian.data = allergy.vegetarian
     form.vegan.data = allergy.vegan
+    form.fish.data = allergy.fish
